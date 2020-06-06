@@ -1,0 +1,563 @@
+@import url("https://fonts.googleapis.com/css2?family=Spartan:wght@700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital@1&display=swap");
+
+* {
+  outline: none;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  z-index: 0;
+}
+
+.csstransforms .cn-wrapper {
+  font-size: 1em;
+  width: 26em;
+  height: 26em;
+  overflow: hidden;
+  position: fixed;
+  z-index: 10;
+  bottom: -13em;
+  left: 50%;
+  border-radius: 50%;
+  margin-left: -13em;
+  transform: scale(0.1);
+  transition: all 0.3s ease;
+}
+/* class applied to the container via JavaScript that will scale the navigation up */
+.csstransforms .opened-nav {
+  border-radius: 50%;
+  transform: scale(1);
+}
+
+.cn-button {
+  border: none;
+  background: none;
+  color: white;
+  text-align: Center;
+  font-size: 1.5em;
+  padding-bottom: 1em;
+  height: 3.5em;
+  width: 3.5em;
+  background-color: #111;
+  position: fixed;
+  left: 50%;
+  margin-left: -1.75em;
+  bottom: -1.75em;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 11;
+}
+.cn-button:hover,
+.cn-button:active,
+.cn-button:focus {
+  background-color: #222;
+}
+
+.cn-overlay {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Class added to the overlay via JavaScript to show it when navigation is open */
+.cn-overlay.on-overlay {
+  pointer-events: auto;
+  opacity: 1;
+}
+
+.csstransforms .cn-wrapper li {
+  position: absolute;
+  font-size: 1.5em;
+  width: 10em;
+  height: 10em;
+  transform-origin: 100% 100%;
+  overflow: hidden;
+  left: 50%;
+  top: 50%;
+  margin-top: -1.3em;
+  margin-left: -10em;
+  transition: border 0.3s ease;
+}
+
+.csstransforms .cn-wrapper li a {
+  display: block;
+  font-size: 1.18em;
+  height: 14.5em;
+  width: 14.5em;
+  position: absolute;
+  bottom: -7.25em;
+  right: -7.25em;
+  border-radius: 50%;
+  text-decoration: none;
+  color: #fff;
+  padding-top: 1.8em;
+  text-align: center;
+  transform: skew(-50deg) rotate(-70deg) scale(1);
+  transition: opacity 0.3s, color 0.3s;
+}
+
+.csstransforms .cn-wrapper li a span {
+  font-size: 1.1em;
+  opacity: 0.7;
+}
+/* for a central angle x, the list items must be skewed by 90-x degrees
+in our case x=40deg so skew angle is 50deg
+items should be rotated by x, minus (sum of angles - 180)2s (for this demo) */
+
+.csstransforms .cn-wrapper li:first-child {
+  transform: rotate(-10deg) skew(50deg);
+}
+
+.csstransforms .cn-wrapper li:nth-child(2) {
+  transform: rotate(30deg) skew(50deg);
+}
+
+.csstransforms .cn-wrapper li:nth-child(3) {
+  transform: rotate(70deg) skew(50deg);
+}
+
+.csstransforms .cn-wrapper li:nth-child(4) {
+  transform: rotate(110deg) skew(50deg);
+}
+
+.csstransforms .cn-wrapper li:nth-child(5) {
+  transform: rotate(150deg) skew(50deg);
+}
+
+.csstransforms .cn-wrapper li:nth-child(odd) a {
+  background-color: #a11313;
+  background-color: hsla(0, 88%, 63%, 1);
+}
+
+.csstransforms .cn-wrapper li:nth-child(even) a {
+  background-color: #a61414;
+  background-color: hsla(0, 88%, 65%, 1);
+}
+
+/* active style */
+.csstransforms .cn-wrapper li.active a {
+  background-color: #b31515;
+  background-color: hsla(0, 88%, 70%, 1);
+}
+
+/* hover style */
+.csstransforms .cn-wrapper li:not(.active) a:hover,
+.csstransforms .cn-wrapper li:not(.active) a:active,
+.csstransforms .cn-wrapper li:not(.active) a:focus {
+  background-color: #b31515;
+  background-color: hsla(0, 88%, 70%, 1);
+}
+.csstransforms .cn-wrapper li:not(.active) a:focus {
+  position: fixed; /* fix the "displacement" bug in webkit browsers when using tab key */
+}
+
+.no-csstransforms .cn-wrapper {
+  font-size: 1em;
+  height: 5em;
+  width: 25.15em;
+  bottom: 0;
+  margin-left: -12.5em;
+  overflow: hidden;
+  position: fixed;
+  z-index: 10;
+  left: 50%;
+  border: 1px solid #ddd;
+}
+
+.no-csstransforms .cn-button {
+  display: none;
+}
+
+.no-csstransforms .cn-wrapper li {
+  position: static;
+  float: left;
+  font-size: 1em;
+  height: 5em;
+  width: 5em;
+  background-color: #eee;
+  text-align: center;
+  line-height: 5em;
+}
+
+.no-csstransforms .cn-wrapper li a {
+  display: block;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+  font-size: 1.3em;
+  border-right: 1px solid #ddd;
+}
+
+.no-csstransforms .cn-wrapper li a:last-child {
+  border: none;
+}
+
+.no-csstransforms .cn-wrapper li a:hover,
+.no-csstransforms .cn-wrapper li a:active,
+.no-csstransforms .cn-wrapper li a:focus {
+  background-color: white;
+}
+
+.no-csstransforms .cn-wrapper li.active a {
+  background-color: #6f325c;
+  color: #fff;
+}
+
+@media screen and (max-width: 480px) {
+  .csstransforms .cn-wrapper {
+    font-size: 0.68em;
+  }
+  .cn-button {
+    font-size: 1em;
+  }
+  .csstransforms .cn-wrapper li {
+    font-size: 1.52em;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .no-csstransforms .cn-wrapper {
+    width: 15.15px;
+    margin-left: -7.5em;
+  }
+  .no-csstransforms .cn-wrapper li {
+    height: 3em;
+    width: 3em;
+  }
+}
+
+.home {
+  display: flex;
+  flex-direction: column;
+  background-image: url(/images/bg-home.JPG);
+  background-size: auto 100%;
+  background-color: black;
+  color: white;
+  justify-content: center;
+  align-items: flex-end;
+  height: 100vh;
+}
+
+.home-subtitle {
+  font-size: 30px;
+  padding-right: 24%;
+  margin-bottom: 10px;
+  font-family: "Alegreya Sans", sans-serif;
+}
+
+.home-heading {
+  font-size: 50px;
+  padding-right: 15%;
+  font-family: "Spartan", sans-serif;
+}
+
+.home h1 {
+  font-size: 300%;
+  padding: 0px;
+  margin: 0px;
+}
+
+.profile {
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(0, 0, 0);
+  color: white;
+  justify-content: center;
+  align-items: center;
+  height: 101vh;
+}
+
+.profile-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 80%;
+  text-align: center;
+}
+
+.profile-content-about {
+  display: flex;
+  width: 33%;
+  flex-direction: column;
+}
+
+.profile-content-photo {
+  display: flex;
+  width: 30%;
+  flex-direction: column;
+}
+
+.profile-content-details {
+  display: flex;
+  width: 33%;
+  flex-direction: column;
+}
+
+.profile-footer {
+  margin: 20px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.profile-footer input {
+  background-color: yellow;
+  border: none;
+  opacity: 0.5;
+  border-radius: 10px;
+}
+
+.profile-footer input:hover {
+  opacity: 1;
+}
+
+.profile-footer input:active {
+  box-shadow: none;
+  transform-origin: center;
+  transform: scale(0.98);
+}
+
+.heading {
+  font-size: 60px;
+  font-variant: small-caps;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  color: aqua;
+}
+
+.heading2 {
+  font-size: 30px;
+  margin-top: 0px;
+  margin-bottom: 7px;
+  color: aqua;
+}
+
+.subtitle {
+  font-size: 20px;
+  margin-top: 0px;
+  margin-bottom: 40px;
+  border-bottom: 2px solid white;
+}
+
+.subtitle2 {
+  font-size: 15px;
+  margin-left: 20px;
+  margin-top: 0px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.exp {
+  display: flex;
+  background-color: rgb(255, 255, 255);
+  color: white;
+  justify-content: center;
+  align-items: center;
+}
+
+.abilities {
+  display: flex;
+  background-color: rgb(167, 167, 167);
+  color: white;
+  justify-content: center;
+  align-items: center;
+}
+
+.prj {
+  display: flex;
+  background-color: rgb(255, 255, 255);
+  color: white;
+  justify-content: center;
+  align-items: center;
+}
+
+.contact {
+  display: flex;
+  background-color: rgb(22, 22, 22);
+  color: white;
+  justify-content: center;
+  align-items: center;
+}
+
+@media screen and (min-width: 320px) and (max-width: 767px) {
+  .home {
+    background-image: url(/images/bg-mobile.jpg);
+  }
+}
+
+/* a {
+  color: #4d4d4d;
+  text-decoration: none;
+}
+
+.fb a,
+.fb:before,
+.fb {
+  background: #3b5999;
+  color: #3b5999;
+}
+
+.tw a,
+.tw:before,
+.tw {
+  background: #55acee;
+  color: #55acee;
+}
+
+.in a,
+.in:before,
+.in {
+  background: #e4405f;
+  color: #e4405f;
+}
+
+.gh a,
+.gh:before,
+.gh {
+  background: #333333;
+  color: #333333;
+}
+
+ul#buttons {
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 10px;
+}
+
+ul#buttons:before {
+  content: "Tirth Jivani";
+  font-size: 3em;
+  font-family: Arial;
+  font-weight: 300;
+  color: #4d4d4d;
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  margin-top: -60px;
+}
+
+ul#buttons li {
+  width: 100px;
+  height: 100px;
+  line-height: 100px;
+  text-align: center;
+  box-sizing: border-box;
+  background: transparent;
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+  transition: 0.5s;
+  box-shadow: 0px 12px 25px -12px, 0px 0px 25px -12px;
+}
+
+ul#buttons li a {
+  display: block;
+  widows: 100%;
+  height: 100%;
+  font-size: 3em;
+  background: transparent;
+  transition: 0.5s;
+  animation: icon-out 0.5s forwards;
+  animation-timing-function: cubic-bezier(0.5, -0.6, 1, 1);
+}
+
+ul#buttons li:before {
+  content: "";
+  width: 150px;
+  height: 150px;
+  display: block;
+  position: absolute;
+  transform: rotate(-45deg) translate(-110%, -23px);
+  z-index: -2;
+  animation: back-out 0.5s forwards;
+  animation-timing-function: cubic-bezier(0.5, -0.6, 1, 1);
+}
+
+ul#buttons li:hover a {
+  animation: icon-in 0.5s forwards;
+  animation-timing-function: cubic-bezier(0, 0, 0.4, 1.6);
+}
+
+ul#buttons li:hover:before {
+  animation: back-in 0.5s forwards;
+  animation-timing-function: cubic-bezier(0, 0, 0.4, 1.6);
+}
+
+@keyframes back-in {
+  0% {
+    transform: rotate(-45deg) translate(-110%, -33px);
+  }
+
+  80% {
+    transform: rotate(-45deg) translate(5%, -33px);
+  }
+
+  100% {
+    transform: rotate(-45deg) translate(0%, -33px);
+  }
+}
+
+@keyframes back-out {
+  0% {
+    transform: rotate(-45deg) translate(0%, -33px);
+  }
+
+  20% {
+    transform: rotate(-45deg) translate(5%, -33px);
+  }
+
+  100% {
+    transform: rotate(-45deg) translate(-110%, -33px);
+  }
+}
+
+@keyframes icon-in {
+  0% {
+    font-size: 2.25em;
+  }
+
+  80% {
+    color: #fff;
+    font-size: 2.5em;
+  }
+
+  100% {
+    color: #fff;
+    font-size: 2.1em;
+  }
+}
+
+@keyframes icon-out {
+  0% {
+    color: #fff;
+    font-size: 2.1em;
+  }
+
+  20% {
+    color: #fff;
+    font-size: 2.25em;
+  }
+
+  100% {
+    font-size: 2em;
+  }
+} */

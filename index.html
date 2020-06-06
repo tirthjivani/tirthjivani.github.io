@@ -1,22 +1,155 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="node_modules/bootstrap/dist/css/bootstrap.min.css"
+    />
+
+    <link
+      rel="stylesheet"
+      href="node_modules/font-awesome/css/font-awesome.min.css"
+    />
+    <link rel="stylesheet" href="css/bootstrap-social.css" />
+    <link rel="stylesheet" type="text/css" href="./css/style.css" />
     <link
       rel="stylesheet"
       href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
     />
-    <link rel="shortcut icon" href="xD.ico" />
-    <title>TJ's profile</title>
+    <link rel="shortcut icon" href="favicon.jpg" />
+    <title>I am Tirth</title>
     <meta
       name="description"
       content="This is a private site for different connections of mine."
     />
     <meta name="copyright" content="" />
+    <script src="js/modernizr-2.6.2.min.js"></script>
   </head>
 
   <body>
-    <ul id="buttons">
+    <div class="home">
+      <div class="home-subtitle">
+        Heyy, I'm
+      </div>
+      <div class="home-heading">
+        Tirth Jivani
+      </div>
+    </div>
+
+    <div class="profile">
+      <div class="heading">
+        Profile
+      </div>
+      <div class="subtitle">
+        I'm a creative Student/Developer
+      </div>
+      <hr />
+      <div class="profile-content">
+        <div class="profile-content-about">
+          <div class="heading2">About me</div>
+          <div class="subtitle2">I am ...</div>
+        </div>
+        <div class="profile-content-photo">
+          <img
+            src="/images/mypic.jpg"
+            alt="My Photo"
+            style="
+              width: 250px;
+              border: 3px solid white;
+              border-radius: 50%;
+              align-self: center;
+              margin-bottom: 20px;
+            "
+          />
+        </div>
+        <div class="profile-content-details">
+          <div class="heading2">Details</div>
+          <div class="subtitle2">
+            <b>Name<br /></b>
+            Tirth Jivani<br />
+            <br />
+            <b>Age<br /></b>
+            20 years <br />
+            <br />
+            <b>Location<br /></b>
+            Anand, Gujarat, India
+          </div>
+        </div>
+      </div>
+      <div class="profile-footer">
+        Got inspired? Copied the theme? Or do you just like the website? No
+        problem, just buy me a beer and make me happy!
+        <input type="button" value="Donate"  />
+      </div>
+    </div>
+
+    <div class="exp">
+      <div class="heading">Education</div>
+      <div>
+        Show here
+      </div>
+      <div>Carrer</div>
+      <div>
+        Show here
+      </div>
+    </div>
+
+    <div class="abilities">
+      <div class="heading">Heading</div>
+      <div>Quote/ Sub-heading</div>
+      <div>
+        Skills
+      </div>
+      <div>
+        <div>
+          Col 1
+        </div>
+        <div>
+          Col 2
+        </div>
+      </div>
+      <hr />
+      <div>
+        Languages
+      </div>
+      <div>
+        <div>
+          Col 1
+        </div>
+        <div>
+          Col 2
+        </div>
+      </div>
+      <div>
+        Tools
+      </div>
+      <div>
+        <div>
+          Col 1
+        </div>
+        <div>
+          Col 2
+        </div>
+      </div>
+    </div>
+
+    <div class="prj">
+      <div class="heading">Project</div>
+      <div>
+        <div>
+          2 here
+        </div>
+        <div>
+          2 here
+        </div>
+      </div>
+    </div>
+
+    <div class="contact">
+      contact
+    </div>
+
+    <!-- <ul id="buttons">
       <li class="fb">
         <a href="https://www.facebook.com/tirth.jivani" title="Facebook">
           <i class="fab fa-facebook-f"></i>
@@ -44,6 +177,34 @@
           <i class="fab fa-github"></i>
         </a>
       </li>
-    </ul>
+    </ul> -->
+
+    <div class="component">
+      <!-- Start Nav Structure -->
+      <button class="cn-button" id="cn-button">+</button>
+      <div class="cn-wrapper" id="cn-wrapper">
+        <ul>
+          <li>
+            <a href="#"><span class="icon-picture"></span></a>
+          </li>
+          <li>
+            <a href="#"><span class="icon-headphones"></span></a>
+          </li>
+          <li>
+            <a href="#"><span class="icon-home"></span></a>
+          </li>
+          <li>
+            <a href="#"><span class="icon-facetime-video"></span></a>
+          </li>
+          <li>
+            <a href="#"><span class="icon-envelope-alt"></span></a>
+          </li>
+        </ul>
+      </div>
+      <div id="cn-overlay" class="cn-overlay"></div>
+      <!-- End Nav Structure -->
+    </div>
+    <script src="js/polyfills.js"></script>
+    <script src="js/demo1.js"></script>
   </body>
 </html>
