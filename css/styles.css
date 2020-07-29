@@ -27,10 +27,44 @@ li {
 }
 
 a {
-  color: #258CDB;
+  color: #258cdb;
 }
 
 a:hover {
   text-decoration: none;
-  color: #2571DB;
+  color: #2571db;
+}
+
+a:active {
+  text-decoration: none;
+}
+
+a::selection {
+  text-decoration: none;
+}
+
+.gallery {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.gallery img {
+  padding: 15px;
+  filter: grayscale(100%);
+  transition: 1s;
+}
+
+.gallery img:hover {
+  filter: grayscale(0);
+  transform: scale(1.1);
+}
+
+.see-more-button {
+  text-align: center;
+  color: #258cdb;
+  text-decoration: none;
+  margin: 20px;
+  margin-bottom: 40px;
 }
