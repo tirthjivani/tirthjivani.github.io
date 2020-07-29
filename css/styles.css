@@ -22,6 +22,21 @@ h3 {
   max-width: 700px;
 }
 
+.home-row-content {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.project-container {
+  max-width: 700px;
+  text-align: justify;
+}
+
+.project-row-content {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
 li {
   font-size: 16px;
 }
