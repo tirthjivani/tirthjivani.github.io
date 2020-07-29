@@ -1,0 +1,27 @@
+body {
+  font-family: "Lato", sans-serif;
+}
+
+p {
+  font-size: 16px;
+}
+
+h2 {
+  font-size: 36px;
+}
+
+h2.profile-name {
+  margin-bottom: 1px;
+}
+
+h3 {
+  font-size: 28;
+}
+
+.home-container {
+  max-width: 700px;
+}
+
+li {
+  font-size: 16px;
+}
