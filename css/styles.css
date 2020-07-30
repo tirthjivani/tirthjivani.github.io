@@ -38,6 +38,11 @@ h3 {
   margin-right: 5px;
 }
 
+.work-container {
+  max-width: 700px;
+  text-align: justify;
+}
+
 li {
   font-size: 16px;
 }
