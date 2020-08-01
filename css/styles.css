@@ -98,8 +98,8 @@ a::selection {
 }
 
 .link-tab {
-  margin: 5px;
-  padding: 10px;
+  margin: 0px;
+  padding: 7px;
 }
 
 a.link-tab:hover {
