@@ -96,3 +96,16 @@ a::selection {
   margin: 20px;
   margin-bottom: 40px;
 }
+
+.link-tab {
+  margin: 5px;
+  padding: 10px;
+}
+
+a.link-tab:hover {
+  background-color: #f0f0f0;
+}
+
+a.link-tab.active {
+  font-weight: bolder;
+}
