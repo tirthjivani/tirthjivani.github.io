@@ -1,14 +1,96 @@
 body {
+  --text-color: #222;
+  --bkg-color: #fff;
+}
+body.dark-theme {
+  --text-color: #eee;
+  --bkg-color: #121212;
+}
+
+* {
   font-family: "Lato", sans-serif;
+}
+
+input[type="checkbox"] {
+  -webkit-appearance: none;
+  visibility: hidden;
+  display: none;
+}
+
+.dark-light-button {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 3%;
+  color: var(--text-color);
+}
+
+.check {
+  position: relative;
+  display: block;
+  width: 40px;
+  height: 20px;
+  background: var(--text-color);
+  cursor: pointer;
+  border-radius: 20px;
+  overflow: hidden;
+  transition: ease-in 0.5s;
+}
+
+input[type="checkbox"]:checked ~ .check {
+  background: var(--bkg-color);
+  box-shadow: 0 0 0 1200px var(--text-color);
+}
+
+.check:before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  background: var(--bkg-color);
+  width: 16px;
+  transition: 0.5s;
+  height: 16px;
+  border-radius: 50%;
+}
+
+input[type="checkbox"]:checked ~ .check:before {
+  transform: translateX(-50px);
+}
+
+.check:after {
+  transition: 0.5s;
+  left: 0px;
+  transform: translateX(50px);
+}
+
+input[type="checkbox"]:checked ~ .check:after {
+  transform: translateX(0px);
+}
+
+body {
+  background-color: var(--bkg-color);
+}
+
+.container {
+  background-color: var(--bkg-color);
+}
+
+.heading-jumbtron {
+  margin-bottom: 0;
+  padding-top: 40px;
+  padding-bottom: 10px;
+  background-color: var(--bkg-color);
 }
 
 p {
   font-size: 16px;
   line-height: 1.5;
+  color: var(--text-color);
 }
 
 h2 {
   font-size: 36px;
+  color: var(--text-color);
 }
 
 h2.profile-name {
@@ -17,6 +99,7 @@ h2.profile-name {
 
 h3 {
   font-size: 28px;
+  color: var(--text-color);
 }
 
 .home-container {
@@ -50,6 +133,7 @@ h3 {
 
 li {
   font-size: 16px;
+  color: var(--text-color);
 }
 
 a {
