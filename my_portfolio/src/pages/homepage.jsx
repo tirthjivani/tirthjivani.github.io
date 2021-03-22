@@ -1,5 +1,3 @@
-function Homepage() {
-  return <>Hello, World!</>;
+export default function Homepage() {
+  return <h2>Hello, I'm Tirth!</h2>;
 }
-
-export default Homepage;
