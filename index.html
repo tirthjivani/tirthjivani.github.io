@@ -1,25 +1,156 @@
-<body
-  bgcolor="black"
-  style="
-    display: grid;
-    place-content: center;
-    color: white;
-    font-family: sans-serif;
-    font-size: xx-large;
-    font-weight: bolder;
-    text-align: center;
-  "
->
-  New Website is coming soon.
-  <br />
-  <div style="font-size: large; font-weight: 100; margin-top: 5px">
-    Click
-    <a href="/old/" style="color: #0095ff; text-decoration: none">here</a>
-    to old Website.
-    <br />
-    <br />
-    <br />
-    <br />
-  </div>
-  <div style="font-size: small; font-weight: 100">#blacklivesmatter</div>
-</body>
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<!-- Required meta tags -->
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="shortcut icon" href="./assets/favicon.ico" type="image/x-icon" />
+
+		<title>Tirth Jivani - Designer, Developer and Researcher</title>
+
+		<!-- Bootstrap CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+		<link rel="stylesheet" type="text/css" href="./css/loader.css" />
+		<link rel="stylesheet" type="text/css" href="./css/font.css" />
+		<link rel="stylesheet" type="text/css" href="./css/sitechange.css" />
+		<link rel="stylesheet" type="text/css" href="./css/navbar.css" />
+		<link rel="stylesheet" type="text/css" href="./css/common.css" />
+		<link rel="stylesheet" type="text/css" href="./css/home-page.css" />
+		<link rel="stylesheet" type="text/css" href="./css/work.css" />
+		<link rel="stylesheet" type="text/css" href="./css/projects.css" />
+		<link rel="stylesheet" type="text/css" href="./css/contact.css" />
+
+		<!-- Preloader -->
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+		<script src="./js/preloader.js"></script>
+
+		<!-- Global site tag (gtag.js) - Google Analytics -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-174029525-1"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag() {
+				dataLayer.push(arguments);
+			}
+			gtag("js", new Date());
+			gtag("config", "UA-174029525-1");
+		</script>
+	</head>
+	<body>
+		<div id="loader-wrapper" data-barba="wrapper">
+			<div class="loader-section section-left"><h1 class="left animate__animated animate__shakeY">tirth</h1></div>
+			<div class="loader-section section-right"><h1 class="right animate__animated animate__shakeY animate__delay-1s">jivani</h1></div>
+		</div>
+
+		<div class="loader"></div>
+
+		<div id="content" data-barba="container" data-barba-namespace="page-a">
+			<!-- Navbar -->
+			<div id="nav" class="navbar-custom transparent">
+				<div class="nav-container">
+					<div class="tirth">T.</div>
+					<ul class="nav-links">
+						<li class="nav-item hide-sm">
+							<a class="nav-link" href="#portfolio">Portfolio</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="/about">About</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="/blog">Blog</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="./Tirth's Resume.pdf">Resume</a>
+						</li>
+						<li class="nav-item hide-sm">
+							<a class="nav-link" href="#contact">Contact</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="body-content">
+				<div class="page-body home-section">
+					<div class="title">Hi, I'm Tirth.</div>
+					<div class="sub-title">
+						A young designer, developer and researcher with a passion for technology, a way with people, and a wish to build the community better.
+					</div>
+				</div>
+
+				<div id="portfolio" class="page-body">
+					<h5 class="heading"><span class="line"></span> FEATURED WORK</h5>
+
+					<div id="iirs" class="work-item">
+						<div class="work-image-container"><img src="./assets/truein.png" class="work-image" alt="Truein" /></div>
+						<div class="details">
+							<div class="sub-heading">IIRS Fellowship</div>
+							<div class="text-wrap text">A 3 month work/research at Indian Institute of Remote Sensing, Dehradun for a full stack software.</div>
+						</div>
+					</div>
+
+					<div id="truein" class="work-item">
+						<div class="work-image-container"><img src="./assets/truein.png" class="work-image" alt="Truein" /></div>
+						<div class="details">
+							<div class="sub-heading">Yugstart Tech. Pvt. Lt.</div>
+							<div class="text">Touchless face recognition for employee attendance and visitor management.</div>
+						</div>
+					</div>
+
+					<div id="meris" class="work-item">
+						<div class="work-image-container"><img src="./assets/meriStreet.png" class="work-image" alt="Truein" /></div>
+						<div class="details">
+							<div class="sub-heading">meriStreet</div>
+							<div class="text-wrap text">
+								Digital catalog | QR code ordering for in-store experience Manage business on one platform digitally | Payments streamlined
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- <div class="page-body projects">
+					<h5 class="heading"><span class="line"></span> OTHER WORKS</h5>
+
+					<h1 class="animate__animated animate__fadeInLeft">An animated element</h1>
+					Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae mollitia corrupti fugit. Lorem ipsum dolor sit amet consectetur
+					adipisicing elit. Aspernatur consequuntur impedit veritatis fugiat nam quo beatae adipisci atque. Non laudantium tempore eum dolore
+					expedita, culpa consectetur. Eius repudiandae velit odio! Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium iusto
+					deleniti consectetur quae similique voluptates sunt, delectus sapiente modi dolorem a quia repudiandae, expedita repellat! Tempore,
+					voluptates. Nobis, praesentium esse? Lorem ipsum dolor sit amet consectetur adipisicing elit. Error nostrum ex ullam omnis quos quisquam
+					ratione tempore. Magni veritatis est consequuntur reprehenderit laboriosam neque recusandae error amet at. Id, aliquid.
+				</div> -->
+
+				<div id="contact" class="page-body black">
+					<h5 class="heading"><span class="line"></span> CONTACT</h5>
+
+					<div class="sub-heading">Contact</div>
+
+					Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae mollitia corrupti fugit. Lorem ipsum dolor sit amet consectetur
+				</div>
+			</div>
+		</div>
+
+		<!-- Javascript -->
+		<script src="https://unpkg.com/@barba/core"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.3.4/gsap.min.js"></script>
+		<script src="./js/navbar.js"></script>
+		<!-- <script src="./js/sitechange.js"></script> -->
+		<script src="./js/scrolling.js"></script>
+		<script type="text/javascript">
+			barba.init({
+			  transitions: [{
+				name: 'opacity-transition',
+				leave(data) {
+				  return gsap.to(data.current.container, {
+					opacity: 0
+				  });
+				},
+				enter(data) {
+				  return gsap.from(data.next.container, {
+					opacity: 0
+				  });
+				}
+			  }]
+			});
+		  </script>
+	</body>
+</html>

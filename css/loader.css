@@ -1,0 +1,109 @@
+.animate__animated.animate__shakeY {
+	--animate-duration: 10s;
+}
+
+#loader-wrapper .loader-section {
+	position: fixed;
+	top: 0;
+	width: 51%;
+	height: 100%;
+	background: #222;
+	z-index: 1000;
+}
+
+#loader-wrapper .loader-section.section-left {
+	left: 0;
+}
+
+#loader-wrapper .loader-section.section-right {
+	right: 0;
+}
+
+#loader-wrapper .loader-section h1 {
+	font-family: "Playfair Display", serif;
+	font-size: 50px;
+	margin-top: 50vh;
+}
+
+#loader-wrapper .loader-section h1.left {
+	color: #00adb5;
+	text-align: end;
+	margin-right: 4%;
+}
+
+#loader-wrapper .loader-section h1.right {
+	color: #eee;
+	margin-left: 1%;
+}
+
+#content {
+	z-index: 999;
+}
+
+/* Loaded Styles */
+.loaded {
+	width: 100%;
+	overflow-x: hidden;
+}
+
+.loaded #loader-wrapper .loader-section.section-left {
+	-webkit-transform: translateX(-100%);
+	-moz-transform: translateX(-100%);
+	-o-transform: translateX(-100%);
+	-ms-transform: translateX(-100%);
+	transform: translateX(-100%);
+
+	-webkit-transition: all 0.7s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+	-moz-transition: all 0.7s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+	-o-transition: all 0.7s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+	-ms-transition: all 0.7s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+	transition: all 0.7s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+
+	visibility: hidden;
+}
+
+.loaded #loader-wrapper .loader-section.section-right {
+	-webkit-transform: translateX(100%);
+	-moz-transform: translateX(100%);
+	-o-transform: translateX(100%);
+	-ms-transform: translateX(100%);
+	transform: translateX(100%);
+
+	-webkit-transition: all 1s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+	-moz-transition: all 1s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+	-o-transition: all 1s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+	-ms-transition: all 1s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+	transition: all 1s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+
+	visibility: hidden;
+}
+
+.loaded #loader-wrapper {
+	-webkit-transition: all 0.3s 1s ease-out;
+	transition: all 0.3s 1s ease-out;
+	visibility: hidden;
+}
+
+@media only screen and (max-width: 768px) {
+	#loader-wrapper .loader-section h1 {
+		font-family: "Playfair Display", serif;
+		font-size: 30px;
+		margin-top: 45vh;
+	}
+}
+
+.loader {
+	position: fixed;
+	width: 100vw;
+	height: 200vh;
+	pointer-events: none;
+	background-color: #fff6ed;
+	z-index: 1;
+	visibility: hidden;
+	opacity: 0;
+}
+
+.is-transitioning {
+    pointer-events: none;
+    cursor: progress;
+}

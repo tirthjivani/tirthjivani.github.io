@@ -1,0 +1,39 @@
+.home-section {
+	background-color: #eee;
+	width: 100%;
+	padding-left: 20%;
+	padding-right: 20%;
+	height: 100vh;
+	margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+	background-image: url(../assets/front2.jpg);
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+@media only screen and (max-width: 768px) {
+	.home-section {
+		width: 100%;
+		padding: 2em;
+		background-image: none;
+	}
+}
+
+@media screen and (max-width: 1200px) and (min-width: 768px) {
+	.home-section {
+		background-image: none;
+	}
+}
+
+.other-home-section {
+	background-color: #eee;
+	width: 100%;
+	padding-left: 20%;
+	padding-right: 20%;
+	height: 100vh;
+	margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+	background-image: none;
+}
