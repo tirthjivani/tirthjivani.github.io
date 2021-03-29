@@ -10,7 +10,6 @@ $(document).ready(function() {
 			$("#nav").addClass("transparent");	
 		}
 
-		console.log($("#contact").position().top-10, windowpos)
 		if (windowpos >= $("#contact").position().top-10) {
             $("#nav").addClass("black-nav");
 		} else {
