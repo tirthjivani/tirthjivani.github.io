@@ -12,8 +12,13 @@
 	padding-bottom: 5em;
 }
 
+#iirs {
+	opacity: 0;
+}
+
 #truein {
 	flex-direction: row;
+	opacity: 0;
 }
 
 .details {
@@ -45,6 +50,10 @@
 	-o-transition: all 0.65s;
 	transition: all 0.65s;
 	transform: scale(1.05);
+}
+
+#meris {
+	opacity: 0;
 }
 
 #meris .work-image {
