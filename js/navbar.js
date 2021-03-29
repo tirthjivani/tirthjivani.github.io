@@ -13,6 +13,7 @@ $(document).ready(function() {
 			n.addClass("transparent");	
 		}
 
+		console.log(c.position().top-10, windowpos)
 		if (windowpos >= c.position().top-10) {
             n.addClass("black-nav");
 		} else {
