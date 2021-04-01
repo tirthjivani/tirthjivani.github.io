@@ -21,6 +21,7 @@
 		<link rel="stylesheet" type="text/css" href="./css/counter.css" />
 		<link rel="stylesheet" type="text/css" href="./css/projects.css" />
 		<link rel="stylesheet" type="text/css" href="./css/contact.css" />
+		<link rel="stylesheet" type="text/css" href="./css/mail.css" />
 
 		<!-- Global site tag (gtag.js) - Google Analytics -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-174029525-1"></script>
@@ -145,7 +146,13 @@
 							<input class="field name" name="name" placeholder="Name" />
 							<input class="field email" name="email" placeholder="Email" />
 							<textarea class="field message" name="message" placeholder="Message"></textarea>
-							<button class="submit-button" name="Send" onclick="sendMail()">Send</button>
+							<button class="button" onclick="sendMail()">
+								<span class="default">Send</span>
+								<span class="success">Sent</span>
+								<div class="left"></div>
+								<div class="right"></div>
+							</button>
+							
 						</form>
 						<div class="links-section">
 							<div class="heading">Tirth Jivani</div>

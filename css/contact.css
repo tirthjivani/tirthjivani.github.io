@@ -50,7 +50,26 @@ a.link {
 .submit-button {
 	padding: 10px;
 	margin: 5px;
+	outline: none;
+	background: #eee;
 }
+
+.submit-button:hover {
+	padding: 10px;
+	margin: 5px;
+	outline: none;
+	background: #00adb5;
+	outline: none;
+}
+
+.submit-button {
+	padding: 10px;
+	margin: 5px;
+	outline: none;
+	background: #00adb5;
+	outline: none;
+}
+
 
 .field.message {
 	height: 200px;
