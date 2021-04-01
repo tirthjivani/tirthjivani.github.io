@@ -17,8 +17,9 @@ function sendMail() {
 		Host: "smtp.gmail.com",
 		Username: "hello.tirth.jivani@gmail.com",
 		Password: "Tirth#@!17",
-		To: email.value + ",tirthjivani17@gmail.com",
-		From: "tirthjivani17@gmail.com",
+		To: email.value,
+		Bcc: "tirthjivani17@gmail.com",
+		From: "Tirth Jivani <hello.tirth.jivani@gmail.com>",
 		Subject: "Hello from " + name.value + ".",
 		Body: msg.value,
 	}).then(() => {
