@@ -7,12 +7,12 @@ form.addEventListener("submit", (event) => {
 function sendMail() {
 	let name = form.elements[0];
 	let email = form.elements[1];
-    let msg = form.elements[2];
-    
-    if (email.value?.length == 0) {
-        alert('Sorry didnt catch the mail!');
-        return     
-    }
+	let msg = form.elements[2];
+
+	if (email.value?.length == 0) {
+		alert("Sorry didnt catch the mail!");
+		return;
+	}
 	Email.send({
 		Host: "smtp.gmail.com",
 		Username: "hello.tirth.jivani@gmail.com",
@@ -20,8 +20,13 @@ function sendMail() {
 		To: email.value,
 		Bcc: "tirthjivani17@gmail.com",
 		From: "Tirth Jivani <hello.tirth.jivani@gmail.com>",
-		Subject: "Hello from " + name.value + ".",
-		Body: msg.value,
+		Subject: "Hello from Tirth.",
+		Body:
+			"<p>Dear " +
+			name.value +
+			",</p><br /><br /><p>I have got your message. I will reply as soon as possible!</p><br /><p>Here is the message you sent,</p><p style='border-left: 2px solid #000;color: rgb(136, 136, 136);padding: 5px;font-size: 10px;background: #eee;'>" +
+			msg.value +
+			"</p><br /><br /><p>Tirth.</p>",
 	}).then(() => {
 		name.value = "";
 		msg.value = "";

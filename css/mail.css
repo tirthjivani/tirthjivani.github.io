@@ -131,9 +131,9 @@
     opacity: var(--success-opacity);
     color: var(--success);
 }
-* {
+/* * {
     box-sizing: inherit;
 }
 *:before, *:after {
     box-sizing: inherit;
-}
+} */
