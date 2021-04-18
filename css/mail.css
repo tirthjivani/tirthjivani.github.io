@@ -62,6 +62,7 @@
     -webkit-appearance: none;
     -webkit-tap-highlight-color: transparent;
     outline: none;
+    align-self: center;
 }
 .button .left, .button .right {
     position: absolute;

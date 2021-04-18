@@ -44,7 +44,7 @@
 	margin-top: 210px;
 	font-size: 50px;
 	font-family: "Playfair Display", serif;
-	text-align: center;
+	text-align: right;
 }
 
 .uc_sub {
@@ -53,6 +53,13 @@
 	flex-wrap: wrap;
 	font-family: "Raleway", sans-serif;
 	text-align: center;
+}
+
+.links-section .heading {
+	font-size: 33px;
+	font-family: "Playfair Display", serif;
+	text-align: end;
+	font-weight: 900;
 }
 
 @media only screen and (max-width: 768px) {
@@ -93,5 +100,13 @@
 		font-family: "Raleway", sans-serif;
 		text-align: center;
 	}
+
+	.links-section .heading {
+		font-size: 33px;
+		font-family: "Playfair Display", serif;
+		text-align: center;
+		font-weight: 900;
+	}
+	
 }
 
