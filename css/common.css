@@ -37,6 +37,17 @@ li.nav-item {
 	list-style-type: none;
 }
 
+.flex-center {
+	display: flex;
+	justify-content: center;
+}
+
+.resume {
+	width: 70%;
+    height: 500px;
+    margin-top: 220px;
+}
+
 @media only screen and (max-width: 768px) {
 	.hide-sm {
 		display: none;
