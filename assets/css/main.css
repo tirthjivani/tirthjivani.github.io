@@ -1,0 +1,466 @@
+
+/* ==================================================
+   Basic Styles
+================================================== */
+
+html{
+	width:100%;
+	font-size: 100%; 
+	-webkit-text-size-adjust: 100%; 
+	-ms-text-size-adjust: 100%;
+}
+
+body{
+	background:#fff;
+	color:#000;
+	font-weight:400;
+	font-size:16px;
+	font-family: 'Montserrat', sans-serif;
+	line-height:30px;
+	letter-spacing: 0.2px;
+}
+
+
+a{
+	color:#777;
+	font-weight: 400;
+	text-decoration: none;
+	cursor: pointer;
+	
+	-webkit-transition: color 0.15s ease-in-out 0s;	
+	   -moz-transition: color 0.15s ease-in-out 0s;
+		 -o-transition: color 0.15s ease-in-out 0s;
+		    transition: color 0.15s ease-in-out 0s;
+}
+
+a:hover,
+a:active,
+a:focus{
+	outline: 0;
+	color:#000;
+	text-decoration:none;
+}
+
+a img {
+	border: none;
+}
+
+a > img {
+	vertical-align: bottom;	
+}
+
+img {
+	max-width: none;	
+}
+
+p {
+	margin: 0 0 30px;
+}
+
+ul {
+    margin: 0 0 20px 0px;
+    padding: 0;
+}
+
+ul {
+	list-style: circle inside;
+}
+
+li {
+	line-height: 30px;
+}
+
+input::input-placeholder,
+textarea::input-placeholder {
+	color: #BCBCC4;
+	opacity: 1;
+}
+
+.w-100 {
+	max-width: 100%;
+}
+
+/* ==================================================
+   Typography
+================================================== */
+
+h3,
+h6{
+	margin:0 0 20px 0;
+	color:#000;
+	font-weight:400;
+	font-family: 'Montserrat', sans-serif;
+	line-height:1.5em;
+}
+
+h3{
+	font-size:22px;
+	color:#000;
+	letter-spacing: 0.6px;
+	text-align:center;
+	font-weight:400;
+
+}
+
+h6{
+	font-size:13px;
+	font-weight:400;
+	line-height:1em;
+	color:#B5B5B5;
+	text-align:center;
+	letter-spacing: 0.5px;
+	padding-top: 5px;
+	
+}
+
+
+
+h7{
+	font-size:14px;
+	font-weight:400;
+	letter-spacing: 1px;
+	color:#000;
+	letter-spacing: 0.5px;
+	text-align:center;
+	line-height:1.6em;
+	
+}
+
+
+/* ==================================================
+   Margin Bottom Sets
+================================================== */
+
+.margin-0{
+	margin-bottom:0 !important;
+}
+
+
+/* ==================================================
+   Header
+================================================== */
+
+header {
+	background:transparent;
+	position: static;
+	width: 100%;
+	height: 100px;
+	z-index: 1001;
+	padding-top:40px;
+	padding-bottom: 40px;
+}
+
+header #logo a {
+	color: #000;
+	font-family: 'Montserrat', sans-serif;
+	font-size: 22px;
+	font-weight: 500;
+	line-height: 100px;
+	letter-spacing: 2px;
+}
+
+header #logo a:hover {
+	color: #777;	
+}
+
+
+
+/* Navigation */
+
+nav#menu {
+	float: right;
+}
+
+nav#menu #menu-nav {
+	margin: 0;
+	padding: 0;
+}
+
+nav#menu #menu-nav li {
+	position: relative;	
+	list-style: none;
+	float: left;
+	padding: 0 30px;
+	
+}
+
+nav#menu #menu-nav li a {
+	color: #000;
+	font-family: 'Montserrat', sans-serif;
+	font-size: 16px;
+	font-weight: 500;
+	line-height: 100px;
+	display: block;
+	letter-spacing: 0.2px;
+}
+
+nav#menu #menu-nav li:last-child {
+	padding-right: 0;
+}
+
+nav#menu #menu-nav li a:hover {
+	color: #777;
+}
+
+/* ==================================================
+   Intro Box
+================================================== */
+
+#intro-box {
+	position: relative;
+	background:transparent;
+	padding: 60px 0 130px;
+	text-align:center;
+}
+
+#intro-box h3 {
+	color: #000;
+	font-family: 'Montserrat', sans-serif;
+	font-size: 33px;
+    font-weight: 400;
+	line-height: 1.7;
+	letter-spacing: 0.5px;
+	text-align: start;
+	
+}
+
+#intro-box p {
+	text-align: start;
+}
+
+#intro-box .center {
+	text-align: center;
+}
+
+#m-0 {
+	padding-bottom: 20px;
+}
+
+#p-90 {
+	padding-bottom: 100px;
+}
+/* ==================================================
+   Team People / Single Team
+================================================== */
+
+/* Single Team Page */
+
+#single-team .team-img {
+	margin-bottom: 30px;	
+}
+
+#single-team .team-img img {
+	width: 100%;
+}
+
+#single-team .team-img-small {
+	display: flex;
+	justify-content: center;	
+}
+
+#single-team .team-img-small img {
+	width: 50%;
+}
+
+/* ==================================================
+   Portfolio
+================================================== */
+
+#portfolio img {
+	width: 100%;	
+}
+
+#projects {
+	margin: 0;
+	padding: 0;
+}
+
+#projects li {
+	list-style: none;
+	margin-bottom: 30px;
+}
+
+.item-project {
+	position: relative;
+	overflow: hidden;	
+}
+
+.item-project:hover img,
+.item-project:active img {
+	opacity:.55
+}
+
+/* ==================================================
+   Footer
+================================================== */
+
+footer {
+	position: relative;
+	background: transparent;	
+	padding: 40px 0 40px;
+	margin-bottom: 0px;
+}
+
+/* ==================================================
+   Footer Widgets
+================================================== */
+
+footer.footer-widgets .widget {
+	margin-bottom: 0;	
+}
+
+footer.footer-widgets {
+	color: #777;
+	font-size: 20x;
+}
+
+footer.footer-widgets a {
+	color: #777;	
+}
+
+footer.footer-widgets a:hover {
+	color: #000;
+}
+
+/* ==================================================
+   Photo Widgets
+================================================== */
+
+.photo {
+	margin-top: 0px;
+	margin-left: 20px;
+	margin-right: 20px;
+}
+
+.photo-row {
+	display: flex;
+	flex-wrap: wrap;
+	padding: 0 4px;
+	justify-content: space-between;
+  }
+  
+  /* Create four equal columns that sits next to each other */
+  .photo-column {
+	flex: 25%;
+	max-width: 24%;
+	padding: 0 4px;
+  }
+  
+  .photo-column img {
+	margin-top: 5%;
+	vertical-align: middle;
+	width: 100%;
+  }
+  
+  /* Responsive layout - makes a two column-layout instead of four columns */
+  @media screen and (max-width: 900px) {
+	.photo-column {
+	  flex: 50%;
+	  max-width: 48%;
+	}
+  }
+  
+  /* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
+  @media screen and (max-width: 768px) {
+	.photo {
+		margin-left: 0px;
+		margin-right: 0px;
+	}
+
+	.photo-column {
+	  flex: 100%;
+	  max-width: 100%;
+	}
+  }
+
+  /* ==================================================
+   Button
+================================================== */
+
+  button {
+	position: relative;
+	display: inline-block;
+	cursor: pointer;
+	outline: none;
+	border: 0;
+	vertical-align: middle;
+	text-decoration: none;
+	background: transparent;
+	padding: 0;
+	font-size: inherit;
+	font-family: inherit;
+   }
+   
+   button.learn-more {
+	width: 17rem;
+	height: auto;
+   }
+   
+   button.learn-more .circle {
+	transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+	position: relative;
+	display: block;
+	margin: 0;
+	width: 3rem;
+	height: 3rem;
+	background: #282936;
+	border-radius: 1.625rem;
+   }
+   
+   button.learn-more .circle .icon {
+	transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	margin: auto;
+	background: #fff;
+   }
+   
+   button.learn-more .circle .icon.arrow {
+	transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+	left: 0.625rem;
+	width: 1.125rem;
+	height: 0.125rem;
+	background: none;
+   }
+   
+   button.learn-more .circle .icon.arrow::before {
+	position: absolute;
+	content: "";
+	top: -0.29rem;
+	right: 0.0625rem;
+	width: 0.625rem;
+	height: 0.625rem;
+	border-top: 0.125rem solid #fff;
+	border-right: 0.125rem solid #fff;
+	transform: rotate(45deg);
+   }
+   
+   button.learn-more .button-text {
+	transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	padding: 0.75rem 0;
+	margin: 0 0 0 1.85rem;
+	color: #282936;
+	font-weight: 700;
+	line-height: 1.6;
+	text-align: center;
+	text-transform: uppercase;
+   }
+   
+   button:hover .circle {
+	width: 100%;
+   }
+   
+   button:hover .circle .icon.arrow {
+	background: #fff;
+	transform: translate(1rem, 0);
+   }
+   
+   button:hover .button-text {
+	color: #fff;
+   }
