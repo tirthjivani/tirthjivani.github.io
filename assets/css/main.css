@@ -253,15 +253,6 @@ nav#menu #menu-nav li a:hover {
 	width: 100%;
 }
 
-#single-team .team-img-small {
-	display: flex;
-	justify-content: center;	
-}
-
-#single-team .team-img-small img {
-	width: 50%;
-}
-
 /* ==================================================
    Portfolio
 ================================================== */
