@@ -81,10 +81,49 @@ textarea::input-placeholder {
 	max-width: 100%;
 }
 
+.subsec.row {
+	margin-bottom: 50px
+}
+
+@media screen and (max-width: 768px) {
+	.row {
+		margin-left: 20px !important;
+	}
+}
+
 /* ==================================================
    Typography
 ================================================== */
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+Display:wght@300&display=swap');
+
+h1 {
+	margin:0 auto;
+	/* margin-bottom: 35vh; */
+	font-weight:600;
+	font-family: 'Montserrat', sans-serif;
+	line-height:1.5em;
+	text-align: center;
+	max-width: 90%;
+	color: #000;
+}
+
+.afterglow {
+	/* height: 90vh; */
+	margin: 27vh auto;
+}
+
+.quote {
+	margin: 10vh auto;
+	text-align: center;
+}
+
+.afterglow h1 {
+	color:#F13E42;
+}
+
+.afterglow h6 {
+	font-size:16px;
+}
 
 h3,
 h6{
@@ -99,9 +138,12 @@ h3{
 	font-size:22px;
 	color:#000;
 	letter-spacing: 0.6px;
-	text-align:center;
+	text-align:center !important;
 	font-weight:400;
+}
 
+h4 {
+	text-transform: uppercase;
 }
 
 h6{
@@ -112,7 +154,6 @@ h6{
 	text-align:center;
 	letter-spacing: 0.5px;
 	padding-top: 5px;
-	
 }
 
 h7{
@@ -125,6 +166,38 @@ h7{
 	line-height:1.6em;	
 }
 
+h6.work {
+	font-size:15px;
+	font-weight:400;
+	line-height:1.7em;
+	color:#B5B5B5;
+	text-align:left;
+	letter-spacing: 0.5px;
+	padding-top: 5px;
+	margin: 0px;
+}
+
+h6.work.center {
+	font-size:15px;
+	font-weight:400;
+	line-height:1.7em;
+	color:#B5B5B5;
+	text-align:center;
+	letter-spacing: 0.5px;
+	padding-top: 5px;
+	margin: 0px;
+}
+
+.red {
+	color: #F13E42;
+	text-align: left;
+	font-weight: 500;
+	margin-top: 30px;
+}
+/* span.work p{
+	margin: 0;
+	text-align: start !important;
+} */
 
 /* ==================================================
    Margin Bottom Sets
@@ -212,6 +285,13 @@ nav#menu #menu-nav li a:hover {
 	text-align:center;
 }
 
+#intro-box.work {
+	position: relative;
+	background:transparent;
+	padding: 60px 0 60px;
+	text-align:center;
+}
+
 #intro-box h3 {
 	color: #000;
 	font-family: 'Montserrat', sans-serif;
@@ -245,11 +325,29 @@ nav#menu #menu-nav li a:hover {
 /* Single Team Page */
 
 #single-team .team-img {
-	margin-bottom: 30px;	
+	margin-bottom: 50px;	
+	text-align: center;
 }
 
-#single-team .team-img img {
+.team-img img {
 	width: 100%;
+}
+
+.span8 .team-img img {
+	width: 100%;
+	margin-bottom: 20px;
+	margin-top: 20px;
+}
+
+.work.team-img img {
+	width: 40%;
+}
+
+/* Responsive layout - makes a two column-layout instead of four columns */
+@media screen and (max-width: 768px) {
+	.work.team-img img {
+		width: 100%;
+	}
 }
 
 /* ==================================================
@@ -385,7 +483,7 @@ footer.footer-widgets a:hover {
 	width: 17rem;
 	height: auto;
    }
-   
+
    button.learn-more .circle {
 	transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
 	position: relative;
@@ -438,10 +536,10 @@ footer.footer-widgets a:hover {
 	color: #de2952;
 	font-weight: 700;
 	line-height: 1.6;
-	text-align: center;
+	text-align: center;  
 	text-transform: uppercase;
    }
-   
+
    button:hover .circle {
 	width: 100%;
    }
