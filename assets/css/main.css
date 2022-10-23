@@ -363,6 +363,10 @@ nav#menu #menu-nav li a:hover {
 	width: 40%;
 }
 
+.work.team-img.laptop img {
+	width: 90%;
+}
+
 /* Responsive layout - makes a two column-layout instead of four columns */
 @media screen and (max-width: 768px) {
 	.work.team-img img {
