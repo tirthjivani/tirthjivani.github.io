@@ -353,6 +353,10 @@ nav#menu #menu-nav li a:hover {
 	width: 100%;
 }
 
+.team-img.hero img {
+	width: 85%;
+}
+
 .span8 .team-img img {
 	width: 100%;
 	margin-bottom: 20px;
