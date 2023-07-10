@@ -10,22 +10,243 @@ html {
 }
 
 body {
-	background: #fff;
-	color: #000;
-	font-weight: 400;
-	font-size: 16px;
+	background: #000;
+	color: #fff;
 	font-family: 'Montserrat', sans-serif;
-	line-height: 30px;
-	letter-spacing: 0.2px;
+	font-size: 16px;
+	font-weight: 300;
+	line-height: 26px;
+	letter-spacing: 1px;
 }
 
-.grid-container {
-	display: grid;
-	grid-template-columns: masonry;
+a {
+	color: var(--work-accent) !important;
+	font-weight: 700;
+}
+
+a:hover {
+	color: #1075da !important;
+}
+
+.card {
+	background: #191C25;
+	border-radius: 30px;
+}
+
+.link-card {
+	background: #303649;
+	width: 70px;
+	height: 70px;
+	border-radius: 20px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 15px;
+}
+
+.card-padding {
+	padding: 20px;
+}
+
+.super-heading {
+	font-size: 48px;
+	font-weight: 800;
+	line-height: 54px;
+	letter-spacing: -1px;
+}
+
+.heading {
+	font-size: 32px;
+	font-weight: 500;
+	line-height: 42px;
+	letter-spacing: -1px;
+}
+
+.summary-number {
+	font-size: 56px;
+	line-height: 70px;
+	font-weight: 800;
+}
+
+.toggle {
+	display: block;
+	cursor: pointer;
+}
+
+.toggle input {
+	display: none;
+}
+
+.toggle input+div {
+	width: 20px;
+	height: 14px;
+	position: relative;
+}
+
+.toggle input+div div {
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	transition: transform 0.5s ease;
+}
+
+.toggle input+div div span {
+	display: block;
+	position: absolute;
+	left: 0;
+	right: 0;
+}
+
+.toggle input+div div span:first-child {
+	top: 0;
+}
+
+.toggle input+div div span:first-child:before,
+.toggle input+div div span:first-child:after {
+	top: 0;
+}
+
+.toggle input+div div span:last-child {
+	bottom: 0;
+}
+
+.toggle input+div div span:last-child:before,
+.toggle input+div div span:last-child:after {
+	bottom: 0;
+}
+
+.toggle input+div div span:before,
+.toggle input+div div span:after {
+	content: '';
+	display: block;
+	width: 47%;
+	height: 2px;
+	border-radius: 1px;
+	background: #fff;
+	position: absolute;
+	-webkit-backface-visibility: hidden;
+	transition: transform 0.5s ease, border-radius 0.3s ease, background 0.4s ease;
+}
+
+.toggle input+div div span:before {
+	left: 0;
+	transform-origin: 0 50%;
+	transform: translate(1px, 0) scaleX(1.1);
+}
+
+.toggle input+div div span:after {
+	right: 0;
+	transform-origin: 100% 50%;
+	transform: translate(-1px, 0) scaleX(1.1);
+}
+
+.toggle input+div svg {
+	display: block;
+	fill: none;
+	stroke: #fff;
+	stroke-width: 2px;
+	width: 44px;
+	height: 44px;
+	stroke-linecap: round;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin: -22px 0 0 -22px;
+	stroke-dasharray: 0 82.801 8 82.801;
+	stroke-dashoffset: 82.801;
+	transform-origin: 50% 50%;
+	-webkit-backface-visibility: hidden;
+	transform: scale(1);
+	transition: stroke-dashoffset 0.5s ease, stroke-dasharray 0.6s ease, transform 0.5s ease, stroke 0.4s ease;
+}
+
+.toggle input+div svg:nth-child(3) {
+	transform: rotate(180deg) scale(1);
+}
+
+.toggle input:checked+div div {
+	transform: rotate(90deg);
+}
+
+.toggle input:checked+div div span:before,
+.toggle input:checked+div div span:after {
+	background: #fff;
+}
+
+.toggle input:checked+div div span:first-child:before {
+	transform: rotate(45deg) translate(2.2px, -3px) scaleX(1.05);
+}
+
+.toggle input:checked+div div span:first-child:after {
+	transform: rotate(-45deg) translate(-2.2px, -3px) scaleX(1.05);
+}
+
+.toggle input:checked+div div span:last-child:before {
+	transform: rotate(-45deg) translate(2.2px, 3px) scaleX(1.05);
+}
+
+.toggle input:checked+div div span:last-child:after {
+	transform: rotate(45deg) translate(-2.2px, 3px) scaleX(1.05);
+}
+
+.toggle input:checked+div svg {
+	stroke-dashoffset: 62;
+	stroke-dasharray: 0 82.801 62 82.801;
+	transform: rotate(90deg);
+	stroke: #fff;
+}
+
+.toggle input:checked+div svg:nth-child(3) {
+	transform: rotate(270deg);
+}
+
+.map-container {
+	padding: 1.75rem 0.8rem;
+	position: relative;
+	display: inline-block;
+}
+
+.map-container img {
+	width: 100%;
+}
+
+.map-container .point {
+	cursor: pointer;
+	position: absolute;
+	width: 1.6rem;
+	height: 1.6rem;
 	background-color: var(--work-accent);
-	gap: 20px;
+	border-radius: 50%;
+	transition: all 0.3s ease;
+	will-change: transform, box-shadow;
+	transform: translate(-50%, -50%);
+	box-shadow: 0 0 0 rgba(0, 172, 193, 0.4);
+	animation: pulse 3s infinite;
 }
 
-.grid-item {
-	width: 200px;
+.map-container .point:hover {
+	animation: none;
+	transform: translate(-50%, -50%) scale3D(1.35, 1.35, 1);
+	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+.map-container .india {
+	top: 48%;
+	left: 84%;
+}
+
+@keyframes pulse {
+	0% {
+		box-shadow: 0 0 0 0 rgba(0, 172, 193, 0.5);
+	}
+
+	70% {
+		box-shadow: 0 0 0 25px rgba(0, 172, 193, 0);
+	}
+
+	100% {
+		box-shadow: 0 0 0 0 rgba(0, 172, 193, 0);
+	}
 }
