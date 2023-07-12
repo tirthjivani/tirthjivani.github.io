@@ -35,17 +35,12 @@ a:hover {
 
 .link-card {
 	background: #303649;
-	width: 70px;
-	height: 70px;
+	/* width: 70px;
+	height: 70px; */
 	border-radius: 20px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	padding: 15px;
-}
-
-.card-padding {
-	padding: 20px;
 }
 
 .super-heading {
@@ -215,8 +210,8 @@ a:hover {
 .map-container .point {
 	cursor: pointer;
 	position: absolute;
-	width: 1.6rem;
-	height: 1.6rem;
+	width: .75rem;
+	height: .75rem;
 	background-color: var(--work-accent);
 	border-radius: 50%;
 	transition: all 0.3s ease;
@@ -234,7 +229,7 @@ a:hover {
 
 .map-container .india {
 	top: 48%;
-	left: 84%;
+	left: 68%;
 }
 
 @keyframes pulse {
