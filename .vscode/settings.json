@@ -1,10 +1,10 @@
 {
   "prettier.bracketSameLine": true,
-  "prettier.printWidth": 170,
+  "prettier.printWidth": 150,
   "prettier.useTabs": true,
   "prettier.tabWidth": 2,
   "editor.minimap.maxColumn": 150,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "prettier.configPath": ".prettierrc",
+  "prettier.configPath": "",
   "prettier.prettierPath": ""
 }
