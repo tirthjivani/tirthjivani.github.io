@@ -2,7 +2,18 @@ body {
   cursor: none;
 }
 
-.parent:hover .child,
-.parent.hover .child {
-  text-decoration: none;
+.cursorCustom {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 26px;
+  height: 26px;
+  background: #000;
+  pointer-events: none !important;
+  border-radius: 100%;
+  mix-blend-mode: exclusion;
+  -webkit-filter: invert(100%);
+  filter: invert(100%);
+  z-index: 999;
+  opacity: 1;
 }

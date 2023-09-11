@@ -15,7 +15,6 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <script src="/assets/js/main.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet"
@@ -46,10 +45,6 @@
                         'temp': '#dddddd',
                         'accent': '#FB6A74',
                     },
-                    cursor: {
-                        'custom': 'url(/assets/icons/cursor.svg), pointer',
-                        // 'textCustom': 'url(assets/icons/TextCursor.svg), text',
-                    }
                 },
                 container: {
                     padding: {
@@ -65,20 +60,22 @@
     </script>
 </head>
 
-<body class="bg-light text-dark font-body carlet-accent accent-accent selection:bg-accent cursor-custom">
+<body class="bg-light text-dark font-body carlet-accent accent-accent selection:bg-accent cursor-none">
+    <div class="hidden lg:block cursorCustom"></div>
     <div class="container mx-auto">
         <nav class="flex justify-between items-center h-10 mt-6 md:w-[80%] md:mx-auto">
             <div class="flex justify-between md:justify-start h-10">
                 <div class="text-[14px] font-semibold leading-[40px]">TIRTH JIVANI</div>
                 <div class="sm:ml-8 md:ml-4 lg:ml-12 hidden sm:flex sm:items-center gap-2 md:gap-1 lg:gap-2">
                     <a href="/"
-                        class="p-2 rounded-full text-[12px] font-semibold leading-[16px] underline underline-offset-8 decoration-accent decoration-2 hover:bg-accent/90 active:bg-accent hover:text-white hover:cursor-none hover:no-underline">ABOUT
+                        class="p-2 rounded-full text-[12px] font-semibold leading-[16px] underline underline-offset-8 decoration-accent decoration-2 hover:bg-accent/90 active:bg-accent hover:text-white hideCursorElement cursor-none hover:no-underline">
+                        ABOUT
                     </a>
                     <a href="/work.html"
-                        class="p-2 rounded-full text-[12px] font-semibold leading-[16px] hover:bg-accent/90 active:bg-accent hover:text-white hover:cursor-none">
+                        class="p-2 rounded-full text-[12px] font-semibold leading-[16px] hover:bg-accent/90 active:bg-accent hover:text-white hideCursorElement cursor-none">
                         WORK </a>
                     <a href="/photography.html"
-                        class="p-2 rounded-full text-[12px] font-semibold leading-[16px] hover:bg-accent/90 active:bg-accent hover:text-white hover:cursor-none">PHOTOS</a>
+                        class="p-2 rounded-full text-[12px] font-semibold leading-[16px] hover:bg-accent/90 active:bg-accent hover:text-white hideCursorElement cursor-none">PHOTOS</a>
                 </div>
             </div>
             <div class="w-8 sm:hidden">
@@ -87,7 +84,7 @@
             <div class="hidden sm:flex sm:flex-row sm:items-center sm:gap-4 text-[12px] font-semibold leading-[16px]">
                 <div class="hidden xl:flex">LET'S CONNECT</div>
                 <div
-                    class="font-medium bg-white rounded-full flex flex-row items-center px-4 py-2 gap-2 hover:cursor-none hover:bg-accent/90 active:bg-accent hover:text-white group">
+                    class="font-medium bg-white rounded-full flex flex-row items-center px-4 py-2 gap-2 hideCursorElement cursor-none hover:bg-accent/90 active:bg-accent hover:text-white group select-none">
                     tirthjivani17@gmail.com
                     <svg class="w-3 group-hover:fill-white group-hover:stroke-white" width="24" height="27"
                         viewBox="0 0 24 27" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -105,7 +102,7 @@
         <div class="mx-auto mt-20">
             <!-- Intro Section -->
             <div
-                class="font-medium tracking-[-4px] mt-6 text-center selection:leading-[48px] text-[56px] leading-[48px] sm:text-[56px] sm:leading-[56px] sm:tracking-[-4px] md:text-[87px] md:leading-[82px] md:tracking-[-6px] xl:text-[102px] xl:leading-[92px] xl:tracking-[-8px] sm:max-w-[80%] xl:w-[60%] 2xl:w-[50%] mx-auto ">
+                class="font-medium tracking-[-4px] mt-6 text-center selection:leading-[48px] text-[56px] leading-[48px] sm:text-[56px] sm:leading-[56px] sm:tracking-[-4px] md:text-[87px] md:leading-[82px] md:tracking-[-6px] xl:text-[102px] xl:leading-[92px] xl:tracking-[-8px] sm:max-w-[80%] xl:w-[60%] 2xl:w-[50%] mx-auto hoverElement">
                 HUMAN EXPERIENCE DESIGNER©
             </div>
             <div
@@ -150,7 +147,7 @@
                 <div class="mt-8 text-[12px] text-[12px] leading-[15px] text-left ml-[10%]">
                     <div class="">You can check this guy's resume from here</div>
                     <a href="https://read.cv/tirth" target="_blank"
-                        class="w-min flex flex-row items-center mt-4 font-semibold rounded-full px-4 py-2 text-dark hover:bg-accent hover:text-light cursor-none outline outline-1 outline-dark hover:outline-accent">
+                        class="w-min flex flex-row items-center mt-4 font-semibold rounded-full px-4 py-2 text-dark hover:bg-accent hover:text-light hideCursorElement cursor-none outline outline-1 outline-dark hover:outline-accent">
                         Open
                         <div class="w-6 pl-1 flex items-center">
                             <span class="material-symbols-rounded"> arrow_outward </span>
@@ -218,40 +215,49 @@
                     <div class="">Got <span class="font-bold ">a brand in your
                             hand?</span>
                         Let's discuss!</div>
-                    <div class="flex flex-row gap-2 mt-3">
-                        <a class="cursor-none outline outline-1 hover:outline-accent hover:bg-accent p-1 w-12 h-12 rounded-full"
-                            href="">
+                    <div class="flex flex-row gap-2 mt-4">
+                        <a class="flex flex-row items-center gap-1 hideCursorElement cursor-none outline outline-1 hover:outline-accent hover:bg-accent p-3 rounded-full group"
+                            href="https://www.linkedin.com/in/tirthjivani/" target="_blank">
                             <div
-                                class="w-6 h-6 p-4 bg-[url('/assets/icons/social/linkedin.svg')] hover:bg-[url('/assets/icons/social/linkedinHover.svg')] bg-cover">
+                                class="w-6 h-6 bg-[url('/assets/icons/social/linkedin.svg')] group-hover:bg-[url('/assets/icons/social/linkedinHover.svg')] bg-cover">
                             </div>
+                            <span class="font-semibold group-hover:text-white">Linkedin</span>
                         </a>
-                        <a class="cursor-none outline outline-1 hover:outline-accent hover:bg-accent p-3 w-12 h-12 rounded-full"
-                            href="">
+                        <a class="flex flex-row items-center gap-1 hideCursorElement cursor-none outline outline-1 hover:outline-accent hover:bg-accent p-3 rounded-full group"
+                            href="https://www.figma.com/@tirthjivani" target="_blank">
                             <div
-                                class="w-6 h-6 bg-[url('/assets/icons/social/dribbble.svg')] hover:bg-[url('/assets/icons/social/dribbbleHover.svg')] bg-cover">
+                                class="w-6 h-6 bg-[url('/assets/icons/social/figma.svg')] group-hover:bg-[url('/assets/icons/social/figmaHover.svg')] bg-cover">
                             </div>
+                            <span class="font-semibold group-hover:text-white">Figma</span>
                         </a>
-                        <a class="cursor-none outline outline-1 hover:outline-accent hover:bg-accent p-3 w-12 h-12 rounded-full"
-                            href="">
+                        <a class="flex flex-row items-center gap-1 hideCursorElement cursor-none outline outline-1 hover:outline-accent hover:bg-accent p-3 rounded-full group"
+                            href="https://dribbble.com/tirthjivani" target="_blank">
                             <div
-                                class="w-6 h-6 bg-[url('/assets/icons/social/linkedin.svg')] hover:bg-[url('/assets/icons/social/linkedinHover.svg')] bg-cover">
+                                class="w-6 h-6 bg-[url('/assets/icons/social/dribbble.svg')] group-hover:bg-[url('/assets/icons/social/dribbbleHover.svg')] bg-cover">
                             </div>
+                            <span class="font-semibold group-hover:text-white">Dribble</span>
                         </a>
-                        <!-- <a class="bg-white hover:bg-accent cursor-none p-3 w-12 h-12 rounded-full" href=""><img
-                                class="fill-accent" src="/assets/icons/Instagram.svg" alt="Tirth's Behance"></a>
-                        <a class="bg-white hover:bg-accent cursor-none p-3 w-12 h-12 rounded-full" href=""><img class=""
-                                src="/assets/icons/dribbble.svg" alt="Tirth's Behance"></a>
-                        <a class="bg-white hover:bg-accent cursor-none p-3 w-12 h-12 rounded-full flex items-center"
-                            href=""><img class="" src="/assets/icons/Behance.svg" alt="Tirth's Behance"></a>
-                        <a class="bg-white hover:bg-accent cursor-none p-3 w-12 h-12 rounded-full flex items-center"
-                            href=""><img class="" src="/assets/icons/X.svg" alt="Tirth's Behance"></a> -->
+                        <a class="flex flex-row items-center gap-1 hideCursorElement cursor-none outline outline-1 hover:outline-accent hover:bg-accent p-3 rounded-full group"
+                            href="https://github.com/tirthjivani" target="_blank">
+                            <div
+                                class="w-6 h-6 bg-[url('/assets/icons/social/github.svg')] group-hover:bg-[url('/assets/icons/social/githubHover.svg')] bg-cover">
+                            </div>
+                            <span class="font-semibold group-hover:text-white">Github</span>
+                        </a>
+                        <a class="flex flex-row items-center gap-1 hideCursorElement cursor-none outline outline-1 hover:outline-accent hover:bg-accent p-3 rounded-full group"
+                            href="mailto:tirthjivani17@gmail.com?subject=Let%27s%20connect!" target="_blank">
+                            <div class="w-6 h-6">
+                                <span class="material-symbols-rounded group-hover:text-white"> mail </span>
+                            </div>
+                            <span class="font-semibold group-hover:text-white">Mail</span>
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
         <div class="mt-12 md:mt-24 mb-12">
             <div
-                class="px-[1.5rem] py-4 md:w-[80%] bg-white text-dark rounded-full mx-auto cursor-none hover:outline hover:outline-1 hover:outline-accent">
+                class="px-[1.5rem] py-4 md:w-[80%] bg-white text-dark rounded-full mx-auto hideCursorElement cursor-none hover:outline hover:outline-1 hover:outline-accent">
                 <div class="flex flex-row justify-between items-end">
                     <div class="text-left text-[14px] leading-[14px]">© Tirth Jivani 2023</div>
                     <div class="flex items-center text-right text-[14px] leading-[14px]">Made with <span
@@ -265,5 +271,7 @@
     </div>
     <!-- <img class="mt-10 mx-auto w-36 text-center" src="/assets/img/memoji.png" alt="" srcset=""> -->
 </body>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js"></script>
+<script src="/assets/js/main.js"></script>
 
 </html>

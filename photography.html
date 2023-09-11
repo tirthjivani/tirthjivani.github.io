@@ -2,171 +2,152 @@
 <html lang="en-US">
 
 <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
-<!-- Meta Tags -->
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="description"
+    content="This is a profile of a UX Designer who loves minimal designs. Keep it balanced! He is from India and wants to give the best out for a worthy impact. " />
+  <title>Tirth Jivani - UX Designer, Researcher and Developer</title>
+  <link rel="shortcut icon" href="./assets/img/logo.png" type="image/x-icon">
 
-<meta name="description" content="This is a profile of a UX Designer who loves minimal designs. Keep it balanced! He is from India and wants to give the best out for a worthy impact. "/>
-<title>Randomshots | Tirth Jivani - UX Designer, Researcher and Developer</title> 
-<link rel="shortcut icon" href="./assets/img/favicon.jpeg" type="image/x-icon">    
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="HandheldFriendly" content="true" />
+  <meta name="MobileOptimized" content="320" />
 
-<!-- Mobile Specifics -->
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="HandheldFriendly" content="true"/>
-<meta name="MobileOptimized" content="320"/>   
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <script src="/assets/js/main.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <style>
+    .material-symbols-rounded {
+      font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 14
+    }
+  </style>
 
-<!-- Bootstrap -->
-<link href="assets/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/css/main.css" rel="stylesheet">
 
-<!-- Main Style -->
-<link href="assets/css/main.css" rel="stylesheet">
-
-<!-- Responsive -->
-<link href="assets/css/responsive.css" rel="stylesheet">
-
-<!-- Google Font -->
-<link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&amp;subset=latin,latin-ext,cyrillic' rel='stylesheet' type='text/css'>
-
-<!-- Fav Icon -->
-<link rel="shortcut icon" href="#">
-
-<link rel="apple-touch-icon" href="#">
-<link rel="apple-touch-icon" sizes="114x114" href="#">
-<link rel="apple-touch-icon" sizes="72x72" href="#">
-<link rel="apple-touch-icon" sizes="144x144" href="#">
-
-<!-- Modernizr -->
-<script src="assets/js/modernizr.js"></script>
-
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        fontFamily: {
+          'body': ['Inter'],
+        },
+        extend: {
+          colors: {
+            'light': '#F1F1F1',
+            'dark': '#0C0A0D',
+            'temp': '#dddddd',
+            'accent': '#FB6A74',
+          },
+          cursor: {
+            'custom': 'url(/assets/icons/cursor.svg), pointer',
+            // 'textCustom': 'url(assets/icons/TextCursor.svg), text',
+          }
+        },
+        container: {
+          padding: {
+            DEFAULT: '1.5rem',
+            sm: '1.5rem',
+            lg: '4rem',
+            xl: '5rem',
+            '2xl': '6rem',
+          },
+        },
+      }
+    }
+  </script>
 </head>
 
-
-<body>
-
-<!-- Header -->
-<header>
-	<div class="container">
-    	<div class="row">
-        	<div class="span2">
-            	<div id="logo">
-        			<a href="index.html" title="TIRTH">TIRTH</a>
-        		</div>
-            </div>
-            <div class="span10">
-        		<nav id="menu">
-                    <ul id="menu-nav">
-                        <li><a href="about.html">about</a></li>
-                        <li><a href="photography.html">photography</a></li>
-                        <li><a href="contact.html">contact</a></li>
-                    </ul>
-                </nav>
-        	</div>
+<body class="bg-light text-dark font-body carlet-accent accent-accent selection:bg-accent cursor-custom">
+  <div class="container mx-auto">
+    <nav class="flex justify-between items-center h-10 mt-6 md:w-[80%] md:mx-auto">
+      <div class="flex justify-between md:justify-start h-10">
+        <div class="text-[14px] font-semibold leading-[40px] selection:leading-[40px]">TIRTH JIVANI</div>
+        <div class="sm:ml-8 md:ml-4 lg:ml-12 hidden sm:flex sm:items-center gap-2 md:gap-1 lg:gap-2">
+          <a href="/"
+            class="p-2 rounded-full text-[12px] font-semibold leading-[16px] hover:cursor-none hover:bg-accent/90 active:bg-accent hover:text-white">ABOUT</a>
+          <a href="/work.html"
+            class="p-2 rounded-full text-[12px] font-semibold leading-[16px] hover:bg-accent/90 active:bg-accent hover:text-white hover:cursor-none hover:no-underline">
+            WORK
+          </a>
+          <a href="/photography.html"
+            class="p-2 rounded-full text-[12px] font-semibold leading-[16px] underline underline-offset-8 decoration-accent decoration-2 hover:cursor-none hover:bg-accent/90 active:bg-accent hover:text-white">PHOTOS</a>
         </div>
-    </div>
-</header>
-<!-- End Header -->
+      </div>
+      <div class="w-8 sm:hidden">
+        <span class="material-symbols-rounded"> drag_handle </span>
+      </div>
+      <div class="hidden sm:flex sm:flex-row sm:items-center sm:gap-4 text-[12px] font-semibold leading-[16px]">
+        <div class="hidden xl:flex">LET'S CONNECT</div>
+        <div
+          class="font-medium bg-white rounded-full flex flex-row items-center px-4 py-2 gap-2 hover:cursor-none hover:bg-accent/90 active:bg-accent hover:text-white group select-none">
+          tirthjivani17@gmail.com
+          <svg class="w-3 group-hover:fill-white group-hover:stroke-white" width="24" height="27" viewBox="0 0 24 27"
+            fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M4.66667 12.0001C4.66667 8.54311 4.66667 6.81463 5.74061 5.74069C6.81456 4.66675 8.54303 4.66675 12 4.66675H15.6667C19.1236 4.66675 20.8521 4.66675 21.926 5.74069C23 6.81463 23 8.54311 23 12.0001V18.1112C23 21.5681 23 23.2966 21.926 24.3706C20.8521 25.4445 19.1236 25.4445 15.6667 25.4445H12C8.54303 25.4445 6.81456 25.4445 5.74061 24.3706C4.66667 23.2966 4.66667 21.5681 4.66667 18.1112V12.0001Z"
+              stroke="#FB6A74" stroke-width="2" />
+            <path opacity="0.5"
+              d="M4.66667 21.7778C2.64163 21.7778 1 20.1362 1 18.1111V10.7778C1 6.16848 1 3.86385 2.43192 2.43192C3.86385 1 6.16848 1 10.7778 1H15.6667C17.6918 1 19.3333 2.64163 19.3333 4.66667"
+              stroke="#FB6A74" stroke-width="2" />
+          </svg>
+        </div>
+      </div>
+    </nav>
 
-<section id="single-team" class="container">
-  <div class="row">
-    <div class="span12">
-      <div class="team-img hero">
-        <img src="assets/img/camera.jpg" alt="About">
+    <div class="mx-auto mt-20">
+      <!-- Intro Section -->
+      <div
+        class="text-center font-semibold mt-4 mx-auto text-[10px] leading-[12px] max-w-[80%] sm:w-[50%] md:w-[55%] lg:w-[45%] 2xl:w-[35%] md:text-[14px] md:leading-[15px]">
+        SHOT ON IPHONE || DSLR
+      </div>
+      <div
+        class="font-medium tracking-[-4px] mt-6 mb-24 text-center text-[56px] leading-[48px] sm:text-[56px] sm:leading-[56px] sm:tracking-[-4px] md:text-[87px] md:leading-[82px] md:tracking-[-6px] xl:text-[102px] xl:leading-[92px] xl:tracking-[-8px] sm:max-w-[60%] xl:w-[60%] 2xl:w-[50%] mx-auto">
+        RANDOM SHOTS
+      </div>
+
+      <div class="mx-auto md:w-[80%]">
+        <!-- Hero Image -->
+        <div class="">
+          <video class="mt-12 h-auto max-w-full mx-auto rounded-[40px]" preload="auto" autoplay="" loop="" muted=""
+            playsinline="" style="opacity: 1;">
+            <source src="https://www.sublimio.com/wp-content/themes/sublimio/img/intro.mp4" type="
+							video/mp4">
+          </video>
+        </div>
+
+        <a class="flex flex-row items-center gap-1 cursor-none outline outline-1 hover:outline-accent hover:bg-accent p-3 rounded-full group"
+          href="mailto:tirthjivani17@gmail.com?subject=Let%27s%20connect!" target="_blank">
+          <div class="w-6 h-6">
+            <span class="material-symbols-rounded group-hover:text-white"> mail </span>
+          </div>
+          <span class="font-semibold group-hover:text-white">Mail</span>
+        </a>
+
+
+      </div>
+    </div>
+    <div class="mt-12 md:mt-24 mb-12">
+      <div
+        class="px-[1.5rem] py-4 md:w-[80%] bg-white text-dark rounded-full mx-auto cursor-none hover:outline hover:outline-1 hover:outline-accent">
+        <div class="flex flex-row justify-between items-end">
+          <div class="text-left text-[14px] leading-[14px]">© Tirth Jivani 2023</div>
+          <div class="flex items-center text-right text-[14px] leading-[14px]">Made with <span
+              class="inline-flex px-1"><img class="w-4"
+                src="https://em-content.zobj.net/source/apple/354/red-heart_2764-fe0f.png" alt=""></span> in Bharat
+          </div>
+        </div>
       </div>
     </div>
   </div>
-</section>
-
-<br/>
-
-<!-- Start Intro Box -->
-<section id="intro-box m-0" class="margin-0">
-	<div class="container">
-        <div class="row">
-          <div class="span12">
-              <h3 class="center">Some stories I failed to put my words into.</h3>
-          </div> 
-        </div>
-    </div>
-</section>
-<!-- End Intro Box -->
-
-<br/>
-
-<!-- ̦Photo Gallery Starts -->
-<div class="row photo">
-  <div class="photo-row">
-    <div class="photo-column">
-      <img src="assets/img/photography/Photo00001.jpg" alt="photography">
-      <img src="assets/img/photography/Photo00002.jpg" alt="photography">
-      <img src="assets/img/photography/Photo00003.JPG" alt="photography">
-      <img src="assets/img/photography/Photo00004.jpeg" alt="photography">
-      <img src="assets/img/photography/Photo00005.jpeg" alt="photography">
-      <img src="assets/img/photography/Photo00023.jpg" alt="photography">
-    </div>
-    <div class="photo-column">
-      <img src="assets/img/photography/Photo00006.jpg" alt="photography">
-      <img src="assets/img/photography/Photo00007.jpg" alt="photography">
-      <img src="assets/img/photography/Photo00008.jpg" alt="photography">
-      <img src="assets/img/photography/Photo00009.jpg" alt="photography">
-      <img src="assets/img/photography/Photo00010.jpg" alt="photography">
-      <img src="assets/img/photography/Photo00021.jpg" alt="photography">
-    </div>
-    <div class="photo-column">
-      <img src="assets/img/photography/Photo00011.jpg" alt="photography">
-      <img src="assets/img/photography/Photo00012.jpg" alt="photography">
-      <img src="assets/img/photography/Photo00013.jpg" alt="photography">
-      <img src="assets/img/photography/Photo00014.jpg" alt="photography">
-      <img src="assets/img/photography/Photo00015.jpg" alt="photography">
-    </div>
-    <div class="photo-column">
-      <img src="assets/img/photography/Photo00016.jpeg" alt="photography">
-      <img src="assets/img/photography/Photo00017.jpg" alt="photography">
-      <img src="assets/img/photography/Photo00018.jpg" alt="photography">
-      <img src="assets/img/photography/Photo00019.jpg" alt="photography">
-      <img src="assets/img/photography/Photo00020.jpg" alt="photography">
-      <img src="assets/img/photography/Photo00022.jpg" alt="photography">
-    </div>
-  </div>
-</div>
-<!-- End ̦Photo Gallery -->
-<br/>
-<br/>
-
-<!-- Start Load More -->
-<section id="intro-box m-0" class="margin-0">
-	<div class="container">
-        <div class="row">
-          <div class="span12">
-              <h3 class="center"><a href="https://www.instagram.com/randomshot.png" target="_blank">Load More</a></h3>
-          </div> 
-        </div>
-    </div>
-</section>
-<!-- End Load More -->
-
-<br/>
-<br/>
-<br/>
-
-<!-- Start Footer -->
-<footer class="footer-widgets">
-	<div class="container">
-    	<div class="row">
-         	<div class="span4 widget">
-            	<div class="about-widget">
-                  <h7><a href="mailto:tirthjivani17@gmail.com?subject=Let's connect!" target="_blank">tirthjivani17@gmail.com</a></h7>
-                </div>
-            </div>
-             <div class="span8 widget">
-            	<div class="twitter-widget">
-                <h7><a href="https://dribbble.com/tirthjivani" target="_blank">dribble</a> &nbsp; • &nbsp; <a href="https://www.linkedin.com/in/tirthjivani/" target="_blank">linkedin</a> &nbsp; • &nbsp; <a href="https://www.instagram.com/tirthjivani/" target="_blank">instagram</a> &nbsp; • &nbsp; <a href="https://www.github.com/tirthjivani/" target="_blank">github</a>
-                </div>	
-            </div>
-        </div>
-    </div>
-</footer>
-<!-- End Footer -->
-
+  <!-- <img class="mt-10 mx-auto w-36 text-center" src="/assets/img/memoji.png" alt="" srcset=""> -->
 </body>
+
 </html>
