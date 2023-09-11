@@ -1,3 +1,8 @@
 body {
   cursor: none;
 }
+
+.parent:hover .child,
+.parent.hover .child {
+  text-decoration: none;
+}

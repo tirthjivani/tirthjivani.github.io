@@ -67,28 +67,30 @@
 
 <body class="bg-light text-dark font-body carlet-accent accent-accent selection:bg-accent cursor-custom">
 	<div class="container mx-auto">
-		<nav class="flex justify-between items-center h-10 mt-6 md:w-[70%] md:mx-auto">
+		<nav class="flex justify-between items-center h-10 mt-6 md:w-[80%] md:mx-auto">
 			<div class="flex justify-between md:justify-start h-10">
 				<div class="text-[14px] font-semibold leading-[40px] selection:leading-[40px]">TIRTH JIVANI</div>
-				<div class="sm:ml-8 lg:ml-12 hidden sm:flex sm:items-center">
-					<a href="/" class="text-[12px] font-semibold leading-[16px]">ABOUT</a>
-					<a href="/work.html" class="sm:ml-4 lg:ml-6 text-[12px] font-semibold leading-[16px]">
-						W<span class="underline underline-offset-8 decoration-accent decoration-2">OR</span>K
+				<div class="sm:ml-8 md:ml-4 lg:ml-12 hidden sm:flex sm:items-center gap-2 md:gap-1 lg:gap-2">
+					<a href="/"
+						class="p-2 rounded-full text-[12px] font-semibold leading-[16px] hover:bg-accent/20 hover:cursor-none">ABOUT</a>
+					<a href="/work.html"
+						class="p-2 rounded-full text-[12px] font-semibold leading-[16px] parent underline underline-offset-8 decoration-accent decoration-2 hover:bg-accent/20 hover:cursor-none hover:no-underline">
+						WORK
 					</a>
 					<a href="/photography.html"
-						class="sm:ml-4 lg:ml-6 text-[12px] font-semibold leading-[16px]">PHOTOS</a>
+						class="p-2 rounded-full text-[12px] font-semibold leading-[16px] hover:bg-accent/20 hover:cursor-none">PHOTOS</a>
 				</div>
 			</div>
 			<div class="w-8 sm:hidden">
-				<img src="/assets/icons/Menu.svg" alt="">
+				<span class="material-symbols-rounded"> drag_handle </span>
 			</div>
 			<div class="hidden sm:flex sm:flex-row sm:items-center sm:gap-4 text-[12px] font-semibold leading-[16px]">
 				<div class="hidden xl:flex">LET'S CONNECT</div>
 				<div class="font-medium bg-white rounded-full flex flex-row items-center px-4 py-2 gap-2">
 					tirthjivani17@gmail.com
-					<div class="w-4 flex items-center">
-						<span class="material-symbols-rounded"> content_copy</span>
-					</div>
+					<span><img class="w-3" src="/assets/icons/copy.svg" alt=""></span>
+					<!-- <span
+						class="flex items-center text-[14px] material-symbols-rounded stroke-accent text-accent">content_copy</span> -->
 				</div>
 			</div>
 		</nav>
@@ -100,33 +102,110 @@
 				(2021 - PRESENT)
 			</div>
 			<div
-				class="font-medium tracking-[-4px] mt-6 mb-24 text-center text-[56px] leading-[48px] sm:text-[56px] sm:leading-[56px] sm:tracking-[-4px] md:text-[87px] md:leading-[82px] md:tracking-[-6px] xl:text-[102px] xl:leading-[92px] xl:tracking-[-8px] sm:max-w-[80%] xl:w-[60%] 2xl:w-[50%] mx-auto">
+				class="font-medium tracking-[-4px] mt-6 mb-24 text-center text-[56px] leading-[48px] sm:text-[56px] sm:leading-[56px] sm:tracking-[-4px] md:text-[87px] md:leading-[82px] md:tracking-[-6px] xl:text-[102px] xl:leading-[92px] xl:tracking-[-8px] sm:max-w-[60%] xl:w-[60%] 2xl:w-[50%] mx-auto">
 				SELECTED WORKS
 			</div>
 
-			<div class="mx-auto md:w-[70%]">
+			<div class="mx-auto md:w-[80%]">
 				<!-- Hero Image -->
-				<!-- <div class="mt-12 bg-auto bg-center bg-[url('/assets/img/prj_afterglow/cover.webp'] rounded-[40px]">
-				</div> -->
-				<div class="bg-no-repeat bg-cover mt-12 h-[300px] w-[100%] mx-auto rounded-[40px]"
-					style="background-image: url('/assets/img/us.JPG');"></div>
+				<div class="">
+					<img class="mt-12 h-auto max-w-full mx-auto rounded-[40px]" src="/assets/img/prj_petpuja/cover.webp"
+						alt="">
+				</div>
 
 				<!-- Hero Caption -->
 				<div class="flex flex-col">
-					<div
-						class="mt-24 font-semibold text-[24px] leading-[25px] text-center w-[80%] sm:w-[50%] lg:w-[40%] 2xl:w-[30%] mx-auto">
+					<div class="mt-10 font-semibold text-[24px] leading-[25px] text-center w-[90%] mx-auto">
 						I deliver impactful results through strategic thinking and data-driven insights.
 					</div>
 				</div>
 
-				<!-- Hero Image 2 -->
-				<div class="bg-cover bg-left mt-12 h-[475px] md:h-[575px] xl:h-[675px] sm:w-[50%] lg:w-[40%] 2xl:w-[30%] mx-auto rounded-[40px]"
+				<!-- Bybonus -->
+				<div class="text-[56px] leading-[48px] font-medium tracking-[-4px] mt-24 text-left ">
+					BYBONUS
+				</div>
+
+				<div class="">
+					<img class="mt-12 h-auto max-w-full mx-auto rounded-[40px]" src="/assets/img/prj_petpuja/cover.webp"
+						alt="">
+				</div>
+				<div class="mt-4 text-[12px] text-[12px] leading-[15px] text-left ml-[10%]">
+					<div class="">You can check this guy's resume from here</div>
+					<a href="https://tome.app/my-workspace-17/bybonus-coupon-experience-app-cllatjf4p01gqpn5q8zf5zlk0"
+						target="_blank"
+						class="w-min flex flex-row items-center mt-4 font-semibold rounded-full px-4 py-2 text-dark hover:bg-accent hover:text-light cursor-none outline outline-1 outline-dark hover:outline-accent">
+						Checkout
+						<div class="w-6 pl-1 flex items-center">
+							<span class="material-symbols-rounded"> arrow_outward </span>
+						</div>
+					</a>
+				</div>
+
+				<!-- Afterglow -->
+				<div class="text-[56px] leading-[48px] font-medium tracking-[-4px] mt-24 text-left ">
+					AFTERGLOW
+				</div>
+
+				<div class="bg-no-repeat bg-cover mt-12 h-[300px] w-[100%] mx-auto rounded-[40px]"
 					style="background-image: url('/assets/img/us.JPG');"></div>
+
+				<div class="mt-4 text-[12px] text-[12px] leading-[15px] text-left ml-[10%]">
+					<div class="">You can check this guy's resume from here</div>
+					<a href="https://tome.app/my-workspace-17/bybonus-coupon-experience-app-cllatjf4p01gqpn5q8zf5zlk0"
+						target="_blank"
+						class="w-min flex flex-row items-center mt-4 font-semibold rounded-full px-4 py-2 text-dark hover:bg-accent hover:text-light cursor-none outline outline-1 outline-dark hover:outline-accent">
+						Checkout
+						<div class="w-6 pl-1 flex items-center">
+							<span class="material-symbols-rounded"> arrow_outward </span>
+						</div>
+					</a>
+				</div>
+
+				<!-- Mooddl -->
+				<div class="text-[56px] leading-[48px] font-medium tracking-[-4px] mt-24 text-left ">
+					MOODDL
+				</div>
+
+				<div class="bg-no-repeat bg-cover mt-12 h-[300px] w-[100%] mx-auto rounded-[40px]"
+					style="background-image: url('/assets/img/us.JPG');"></div>
+
+				<div class="mt-4 text-[12px] text-[12px] leading-[15px] text-left ml-[10%]">
+					<div class="">You can check this guy's resume from here</div>
+					<a href="https://tome.app/my-workspace-17/bybonus-coupon-experience-app-cllatjf4p01gqpn5q8zf5zlk0"
+						target="_blank"
+						class="w-min flex flex-row items-center mt-4 font-semibold rounded-full px-4 py-2 text-dark hover:bg-accent hover:text-light cursor-none outline outline-1 outline-dark hover:outline-accent">
+						Checkout
+						<div class="w-6 pl-1 flex items-center">
+							<span class="material-symbols-rounded"> arrow_outward </span>
+						</div>
+					</a>
+				</div>
+
+				<!-- Petpuja -->
+				<div class="text-[56px] leading-[48px] font-medium tracking-[-4px] mt-24 text-left ">
+					PETPUJA
+				</div>
+
+				<div class="bg-no-repeat bg-cover mt-12 h-[300px] w-[100%] mx-auto rounded-[40px]"
+					style="background-image: url('/assets/img/us.JPG');"></div>
+
+				<div class="mt-4 text-[12px] text-[12px] leading-[15px] text-left ml-[10%]">
+					<div class="">You can check this guy's resume from here</div>
+					<a href="https://tome.app/my-workspace-17/bybonus-coupon-experience-app-cllatjf4p01gqpn5q8zf5zlk0"
+						target="_blank"
+						class="w-min flex flex-row items-center mt-4 font-semibold rounded-full px-4 py-2 text-dark hover:bg-accent hover:text-light cursor-none outline outline-1 outline-dark hover:outline-accent">
+						Checkout
+						<div class="w-6 pl-1 flex items-center">
+							<span class="material-symbols-rounded"> arrow_outward </span>
+						</div>
+					</a>
+				</div>
+
 			</div>
 		</div>
 		<div class="mt-12 md:mt-24 mb-12">
 			<div
-				class="px-[1.5rem] py-4 md:w-[70%] bg-white text-dark rounded-full mx-auto cursor-none hover:outline hover:outline-1 hover:outline-accent">
+				class="px-[1.5rem] py-4 md:w-[80%] bg-white text-dark rounded-full mx-auto cursor-none hover:outline hover:outline-1 hover:outline-accent">
 				<div class="flex flex-row justify-between items-end">
 					<div class="text-left text-[14px] leading-[14px]">© Tirth Jivani 2023</div>
 					<div class="flex items-center text-right text-[14px] leading-[14px]">Made with <span
