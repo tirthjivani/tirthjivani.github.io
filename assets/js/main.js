@@ -60,22 +60,17 @@ hideCursorArray.forEach((hideCursor) => {
   });
 });
 
-// // I would cache these vars outside the scroll for better performance
-// var navWrap = $('#navWrap'),
-// nav = $(nav),
-// startPosition = navWrap.offset().top,
-// stopPosition = $(' #stopHere').offset).top - nav.outerHeight);
+window.addEventListener("scroll", function () {
+  let randomshotsInstagram = document.querySelector(".randomshotsInstagram");
+  const scrollPosition = window.scrollY;
+  const halfInnerHeight = window.innerHeight / 2;
 
-// $(document).scroll(function () {
-// //stick nav to top of page
-// var y = $(this).scrollTop();
-// if (y > startPosition) {
-// nav.addClass('sticky');
-// if (y > stopPosition) {
-// nav.css('top', stopPosition - y);
-// } else {
-// nav.css('top', 0);
-// ｝
-// else {
-// hav.removeClass ('sticky');
-// }
+  if (scrollPosition >= halfInnerHeight) {
+    randomshotsInstagram.style.position = "sticky";
+    randomshotsInstagram.style.top = "40%";
+    randomshotsInstagram.hover();
+  } else {
+    randomshotsInstagram.style.position = "initial";
+    randomshotsInstagram.style.margin = "auto";
+  }
+});
