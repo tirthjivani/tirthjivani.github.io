@@ -68,9 +68,60 @@ window.addEventListener("scroll", function () {
   if (scrollPosition >= halfInnerHeight) {
     randomshotsInstagram.style.position = "sticky";
     randomshotsInstagram.style.top = "40%";
-    randomshotsInstagram.hover();
+    randomshotsInstagram.style.top = "40%";
   } else {
     randomshotsInstagram.style.position = "initial";
     randomshotsInstagram.style.margin = "auto";
   }
 });
+
+// const animateit = function (e) {
+//   const span = this.querySelector(".tirth");
+//   const { offsetX: x, offsetY: y } = e,
+//     { offsetWidth: width, offsetHeight: height } = this,
+//     move = 25,
+//     xMove = (x / width) * (move * 2) - move,
+//     yMove = (y / height) * (move * 2) - move;
+
+//   span.style.transform = `translate(${xMove}px, ${yMove}px)`;
+
+//   if (e.type === "mouseleave") span.style.transform = "";
+// };
+
+// const editCursor = (e) => {
+//   const { clientX: x, clientY: y } = e;
+//   cursor.style.left = x + "px";
+//   cursor.style.top = y + "px";
+// };
+
+// hideCursorArray.forEach((hideCurDiv) => hideCurDiv.addEventListener("mousemove", animateit));
+// hideCursorArray.forEach((b) => b.addEventListener("mouseleave", animateit));
+// window.addEventListener("mousemove", editCursor);
+
+// (function () {
+//   const link = document.querySelectorAll(".button > .hover-this");
+//   const cursor = document.querySelector(".customCursor");
+
+//   const animateit = function (e) {
+//     const span = this.querySelector("span");
+//     const { offsetX: x, offsetY: y } = e,
+//       { offsetWidth: width, offsetHeight: height } = this,
+//       move = 25,
+//       xMove = (x / width) * (move * 2) - move,
+//       yMove = (y / height) * (move * 2) - move;
+
+//     span.style.transform = `translate(${xMove}px, ${yMove}px)`;
+
+//     if (e.type === "mouseleave") span.style.transform = "";
+//   };
+
+//   const editCursor = (e) => {
+//     const { clientX: x, clientY: y } = e;
+//     cursor.style.left = x + "px";
+//     cursor.style.top = y + "px";
+//   };
+
+//   link.forEach((b) => b.addEventListener("mousemove", animateit));
+//   link.forEach((b) => b.addEventListener("mouseleave", animateit));
+//   window.addEventListener("mousemove", editCursor);
+// })();
