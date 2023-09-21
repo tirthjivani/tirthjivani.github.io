@@ -14,10 +14,10 @@ window.addEventListener("mousemove", (e) => {
 // Hover
 cursorHoverArray.forEach((cursorHover) => {
   cursorHover.addEventListener("mouseenter", () => {
-    gsap.to(cursor, 0, {
+    gsap.to(cursor, 0.3, {
       scale: 1.6,
       rotate: 0,
-      ease: Elastic.easeOut.config(1, 0.3),
+      ease: "circ.out",
     });
   });
 
@@ -29,9 +29,9 @@ cursorHoverArray.forEach((cursorHover) => {
   });
 
   cursorHover.addEventListener("mouseleave", () => {
-    gsap.to(cursor, 0, {
+    gsap.to(cursor, 0.3, {
       scale: 1,
-      ease: Elastic.easeIn.config(1, 0.3),
+      ease: "circ.out",
     });
   });
 });

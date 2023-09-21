@@ -16,4 +16,5 @@ body {
   filter: invert(100%);
   z-index: 999;
   opacity: 1;
+  transition: transform 30ms ease-in;
 }
