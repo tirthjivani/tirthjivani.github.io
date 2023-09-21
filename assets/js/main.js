@@ -15,7 +15,7 @@ window.addEventListener("mousemove", (e) => {
 cursorHoverArray.forEach((cursorHover) => {
   cursorHover.addEventListener("mouseenter", () => {
     gsap.to(cursor, 0, {
-      scale: 1.8,
+      scale: 1.6,
       rotate: 0,
       ease: Elastic.easeOut.config(1, 0.3),
     });
