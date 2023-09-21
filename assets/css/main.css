@@ -1,13 +1,13 @@
 body {
-  cursor: none;
+  cursor: none !important;
 }
 
 .cursorCustom {
   position: fixed;
   top: 0;
   left: 0;
-  width: 26px;
-  height: 26px;
+  width: 25px;
+  height: 25px;
   background: #000;
   pointer-events: none !important;
   border-radius: 100%;
@@ -16,4 +16,5 @@ body {
   filter: invert(100%);
   z-index: 999;
   opacity: 1;
+  transition: transform 40ms ease-in;
 }
