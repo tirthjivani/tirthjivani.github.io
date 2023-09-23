@@ -5,8 +5,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
     <meta name="description"
-        content="This is a profile of a UX Designer who loves minimal designs. Keep it balanced! He is from India and wants to give the best out for a worthy impact. " />
-    <title>Tirth Jivani - UX Designer, Researcher and Developer</title>
+        content="This is a profile of a UX Designer who loves minimal designs. Keep it balanced! He is from India and wants to give the best out for a worthy impact." />
+    <title>Tirth Jivani - Human Experience Designer</title>
     <link rel="shortcut icon" href="./assets/img/logo.png" type="image/x-icon">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -42,9 +42,11 @@
                     colors: {
                         'light': '#F1F1F1',
                         'dark': '#0C0A0D',
-                        'temp': '#dddddd',
-                        'accent': '#FC471E',
+                        'accent': '#FFC645',
                     },
+                    transitionTimingFunction: {
+                        'custom': 'cubic-bezier(.94,.07,.04,.95)',
+                    }
                 },
                 container: {
                     padding: {
@@ -63,69 +65,126 @@
 <body class="bg-light text-dark font-body carlet-accent accent-accent selection:bg-accent cursor-none">
     <div class="hidden lg:block cursorCustom"></div>
     <div class="container mx-auto">
-        <nav class="flex justify-between items-center h-14 pt-8 md:w-[80%] md:mx-auto">
-            <div class="flex justify-between md:justify-start md:items-center h-10">
-                <div class="text-[14px] font-semibold leading-[40px]">TIRTH JIVANI</div>
-                <div class="sm:ml-8 md:ml-4 lg:ml-12 hidden sm:flex sm:items-center gap-2 md:gap-1 lg:gap-2">
-                    <a href="/"
-                        class="p-2 rounded-full text-[12px] font-semibold leading-[16px] underline underline-offset-8 decoration-accent decoration-2 hover:bg-accent/90 active:bg-accent hover:text-white hideCursorElement cursor-none hover:no-underline">
-                        ABOUT
-                    </a>
-                    <a href="/work"
-                        class="p-2 rounded-full text-[12px] font-semibold leading-[16px] hover:bg-accent/90 active:bg-accent hover:text-white hideCursorElement cursor-none">
-                        WORK </a>
-                    <a href="/photography"
-                        class="p-2 rounded-full text-[12px] font-semibold leading-[16px] hover:bg-accent/90 active:bg-accent hover:text-white hideCursorElement cursor-none">PHOTOS</a>
-                </div>
+        <nav
+            class="z-[50] flex justify-between items-center sticky top-6 h-14 md:mx-auto md:w-[80%] md:mx-auto mix-blend-difference invert">
+            <div class="text-[18px] leading-[22px]"><span class="font-bold">TIRTH</span> JIVANI</div>
+            <div onclick="showNav()" class="sm:hidden flex items-center px-0 py-1 rounded-full font-semibold">
+                <span class="material-symbols-rounded text-[24px]"> drag_handle </span>
             </div>
-            <div class="w-8 sm:hidden">
-                <span class="material-symbols-rounded"> drag_handle </span>
-            </div>
-            <div class="hidden sm:flex sm:flex-row sm:items-center sm:gap-4 text-[12px] font-semibold leading-[16px]">
-                <div class="hidden xl:flex">LET'S CONNECT</div>
+            <div class="hidden sm:flex sm:flex-row-reverse items-center gap-2">
                 <a href="mailto:tirthjivani17@gmail.com?subject=Let%27s%20connect!" target="_blank"
-                    class="text-[12px] leading-[16px] font-medium bg-white rounded-full flex flex-row items-center px-4 py-2 gap-1 hideCursorElement cursor-none hover:bg-accent/90 active:bg-accent hover:text-white group select-none">
-                    tirthjivani17@gmail.com
-                    <span class="material-symbols-rounded text-accent group-hover:text-white text-[20px]"> arrow_outward
-                    </span>
+                    class="flex items-center px-5 py-1 rounded-full font-semibold hover:bg-dark/90 hover:text-white active:bg-dark hideCursorElement cursor-none">
+                    <span class="material-symbols-rounded text-[24px]"> arrow_outward </span>
+                </a>
+                <a href="/photography"
+                    class="flex items-center px-5 py-1 rounded-full font-semibold hover:bg-dark/90 hover:invert-0 hover:text-white !active:bg-dark hideCursorElement cursor-none">
+                    <span class="material-symbols-rounded text-[24px]"> photo </span>
+                </a>
+                <a href="/work"
+                    class="flex items-center px-5 py-1 rounded-full font-semibold hover:bg-dark/90 hover:mix-blend-normal hover:text-white active:bg-dark hideCursorElement cursor-none">
+                    <span class="material-symbols-rounded text-[24px]"> work </span>
+                </a>
+                <a href="/"
+                    class="flex items-center px-5 py-1 rounded-full font-semibold bg-accent hover:bg-dark/90 hover:text-white active:bg-dark hideCursorElement cursor-none hover:border-none">
+                    <span class="material-symbols-rounded text-[24px]"> face </span>
                 </a>
             </div>
         </nav>
 
-        <div class="mx-auto mt-20">
+        <div id="navigation-menu"
+            class="hidden mix-blend-normal invert-0 z-[100] fixed left-0 top-0 sm:hidden w-[100%] mx-auto h-[100vh] bg-dark text-light px-[1.5rem]">
+            <nav class="z-[99] flex justify-between items-center sticky top-6 h-14 mx-auto">
+                <div class="text-[18px] leading-[22px]"><span class="font-bold">TIRTH</span> JIVANI</div>
+                <div onclick="showNav()" class="sm:hidden flex items-center px-0 py-1">
+                    <span class="material-symbols-rounded text-[24px]"> close </span>
+                </div>
+            </nav>
+            <div class="flex flex-col-reverse mt-28 gap-2 text-[24px] leading-[26px] text-center">
+                <a href="/"
+                    class="w-[60%] py-3 rounded-full font-semibold bg-accent text-dark absolute bottom-20 left-[50%] -translate-x-1/2">
+                    Contact Me
+                </a>
+                <a href="/photography" class="flex items-center justify-center py-3 rounded-full font-semibold">
+                    Photography
+                </a>
+                <a href="/work" class="flex items-center justify-center py-3 rounded-full font-semibold">
+                    Work
+                </a>
+                <a href="/" class="flex items-center justify-center py-3 rounded-full font-semibold text-accent">
+                    About
+                </a>
+            </div>
+        </div>
+
+        <!-- <nav class="flex justify-between sticky top-0 w-[80%] mx-auto mix-blend-difference invert z-[50]">
+            <div class="text-[18px] leading-[22px] p-12 pb-6 pl-1 w-fit"><span class="font-bold">TIRTH</span>
+                JIVANI
+            </div>
+
+            <div class="dark-matter items-center p-12 pb-6 pr-1 hover:bg-accent">
+                <div class="w-5 h-5 bg-dark rounded-full relative right-0"></div>
+                <a href="mailto:tirthjivani17@gmail.com?subject=Let%27s%20connect!" target="_blank"
+                    class="hidden lg:flex items-center px-5 py-1 rounded-full font-semibold hover:bg-dark/90 hover:text-white active:bg-dark hideCursorElement cursor-none relative right-0">
+                    <span class="material-symbols-rounded text-[24px]"> arrow_outward </span>
+                </a>
+                <a href="/photography"
+                    class="hidden lg:flex items-center px-5 py-1 rounded-full font-semibold hover:bg-dark/90 hover:invert-0 hover:text-white !active:bg-dark hideCursorElement cursor-none">
+                    <span class="material-symbols-rounded text-[24px]"> photo </span>
+                </a>
+            </div>
+        </nav> -->
+
+        <div class="mx-auto mt-24">
             <!-- Intro Section -->
             <div
                 class="font-medium tracking-[-4px] mt-6 text-center selection:leading-[48px] text-[56px] leading-[48px] sm:text-[56px] sm:leading-[56px] sm:tracking-[-4px] md:text-[87px] md:leading-[82px] md:tracking-[-6px] xl:text-[102px] xl:leading-[92px] xl:tracking-[-8px] sm:max-w-[80%] xl:w-[60%] 2xl:w-[50%] mx-auto hoverElement">
                 HUMAN EXPERIENCE DESIGNER©
             </div>
             <div
-                class="w-[85%] flex justify-between mt-4 mx-auto text-[10px] leading-[12px] max-w-[80%] sm:w-[50%] md:w-[55%] lg:w-[45%] 2xl:w-[35%] md:text-[14px] md:leading-[15px]">
-                <div class="font-semibold text-left ">CURRENTLY CRAFTING <br /> EXPERIENCES AT
+                class="w-[85%] flex justify-between mt-6 mx-auto text-[10px] leading-[12px] max-w-[80%] sm:w-[50%] md:w-[55%] lg:w-[45%] 2xl:w-[35%] md:text-[14px] md:leading-[15px]">
+                <div class="font-semibold text-left">CURRENTLY CRAFTING <br /> EXPERIENCES AT
                     SELLERAPP
                 </div>
-                <div class="font-semibold text-right ">(2021 - PRESENT)</div>
+                <div class="font-semibold text-right">(2021 - PRESENT)</div>
             </div>
 
             <!-- Hero Image -->
-            <div class=" mt-12 h-[475px] md:h-[575px] xl:h-[675px] sm:w-[50%] lg:w-[40%] 2xl:w-[30%] mx-auto bg-cover bg-center rounded-[40px] hoverElement"
+            <div class=" mt-20 h-[475px] md:h-[575px] xl:h-[675px] sm:w-[50%] lg:w-[40%] 2xl:w-[30%] mx-auto bg-cover bg-center rounded-[40px] hoverElement"
                 style="background-image: url('/assets/img/me.JPG');"></div>
+            <!-- <div class="hoverElement mx-auto md:w-[80%]">
+                <img class="rounded-[40px] mt-12 max-w-full mx-auto" src="./assets/img/me.png" alt="">
+                <video class="mt-12 h-auto max-w-full mx-auto rounded-[40px]" preload="auto" autoplay="" loop=""
+						muted="" playsinline="" style="opacity: 1;">
+						<source src="https://www.sublimio.com/wp-content/themes/sublimio/img/intro.mp4" type="
+							video/mp4">
+					</video>
+            </div> -->
 
             <!-- Hero Caption -->
-            <div class="flex flex-col">
-                <div
-                    class="mt-24 font-semibold text-[24px] leading-[25px] text-center w-[80%] sm:w-[50%] lg:w-[40%] 2xl:w-[30%] mx-auto ">
-                    Design Creates Culture, Culture Shapes Values, and Values determine the Future.
+            <div class="mt-16 flex flex-col gap-2 sm:w-[60%] md:w-[50%] lg:w-[40%] 2xl:w-[30%] mx-auto">
+                <div class="font-semibold text-[24px] leading-[26px] tracking-[-1px] text-center">
+                    Namaste! I am Tirth Jivani, a product designer based in Bengaluru.
                 </div>
-                <div
-                    class="mt-4 text-[10px] leading-[12px] md:text-[14px] md:leading-[15px] text-center mx-auto text-dark/50 ">
-                    - Krishna Gupta
+                <div class="text-[14px] leading-[16px] text-center text-dark/40">
+                    <b>I design products.</b> Through past experiences in tech, and product, my work
+                    aims to promote an holistic approach of aesthetics and balanced designs. FYI I developed this
+                    website by myself. In addition to designing digital products, I'm die hard part of OG CSGO
+                    community.
                 </div>
             </div>
 
+            <!-- Hero Image -->
+            <!-- <div class=" mt-24 h-[475px] md:h-[575px] xl:h-[675px] sm:w-[50%] lg:w-[40%] 2xl:w-[30%] mx-auto bg-cover bg-center rounded-[40px] hoverElement"
+                style="background-image: url('/assets/img/me.JPG');"></div> -->
+
             <!-- Hero Caption 2 -->
-            <div
-                class="mt-24 font-semibold text-[24px] leading-[25px] text-center text-dark/50 w-[80%] sm:w-[50%] lg:w-[40%] 2xl:w-[30%] mx-auto">
-                I love making cool things and solving complex problems for people — like you.
+            <div class="flex flex-col gap-4 sm:w-[60%] md:w-[50%] lg:w-[40%] xl:w-[30%] mx-auto">
+                <div class="mt-24 font-semibold text-[24px] leading-[26px] tracking-[-1px] text-center">
+                    Design Creates Culture, Culture Shapes Values, and Values determine the Future.
+                </div>
+                <div class="text-[10px] leading-[12px] md:text-[14px] md:leading-[15px] text-center text-dark/40">
+                    - Krishna Gupta
+                </div>
             </div>
 
             <!-- Hero Image 2 -->
@@ -133,34 +192,68 @@
                 style="background-image: url('/assets/img/us.JPG');"></div>
 
             <div class="md:w-[80%] md:mx-auto">
+
                 <!-- Resume Section -->
-                <div class="text-[56px] leading-[48px] font-medium tracking-[-4px] mt-24 text-left ">
+                <div class="text-[56px] leading-[48px] font-medium tracking-[-4px] mt-24 text-left">
                     RESUME
                 </div>
-                <div class="mt-8 text-[12px] text-[12px] leading-[15px] text-left ml-[10%]">
-                    <div class="">You can check this guy's resume from here</div>
-                    <a href="https://read.cv/tirth" target="_blank"
-                        class="w-min flex flex-row items-center mt-4 font-semibold rounded-full px-4 py-2 text-dark hover:bg-accent hover:text-light hideCursorElement cursor-none outline outline-1 outline-dark hover:outline-accent">
-                        Open
-                        <div class="w-6 pl-1 flex items-center">
-                            <span class="material-symbols-rounded"> arrow_outward </span>
-                        </div>
-                    </a>
+                <div class="mt-14 text-[12px] leading-[15px] text-left ml-[15%]">
+                    <div class="">You can check out my resume here</div>
+                    <div class="flex flex-row gap-2 mt-4 flex-wrap">
+                        <a href="/Resume.pdf" download="Tirth's Resume" target="_blank"
+                            class="w-min flex flex-row items-center mt-4 font-semibold rounded-full px-6 py-2 text-dark hover:bg-dark hover:text-light hideCursorElement cursor-none outline outline-1 outline-dark hover:outline-dark ease-custom duration-200">
+                            Download
+                            <div class="w-6 pl-1 flex items-center">
+                                <span class="material-symbols-rounded"> download </span>
+                            </div>
+                        </a>
+                        <a href="https://read.cv/tirth" target="_blank"
+                            class="w-min flex flex-row items-center mt-4 font-semibold rounded-full px-6 py-2 text-dark hover:bg-dark hover:text-light hideCursorElement cursor-none outline outline-1 outline-dark hover:outline-dark ease-custom duration-200">
+                            Open
+                            <div class="w-6 pl-1 flex items-center">
+                                <span class="material-symbols-rounded"> arrow_outward </span>
+                            </div>
+                        </a>
+                    </div>
                 </div>
 
+                <!-- Blogs Section -->
+                <!-- <div class="text-[56px] leading-[48px] font-medium tracking-[-4px] mt-24 text-left">
+                    I WRITE
+                </div>
+                <div class="mt-14 text-[12px] leading-[15px] text-left ml-[15%]">
+                    <div class="">You can check out my resume here</div>
+                    <div class="flex flex-row gap-2 mt-4 flex-wrap">
+                        <a href="/Resume.pdf" download="Tirth's Resume" target="_blank"
+                            class="w-min flex flex-row items-center mt-4 font-semibold rounded-full px-6 py-2 text-dark hover:bg-dark hover:text-light hideCursorElement cursor-none outline outline-1 outline-dark hover:outline-dark ease-custom duration-200">
+                            Download
+                            <div class="w-6 pl-1 flex items-center">
+                                <span class="material-symbols-rounded"> download </span>
+                            </div>
+                        </a>
+                        <a href="https://read.cv/tirth" target="_blank"
+                            class="w-min flex flex-row items-center mt-4 font-semibold rounded-full px-6 py-2 text-dark hover:bg-dark hover:text-light hideCursorElement cursor-none outline outline-1 outline-dark hover:outline-dark ease-custom duration-200">
+                            Open
+                            <div class="w-6 pl-1 flex items-center">
+                                <span class="material-symbols-rounded"> arrow_outward </span>
+                            </div>
+                        </a>
+                    </div>
+                </div> -->
+
                 <!-- Experiences Section -->
-                <div class="text-[56px] leading-[48px] font-medium tracking-[-4px] mt-24 text-left ">
+                <div class="text-[56px] leading-[48px] font-medium tracking-[-4px] mt-24 text-left">
                     RELEVANT EXPERIENCE
                 </div>
 
                 <!-- SellerApp -->
-                <div class="text-[12px] text-[12px] leading-[15px] text-left ml-[10%] ">
-                    <div class="mt-8 font-semibold text-[24px] leading-[25px]">Sellerapp</div>
+                <div class="mt-14 text-[14px] leading-[16px] text-left ml-[15%]">
+                    <div class="font-semibold text-[24px] leading-[25px]">Sellerapp</div>
                     <div class="mt-2 font-semibold flex flex-row justify-between uppercase">
                         <div>Product Designer</div>
                         <div>(2021-Present)</div>
                     </div>
-                    <div class="mt-2 text-dark/50 w-[80%] ">
+                    <div class="mt-2 text-dark/40 w-[70%]">
                         Leading SellerApp Design Team in creating Crystal Design System, and Branding Guidlines.
                         Designing ONDC collaborated dashboard for D2C sellers. Partnership with Google and many other
                         companies for creating DEMOs to showcase in Google IO and Google Cloud events.
@@ -171,13 +264,13 @@
                 </div>
 
                 <!-- Truein -->
-                <div class="text-[12px] leading-[15px] text-left ml-[10%] ">
+                <div class="text-[14px] leading-[16px] text-left ml-[15%]">
                     <div class="font-semibold text-[24px] leading-[25px]">Truein</div>
                     <div class="mt-2 font-semibold flex flex-row justify-between uppercase">
                         <div>Product Intern</div>
                         <div>(2020-2021)</div>
                     </div>
-                    <div class="mt-2 text-dark/50 w-[80%]">
+                    <div class="mt-2 text-dark/40 w-[70%]">
                         Applied Design Principles and leveraged my design expertise to craft an engaging and intuitive
                         touchless solution for Employee Attendance and Visitor Management Dashboard which was developed
                         in AngularJS and PHP.
@@ -188,56 +281,56 @@
                 </div>
 
                 <!-- MeriStreet -->
-                <div class="text-[12px] leading-[15px] text-left ml-[10%] ">
+                <div class="text-[14px] leading-[16px] text-left ml-[15%]">
                     <div class="font-semibold text-[24px] leading-[25px]">Meristreet</div>
                     <div class="mt-2 font-semibold flex flex-row justify-between uppercase">
                         <div>Startup</div>
                         <div>(2019-2020)</div>
                     </div>
-                    <div class="mt-2 text-dark/50 w-[80%]">
+                    <div class="mt-2 text-dark/40 w-[70%]">
                         Created an empowering businesses in tier 2 cities by establishing a strong online presence of
                         Shops and Sellers by creating innovative e-commerce platform for buyers and sellers.
                     </div>
                 </div>
 
                 <!-- Contact Section -->
-                <div class="text-[56px] leading-[48px] font-medium tracking-[-4px] mt-24 text-left ">
+                <div class="text-[56px] leading-[48px] font-medium tracking-[-4px] mt-24 text-left">
                     CONTACT
                 </div>
-                <div class="mt-8 text-[12px] text-[12px] leading-[15px] text-left ml-[10%]">
+                <div class="mt-14 text-[12px] text-[12px] leading-[15px] text-left ml-[15%]">
                     <div class="">Got <span class="font-bold">a brand in your
                             hand?</span>
                         Let's discuss!</div>
                     <div class="flex flex-row gap-2 mt-4 flex-wrap">
-                        <a class="flex flex-row items-center gap-1 hideCursorElement cursor-none outline outline-1 hover:outline-accent hover:bg-accent p-3 rounded-full group"
+                        <a class="flex flex-row items-center gap-1 hideCursorElement cursor-none outline outline-1 hover:outline-dark hover:bg-dark px-6 py-2 rounded-full group ease-custom duration-200"
                             href="https://www.linkedin.com/in/tirthjivani/" target="_blank">
                             <div
                                 class="w-6 h-6 bg-[url('/assets/icons/social/linkedin.svg')] group-hover:bg-[url('/assets/icons/social/linkedinHover.svg')] bg-cover">
                             </div>
                             <span class="font-semibold group-hover:text-white">Linkedin</span>
                         </a>
-                        <a class="flex flex-row items-center gap-1 hideCursorElement cursor-none outline outline-1 hover:outline-accent hover:bg-accent p-3 rounded-full group"
+                        <a class="flex flex-row items-center gap-1 hideCursorElement cursor-none outline outline-1 hover:outline-dark hover:bg-dark px-6 py-2 rounded-full group ease-custom duration-200"
                             href="https://www.figma.com/@tirthjivani" target="_blank">
                             <div
                                 class="w-6 h-6 bg-[url('/assets/icons/social/figma.svg')] group-hover:bg-[url('/assets/icons/social/figmaHover.svg')] bg-cover">
                             </div>
                             <span class="font-semibold group-hover:text-white">Figma</span>
                         </a>
-                        <a class="flex flex-row items-center gap-1 hideCursorElement cursor-none outline outline-1 hover:outline-accent hover:bg-accent p-3 rounded-full group"
+                        <a class="flex flex-row items-center gap-1 hideCursorElement cursor-none outline outline-1 hover:outline-dark hover:bg-dark px-6 py-2 rounded-full group ease-custom duration-200"
                             href="https://dribbble.com/tirthjivani" target="_blank">
                             <div
                                 class="w-6 h-6 bg-[url('/assets/icons/social/dribbble.svg')] group-hover:bg-[url('/assets/icons/social/dribbbleHover.svg')] bg-cover">
                             </div>
                             <span class="font-semibold group-hover:text-white">Dribble</span>
                         </a>
-                        <a class="flex flex-row items-center gap-1 hideCursorElement cursor-none outline outline-1 hover:outline-accent hover:bg-accent p-3 rounded-full group"
+                        <a class="flex flex-row items-center gap-1 hideCursorElement cursor-none outline outline-1 hover:outline-dark hover:bg-dark px-6 py-2 rounded-full group ease-custom duration-200"
                             href="https://github.com/tirthjivani" target="_blank">
                             <div
                                 class="w-6 h-6 bg-[url('/assets/icons/social/github.svg')] group-hover:bg-[url('/assets/icons/social/githubHover.svg')] bg-cover">
                             </div>
                             <span class="font-semibold group-hover:text-white">Github</span>
                         </a>
-                        <a class="flex flex-row items-center gap-1 hideCursorElement cursor-none outline outline-1 hover:outline-accent hover:bg-accent p-3 rounded-full group"
+                        <a class="flex flex-row items-center gap-1 hideCursorElement cursor-none outline outline-1 hover:outline-dark hover:bg-dark px-6 py-2 rounded-full group ease-custom duration-200"
                             href="mailto:tirthjivani17@gmail.com?subject=Let%27s%20connect!" target="_blank">
                             <div class="w-6 h-6">
                                 <span class="material-symbols-rounded group-hover:text-white"> mail </span>
@@ -250,13 +343,14 @@
         </div>
 
         <div class="mt-12 md:mt-24 mb-12">
-            <div class="py-4 md:w-[80%] text-dark/50 rounded-full mx-auto">
+            <div class="py-4 md:w-[80%] text-dark/40 rounded-full mx-auto">
                 <div class="flex flex-row justify-between items-end">
                     <div class="text-left text-[14px] leading-[14px]">© Copyright 2023</div>
                     <div class="flex items-center text-right text-[14px] leading-[14px]">Made with <span
                             class="inline-flex px-1"><img class="w-4"
                                 src="https://em-content.zobj.net/source/apple/354/red-heart_2764-fe0f.png"
-                                alt=""></span> in Bharat
+                                alt=""></span> in
+                        Bharat
                     </div>
                 </div>
             </div>
@@ -266,5 +360,11 @@
 
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js"></script>
 <script src="/assets/js/main.js"></script>
+<script>
+    function showNav() {
+        var navMenu = document.getElementById("navigation-menu");
+        navMenu.classList.toggle("hidden");
+    }
+</script>
 
 </html>
