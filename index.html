@@ -70,7 +70,7 @@
         <nav
             class="z-[50] flex justify-between items-center sticky top-6 h-14 md:mx-auto md:w-[80%] md:mx-auto mix-blend-difference invert">
             <div class="text-[18px] leading-[22px]"><span class="font-bold">TIRTH</span> JIVANI</div>
-            <div onclick="showNav()" class="sm:hidden flex items-center px-0 py-1 rounded-full font-semibold">
+            <div onclick="showNav()" class="sm:hidden flex items-center px-1 py-1 rounded-full font-semibold">
                 <span class="material-symbols-rounded text-[24px]"> drag_handle </span>
             </div>
             <div class="hidden sm:flex sm:flex-row-reverse items-center gap-2">
@@ -94,11 +94,11 @@
         </nav>
 
         <div id="navigation-menu"
-            class="hidden mix-blend-normal invert-0 z-[100] fixed left-0 top-0 sm:hidden w-[100%] mx-auto h-[100vh] bg-dark text-light px-[1.5rem]">
+            class="mix-blend-normal invert-0 z-[100] fixed left-[100%] top-0 sm:hidden w-[100%] mx-auto h-[100vh] bg-dark text-light px-[1.5rem] ease-custom duration-500">
             <nav class="z-[99] flex justify-between items-center sticky top-6 h-14 mx-auto">
                 <div class="text-[18px] leading-[22px]"><span class="font-bold">TIRTH</span> JIVANI</div>
-                <div onclick="showNav()" class="sm:hidden flex items-center px-0 py-1">
-                    <span class="material-symbols-rounded text-[24px]"> close </span>
+                <div onclick="showNav()" class="sm:hidden flex items-center px-1 py-1">
+                    <span class="material-symbols-rounded text-[24px]"> chevron_right </span>
                 </div>
             </nav>
             <div class="flex flex-col-reverse mt-28 gap-2 text-[24px] leading-[26px] text-center">
@@ -136,9 +136,7 @@
 
 
             <!-- Me Section -->
-            <div class="mt-20 h-[475px] md:hidden mx-auto bg-cover bg-center rounded-[40px] hoverElement"
-                style="background-image: url('/assets/img/me.JPG');"></div>
-            <div class="hidden md:flex hoverElement mx-auto md:w-[80%]">
+            <div class="hoverElement mx-auto md:w-[80%]">
                 <img class="rounded-[40px] mt-12 max-w-full mx-auto" src="./assets/img/me.png" alt="">
                 <!-- <video class="mt-12 h-auto max-w-full mx-auto rounded-[40px]" preload="auto" autoplay="" loop=""
                     muted="" playsinline="" style="opacity: 1;">
@@ -357,7 +355,14 @@
 <script>
     function showNav() {
         var navMenu = document.getElementById("navigation-menu");
-        navMenu.classList.toggle("hidden");
+        if (navMenu.classList.contains("left-[100%]")) {
+            navMenu.classList.remove("left-[100%]");
+            navMenu.classList.add("left-0");
+        }
+        else {
+            navMenu.classList.add("left-[100%]");
+            navMenu.classList.remove("left-0");
+        }
     }
 </script>
 
