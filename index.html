@@ -65,10 +65,12 @@
 <body class="bg-light text-dark font-body carlet-accent accent-accent selection:bg-accent cursor-none">
     <div class="hidden lg:block cursorCustom"></div>
     <div class="container mx-auto">
+
+        <!-- Navbar -->
         <nav
             class="z-[50] flex justify-between items-center sticky top-6 h-14 md:mx-auto md:w-[80%] md:mx-auto mix-blend-difference invert">
             <div class="text-[18px] leading-[22px]"><span class="font-bold">TIRTH</span> JIVANI</div>
-            <div onclick="showNav()" class="sm:hidden flex items-center px-0 py-1 rounded-full font-semibold">
+            <div onclick="showNav()" class="sm:hidden flex items-center px-1 py-1 rounded-full font-semibold">
                 <span class="material-symbols-rounded text-[24px]"> drag_handle </span>
             </div>
             <div class="hidden sm:flex sm:flex-row-reverse items-center gap-2">
@@ -92,17 +94,17 @@
         </nav>
 
         <div id="navigation-menu"
-            class="hidden mix-blend-normal invert-0 z-[100] fixed left-0 top-0 sm:hidden w-[100%] mx-auto h-[100vh] bg-dark text-light px-[1.5rem]">
+            class="mix-blend-normal invert-0 z-[100] fixed left-[100%] top-0 sm:hidden w-[100%] mx-auto h-[100vh] bg-dark text-light px-[1.5rem] ease-custom duration-500">
             <nav class="z-[99] flex justify-between items-center sticky top-6 h-14 mx-auto">
                 <div class="text-[18px] leading-[22px]"><span class="font-bold">TIRTH</span> JIVANI</div>
-                <div onclick="showNav()" class="sm:hidden flex items-center px-0 py-1">
-                    <span class="material-symbols-rounded text-[24px]"> close </span>
+                <div onclick="showNav()" class="sm:hidden flex items-center px-1 py-1">
+                    <span class="material-symbols-rounded text-[24px]"> chevron_right </span>
                 </div>
             </nav>
             <div class="flex flex-col-reverse mt-28 gap-2 text-[24px] leading-[26px] text-center">
                 <a href="/"
-                    class="w-[60%] py-3 rounded-full font-semibold bg-accent text-dark absolute bottom-24 left-[50%] -translate-x-1/2">
-                    Contact Me
+                    class="flex justify-center items-center gap-2 w-[60%] py-3 rounded-full bg-accent text-dark absolute bottom-24 left-[50%] -translate-x-1/2">
+                    Contact Me <span class="material-symbols-rounded text-[26px]"> arrow_outward </span>
                 </a>
                 <a href="/photography" class="flex items-center justify-center py-3 rounded-full font-semibold">
                     Photography
@@ -116,25 +118,9 @@
             </div>
         </div>
 
-        <!-- <nav class="flex justify-between sticky top-0 w-[80%] mx-auto mix-blend-difference invert z-[50]">
-            <div class="text-[18px] leading-[22px] p-12 pb-6 pl-1 w-fit"><span class="font-bold">TIRTH</span>
-                JIVANI
-            </div>
-
-            <div class="dark-matter items-center p-12 pb-6 pr-1 hover:bg-accent">
-                <div class="w-5 h-5 bg-dark rounded-full relative right-0"></div>
-                <a href="mailto:tirthjivani17@gmail.com?subject=Let%27s%20connect!" target="_blank"
-                    class="hidden lg:flex items-center px-5 py-1 rounded-full font-semibold hover:bg-dark/90 hover:text-white active:bg-dark hideCursorElement cursor-none relative right-0">
-                    <span class="material-symbols-rounded text-[24px]"> arrow_outward </span>
-                </a>
-                <a href="/photography"
-                    class="hidden lg:flex items-center px-5 py-1 rounded-full font-semibold hover:bg-dark/90 hover:invert-0 hover:text-white !active:bg-dark hideCursorElement cursor-none">
-                    <span class="material-symbols-rounded text-[24px]"> photo </span>
-                </a>
-            </div>
-        </nav> -->
-
         <div class="mx-auto mt-24">
+
+
             <!-- Intro Section -->
             <div
                 class="font-medium tracking-[-4px] mt-6 text-center selection:leading-[48px] text-[56px] leading-[48px] sm:text-[56px] sm:leading-[56px] sm:tracking-[-4px] md:text-[87px] md:leading-[82px] md:tracking-[-6px] xl:text-[102px] xl:leading-[92px] xl:tracking-[-8px] sm:max-w-[80%] xl:w-[60%] 2xl:w-[50%] mx-auto hoverElement">
@@ -148,36 +134,30 @@
                 <div class="font-semibold text-right">(2021 - PRESENT)</div>
             </div>
 
-            <!-- Hero Image -->
-            <div class=" mt-20 h-[475px] md:h-[575px] xl:h-[675px] sm:w-[50%] lg:w-[40%] 2xl:w-[30%] mx-auto bg-cover bg-center rounded-[40px] hoverElement"
-                style="background-image: url('/assets/img/me.JPG');"></div>
-            <!-- <div class="hoverElement mx-auto md:w-[80%]">
-                <img class="rounded-[40px] mt-12 max-w-full mx-auto" src="./assets/img/me.png" alt="">
-                <video class="mt-12 h-auto max-w-full mx-auto rounded-[40px]" preload="auto" autoplay="" loop=""
-						muted="" playsinline="" style="opacity: 1;">
-						<source src="https://www.sublimio.com/wp-content/themes/sublimio/img/intro.mp4" type="
-							video/mp4">
-					</video>
-            </div> -->
 
-            <!-- Hero Caption -->
-            <div class="mt-16 flex flex-col gap-2 sm:w-[60%] md:w-[50%] lg:w-[40%] 2xl:w-[30%] mx-auto">
+            <!-- Me Section -->
+            <div class="hoverElement mx-auto md:w-[80%]">
+                <img class="rounded-[40px] mt-12 max-w-full mx-auto" src="./assets/img/me.png" alt="">
+                <!-- <video class="mt-12 h-auto max-w-full mx-auto rounded-[40px]" preload="auto" autoplay="" loop=""
+                    muted="" playsinline="" style="opacity: 1;">
+                    <source src="https://www.sublimio.com/wp-content/themes/sublimio/img/intro.mp4" type="
+							video/mp4">
+                </video> -->
+            </div>
+            <div class="mt-12 flex flex-col gap-2 sm:w-[60%] md:w-[50%] lg:w-[40%] 2xl:w-[30%] mx-auto">
                 <div class="font-semibold text-[24px] leading-[26px] tracking-[-1px] text-center">
                     Namaste! I am Tirth Jivani, a product designer based in Bengaluru.
                 </div>
                 <div class="text-[14px] leading-[16px] text-center text-dark/40">
                     <b>I design products.</b> Through past experiences in tech, and product, my work
                     aims to promote an holistic approach of aesthetics and balanced designs. FYI I developed this
-                    website by myself. In addition to designing digital products, I'm die hard part of OG CSGO
+                    website by myself. In addition to designing digital products, I'm die-hard part of OG CSGO
                     community.
                 </div>
             </div>
 
-            <!-- Hero Image -->
-            <!-- <div class=" mt-24 h-[475px] md:h-[575px] xl:h-[675px] sm:w-[50%] lg:w-[40%] 2xl:w-[30%] mx-auto bg-cover bg-center rounded-[40px] hoverElement"
-                style="background-image: url('/assets/img/me.JPG');"></div> -->
 
-            <!-- Hero Caption 2 -->
+            <!-- Quote -->
             <div class="flex flex-col gap-4 sm:w-[60%] md:w-[50%] lg:w-[40%] xl:w-[30%] mx-auto">
                 <div class="mt-24 font-semibold text-[24px] leading-[26px] tracking-[-1px] text-center">
                     Design Creates Culture, Culture Shapes Values, and Values determine the Future.
@@ -187,9 +167,21 @@
                 </div>
             </div>
 
-            <!-- Hero Image 2 -->
-            <div class="bg-cover bg-left mt-12 h-[475px] md:h-[575px] xl:h-[675px] sm:w-[50%] lg:w-[40%] 2xl:w-[30%] mx-auto rounded-[40px] hoverElement"
-                style="background-image: url('/assets/img/us.JPG');"></div>
+
+            <!-- Us Section -->
+            <div class="hoverElement mx-auto md:w-[80%]">
+                <a class="cursor-none" target="_blank" href="http://instagram.com/talesoftirvee"><img
+                        class="rounded-[40px] mt-12 max-w-full mx-auto" src="./assets/img/us.png" alt=""></a>
+            </div>
+            <div class="mt-12 flex flex-col gap-2 sm:w-[60%] md:w-[50%] lg:w-[40%] 2xl:w-[30%] mx-auto">
+                <div class="font-semibold text-[24px] leading-[26px] tracking-[-1px] text-center">
+                    This is her
+                </div>
+                <div class="text-[14px] leading-[16px] text-center text-dark/40 flex justify-center items-center">
+                    Which makes me; us <span class="inline-flex px-1"><img class="w-4"
+                            src="https://em-content.zobj.net/source/apple/354/red-heart_2764-fe0f.png" alt="">.</span>
+                </div>
+            </div>
 
             <div class="md:w-[80%] md:mx-auto">
 
@@ -199,7 +191,7 @@
                 </div>
                 <div class="mt-14 text-[12px] leading-[15px] text-left ml-[15%]">
                     <div class="">You can check out my resume here</div>
-                    <div class="flex flex-row gap-2 mt-4 flex-wrap">
+                    <div class="flex flex-row gap-2 flex-wrap">
                         <a href="/Resume.pdf" download="Tirth's Resume" target="_blank"
                             class="w-min flex flex-row items-center mt-4 font-semibold rounded-full px-6 py-2 text-dark hover:bg-dark hover:text-light hideCursorElement cursor-none outline outline-1 outline-dark hover:outline-dark ease-custom duration-200">
                             Download
@@ -363,7 +355,14 @@
 <script>
     function showNav() {
         var navMenu = document.getElementById("navigation-menu");
-        navMenu.classList.toggle("hidden");
+        if (navMenu.classList.contains("left-[100%]")) {
+            navMenu.classList.remove("left-[100%]");
+            navMenu.classList.add("left-0");
+        }
+        else {
+            navMenu.classList.add("left-[100%]");
+            navMenu.classList.remove("left-0");
+        }
     }
 </script>
 
