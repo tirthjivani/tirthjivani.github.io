@@ -18,3 +18,10 @@ body {
   opacity: 1;
   transition: transform 30ms ease-in;
 }
+
+.bg-image {
+  background-image: url("../img/bg.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 60% 0;
+}
