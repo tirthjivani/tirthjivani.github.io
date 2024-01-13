@@ -27,3 +27,10 @@ body {
   background-repeat: no-repeat;
   background-position: 60% 0;
 }
+
+.bg-partyplot {
+  background-image: url("../img/partyplot.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}

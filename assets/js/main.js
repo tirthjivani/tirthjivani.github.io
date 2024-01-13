@@ -60,34 +60,16 @@ hideCursorArray.forEach((hideCursor) => {
   });
 });
 
-// hideCursorArray.forEach((hideCurDiv) => hideCurDiv.addEventListener("mousemove", animateit));
-// hideCursorArray.forEach((b) => b.addEventListener("mouseleave", animateit));
-// window.addEventListener("mousemove", editCursor);
+// const text = document.querySelector(".text-to-scroll");
 
-// (function () {
-//   const link = document.querySelectorAll(".button > .hover-this");
-//   const cursor = document.querySelector(".customCursor");
+// const scrollAnimate = (element, position) => {
+//   element.style.transform = `translateY(${position}px)`;
+// };
 
-//   const animateit = function (e) {
-//     const span = this.querySelector("span");
-//     const { offsetX: x, offsetY: y } = e,
-//       { offsetWidth: width, offsetHeight: height } = this,
-//       move = 25,
-//       xMove = (x / width) * (move * 2) - move,
-//       yMove = (y / height) * (move * 2) - move;
+// document.addEventListener("scroll", function (e) {
+//   lastKnownScrollPosition = window.scrollY;
 
-//     span.style.transform = `translate(${xMove}px, ${yMove}px)`;
-
-//     if (e.type === "mouseleave") span.style.transform = "";
-//   };
-
-//   const editCursor = (e) => {
-//     const { clientX: x, clientY: y } = e;
-//     cursor.style.left = x + "px";
-//     cursor.style.top = y + "px";
-//   };
-
-//   link.forEach((b) => b.addEventListener("mousemove", animateit));
-//   link.forEach((b) => b.addEventListener("mouseleave", animateit));
-//   window.addEventListener("mousemove", editCursor);
-// })();
+//   window.requestAnimationFrame(function () {
+//     scrollAnimate(text, lastKnownScrollPosition * +1.2);
+//   });
+// });
