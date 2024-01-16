@@ -46,7 +46,21 @@
 					},
 					transitionTimingFunction: {
 						'custom': 'cubic-bezier(.94,.07,.04,.95)',
-					}
+					},
+					animation: {
+						marquee: 'marquee 25s linear infinite',
+						marquee2: 'marquee2 25s linear infinite',
+					},
+					keyframes: {
+						marquee: {
+							'0%': { transform: 'translateX(0%)' },
+							'100%': { transform: 'translateX(-100%)' },
+						},
+						marquee2: {
+							'0%': { transform: 'translateX(100%)' },
+							'100%': { transform: 'translateX(0%)' },
+						},
+					},
 				},
 				container: {
 					padding: {
@@ -70,12 +84,12 @@
 			<div class="w-full flex justify-between items-center h-14">
 				<div class="text-[18px] leading-[22px]"><a href="/">TIRVEE</a></div>
 				<div class="flex items-center">
-					18-02-2024
+					18.02.2024
 				</div>
 			</div>
 		</nav>
 
-		<div class="mt-52 fixed top-[193px]">
+		<div class="mt-52 top-[193px]">
 			<div
 				class="px-8 w-[65%] sm:w-[45%] md:w-[45%] lg:w-[40%] 2xl:w-[30%] text-left tracking-[-3px] mb-24 text-[56px] leading-[48px] sm:text-[56px] sm:leading-[56px] sm:tracking-[-4px] md:text-[87px] md:leading-[82px] md:tracking-[-6px] xl:text-[102px] xl:leading-[92px] xl:tracking-[-8px]">
 				TIRTH <span class="italic">&</span> RAJVEE
@@ -96,7 +110,26 @@
 			</div>
 		</div>
 
-		<div>Images</div>
+		<div class="hidden md:flex px-8 my-48 relative overflow-x-hidden">
+			<div class="flex flex-row items-center animate-marquee whitespace-nowrap">
+				<span class="mx-12"><img class="w-[500px]" src="../assets/img/us/1.jpg" alt=""></span>
+				<span class="mx-12"><img class="w-[400px]" src="../assets/img/us/2.jpg" alt=""></span>
+				<span class="mx-12"><img class="w-[500px]" src="../assets/img/us/3.jpg" alt=""></span>
+				<span class="mx-12"><img class="w-[400px]" src="../assets/img/us/4.JPG" alt=""></span>
+				<span class="mx-12"><img class="w-[500px]" src="../assets/img/us/5.jpg" alt=""></span>
+				<span class="mx-12"><img class="w-[400px]" src="../assets/img/us/6.jpg" alt=""></span>
+			</div>
+
+			<div class="flex flex-row items-center absolute top-0 animate-marquee2 whitespace-nowrap">
+				<span class="mx-12"><img class="w-[400px]" src="../assets/img/us/7.jpg" alt=""></span>
+				<span class="mx-12"><img class="w-[500px]" src="../assets/img/us/8.JPG" alt=""></span>
+				<span class="mx-12"><img class="w-[400px]" src="../assets/img/us/9.jpg" alt=""></span>
+				<span class="mx-12"><img class="w-[500px]" src="../assets/img/us/10.jpg" alt=""></span>
+				<span class="mx-12"><img class="w-[400px]" src="../assets/img/us/11.jpg" alt=""></span>
+				<span class="mx-12"><img class="w-[450px]" src="../assets/img/us/12.png" alt=""></span>
+			</div>
+		</div>
+
 
 		<div class="px-8 flex flex-col md:flex-row gap-8 mb-24">
 			<div class="flex flex-col w-[90%] sm:w-[60%] md:w-[50%] lg:w-[40%] mx-auto">
