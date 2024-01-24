@@ -45,23 +45,6 @@
 						'dark': '#0C0A0D',
 						'accent': '#FFC645',
 					},
-					transitionTimingFunction: {
-						'custom': 'cubic-bezier(.94,.07,.04,.95)',
-					},
-					animation: {
-						marquee: 'marquee 25s linear infinite',
-						marquee2: 'marquee2 25s linear infinite',
-					},
-					keyframes: {
-						marquee: {
-							'0%': { transform: 'translateX(0%)' },
-							'100%': { transform: 'translateX(-100%)' },
-						},
-						marquee2: {
-							'0%': { transform: 'translateX(100%)' },
-							'100%': { transform: 'translateX(0%)' },
-						},
-					},
 				},
 				container: {
 					padding: {
@@ -81,7 +64,7 @@
 	<div class="hidden lg:block cursorCustom"></div>
 
 	<nav class="w-screen px-4 z-[70] fixed top-0 mix-blend-difference invert">
-		<div class="flex justify-between items-center h-14 text-[13px] leading-[1.6em]">
+		<div class="flex justify-between items-center h-14 text-[13px] leading-[16px]">
 			<div class="">
 				<a href="/">TIRVEE</a>
 			</div>
@@ -91,688 +74,717 @@
 		</div>
 	</nav>
 
-	<div class="h-[1025px] pt-48">
-		<div class="z-[50] sticky top-[193px]">
-			<div
-				class="px-4 mb-24 text-left text-[64px] leading-[64px] tracking-[-2.5px] md:text-[87px] md:leading-[82px] md:tracking-[-6px] xl:text-[102px] xl:leading-[92px] xl:tracking-[-8px]">
-				<span>TIRTH</span><br />
-				<span class="mx-8"><span class="italic">&</span> RAJVEE</span>
-			</div>
-		</div>
-
+	<div style="transform: translateY(0); overflow-y: hidden;"
+		class="h-[1025px] lg:h-[1777px] transform-this-image object-cover pt-48">
 		<div class="absolute block w-[100%] h-[100%] top-0 right-0 left-0">
 			<img src="../assets/img/bg.jpg" class="block object-cover w-[100%] h-[100%] object-center"
 				alt="Photo of the couple">
 		</div>
-	</div>
-
-	<div class="my-48 flex flex-col w-[90%] mx-auto">
-		<div class="font-caption mb-2 text-[14px] leading-[16px] text-center text-dark/60">
-			STORY
-		</div>
-		<div class="text-[32px] leading-[34px] tracking-[-1px] text-center">
-			CLASSMATES TO <span class="italic">SOULMATES</span> ! MANIFESTATION INTO <span class="italic">REALITY</span>
-			🥰
-		</div>
-	</div>
-
-	<div class="flex px-4 my-48 relative overflow-x-hidden">
-		<div class="flex flex-row items-center animate-marquee whitespace-nowrap">
-			<span class="mx-12"><img class="w-[500px]" src="../assets/img/us/1.jpg" alt=""></span>
-			<span class="mx-12"><img class="w-[400px]" src="../assets/img/us/2.jpg" alt=""></span>
-			<span class="mx-12"><img class="w-[500px]" src="../assets/img/us/3.jpg" alt=""></span>
-			<span class="mx-12"><img class="w-[400px]" src="../assets/img/us/4.jpg" alt=""></span>
-			<span class="mx-12"><img class="w-[500px]" src="../assets/img/us/5.jpg" alt=""></span>
-			<span class="mx-12"><img class="w-[400px]" src="../assets/img/us/6.jpg" alt=""></span>
-		</div>
-
-		<div class="flex flex-row items-center absolute top-0 animate-marquee2 whitespace-nowrap">
-			<span class="mx-12"><img class="w-[400px]" src="../assets/img/us/7.jpg" alt=""></span>
-			<span class="mx-12"><img class="w-[500px]" src="../assets/img/us/8.jpg" alt=""></span>
-			<span class="mx-12"><img class="w-[400px]" src="../assets/img/us/9.jpg" alt=""></span>
-			<span class="mx-12"><img class="w-[500px]" src="../assets/img/us/10.jpg" alt=""></span>
-			<span class="mx-12"><img class="w-[400px]" src="../assets/img/us/11.jpg" alt=""></span>
-			<span class="mx-12"><img class="w-[450px]" src="../assets/img/us/12.jpg" alt=""></span>
-		</div>
-	</div>
-
-
-	<div class="px-4 flex flex-col md:flex-row gap-8 mb-24">
-		<div class="flex flex-col w-[90%]">
-			<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">
-				DRESS CODE
-			</div>
-			<div class="text-[24px] leading-[24px] tracking-[-1px]">
-				DRESS TO IMPRESS
-			</div>
-		</div>
-		<div class="flex flex-col w-[90%]">
-			<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">
-				PARKING
-			</div>
-			<div class="text-[24px] leading-[24px] tracking-[-1px]">
-				FREE VALET PARKING
-			</div>
-		</div>
-		<div class="flex flex-col w-[90%]">
-			<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">
-				PARKING
-			</div>
-			<div class="text-[24px] leading-[24px] tracking-[-1px]">
-				FREE VALET PARKING
+		<div class="transform-this-text sticky top-0">
+			<div
+				class="px-4 mb-24 text-left text-[64px] leading-[64px] tracking-[-2.5px] md:text-[87px] md:leading-[82px] md:tracking-[-6px] lg:text-[136px] lg:leading-[116px] lg:tracking-[-7px]">
+				<span>TIRTH</span><br />
+				<span class="mx-8"><span class="italic">&</span> RAJVEE</span>
 			</div>
 		</div>
 	</div>
 
-	<div class="bg-partyplot h-[716px] xl:h-[1358px]">
-		<div class="bg-light w-full h-full">
-			<div class="px-4 text-center h-full flex flex-col justify-center items-center mx-auto text-dark">
-				<div class="font-caption mb-2 text-[14px] leading-[16px] text-center text-dark">
-					JOIN US
-				</div>
-				<div
-					class="px-4 text-center mb-8 text-[64px] leading-[68px] tracking-[-3px] md:text-[87px] md:leading-[82px] md:tracking-[-6px] xl:text-[102px] xl:leading-[92px] xl:tracking-[-8px]">
-					<a href="https://maps.app.goo.gl/vhfEgyK7iHhfRray8" target="_blank" id="openMapsLink">SAMANVAY
-						PARTY LAWNS </a>
-
-					<br /> 18.02.2024
-				</div>
-
-				<div class="text-[24px] leading-[28px] tracking-[-1px] text-center">
-					SAMANVAY PARTY LAWNS, <br /> KANKOT RD, OF KALAWAD RD, <br /> RAJKOT, GUJARAT
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<div
-		class="py-24 px-4 bg-dark text-light flex flex-col md:flex-row md:justify-between gap-12 text-left gfg_background">
-		<div class="flex flex-col">
-			<div class="font-caption mb-2 text-[14px] leading-[16px] text-light">
-				AGENDA
-			</div>
-			<div class="text-[32px] leading-[34px] tracking-[-1px]">
-				DON'T BE FASHIONABLY LATE!
-			</div>
-		</div>
-		<div class="flex flex-col gap-8 md:min-w-56">
-			<div class="flex flex-col">
-				<div class="font-caption mb-2 text-[14px] leading-[16px] text-light">
-					MANDAP
-				</div>
-				<div class="text-[24px] leading-[28px] tracking-[-1px]">
-					07:00
-				</div>
-			</div>
-			<div class="flex flex-col">
-				<div class="font-caption mb-2 text-[14px] leading-[16px] text-light">
-					HUES OF HALDI
-				</div>
-				<div class="text-[24px] leading-[28px] tracking-[-1px]">
-					15:00
-				</div>
-			</div>
-			<div class="flex flex-col">
-				<div class="font-caption mb-2 text-[14px] leading-[16px] text-light">
-					DANCE NIGHT
-				</div>
-				<div class="text-[24px] leading-[28px] tracking-[-1px]">
-					20:00
-				</div>
-			</div>
-			<div class="flex flex-col">
-				<div class="font-caption mb-2 text-[14px] leading-[16px] text-light">
-					WEDLOCK FESTIVITY
-				</div>
-				<div class="text-[24px] leading-[28px] tracking-[-1px]">
-					18:00
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<div class="py-24 px-4 bg-light text-dark flex flex-col md:flex-row md:justify-between gap-12 text-left">
-		<div class="flex flex-col">
-			<div class="font-medium text-[32px] leading-[34px] tracking-[-1px] mb-4">
-				MANDAP
-			</div>
-			<div class="text-[18px] leading-[24px] tracking-[-0.5px] text-dark">
-				Join us for the Mandap Ropan ceremony, a sacred moment as we set the stage for our union <br>
-			</div>
-		</div>
-		<div class="flex flex-col gap-8 md:min-w-56">
-			<div class="flex flex-col">
-				<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">
-					TIME
-				</div>
-				<div class="text-[24px] leading-[28px] tracking-[-1px]">
-					07:00
-				</div>
-			</div>
-			<div class="flex flex-col">
-				<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">
-					DRESSCODE
-				</div>
-				<div class="text-[24px] leading-[28px] tracking-[-1px]">
-					STYLE IN ETHNIC
-				</div>
-			</div>
-			<div class="flex flex-col">
-				<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">
-					WHERE
-				</div>
-				<div class="text-[24px] leading-[28px] tracking-[-1px]">
-					UNDER MANDAP ON RIGHT OF LAWNS ENTRY
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<hr class="border-1 border-dark" />
-
-	<div class="py-24 px-4 bg-light text-dark flex flex-col md:flex-row md:justify-between gap-12 text-left">
-		<div class="flex flex-col">
-			<div class="font-medium text-[32px] leading-[34px] tracking-[-1px] mb-4">
-				HUES OF HALDI
-			</div>
-			<div class="text-[18px] leading-[24px] tracking-[-0.5px] text-dark">
-				Join us in the vibrant Haldi ceremony, as we embrace tradition with turmeric's golden touch. Let's
-				celebrate love, laughter, and the colorful blessings
-			</div>
-		</div>
-		<div class="flex flex-col gap-8 md:min-w-56">
-			<div class="flex flex-col">
-				<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">
-					TIME
-				</div>
-				<div class="text-[24px] leading-[28px] tracking-[-1px]">
-					15:00
-				</div>
-			</div>
-			<div class="flex flex-col">
-				<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">
-					DRESSCODE
-				</div>
-				<div class="text-[24px] leading-[28px] tracking-[-1px]">
-					ANYTHING IN YELLOW
-				</div>
-			</div>
-			<div class="flex flex-col">
-				<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">
-					WHERE
-				</div>
-				<div class="text-[24px] leading-[28px] tracking-[-1px]">
-					SAME PLACE AS MANDAP
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<hr class="border-1 border-dark" />
-
-	<div class="py-24 px-4 bg-light text-dark flex flex-col md:flex-row md:justify-between gap-12 text-left">
-		<div class="flex flex-col">
-			<div class="font-medium text-[32px] leading-[34px] tracking-[-1px] mb-4">
-				DANCE NIGHT
-			</div>
-			<div class="text-[18px] leading-[24px] tracking-[-0.5px] text-dark">
-				Join us for the night filled with bollywood dance, Garba and DJ beats <br>
-			</div>
-		</div>
-		<div class="flex flex-col gap-8 md:min-w-56">
-			<div class="flex flex-col">
-				<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">
-					TIME
-				</div>
-				<div class="text-[24px] leading-[28px] tracking-[-1px]">
-					20:00
-				</div>
-			</div>
-			<div class="flex flex-col">
-				<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">
-					DRESSCODE
-				</div>
-				<div class="text-[24px] leading-[28px] tracking-[-1px]">
-					DAZZLE IN LEHENGA CHOLI
-				</div>
-			</div>
-			<div class="flex flex-col">
-				<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">
-					DANCE PERFORMANCES
-				</div>
-				<div class="text-[24px] leading-[28px] tracking-[-1px]">
-					20:00 ONWARDS
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<hr class="border-1 border-dark" />
-
-	<div class="py-24 px-4 bg-light text-dark flex flex-col md:flex-row md:justify-between gap-12 text-left">
-		<div class="flex flex-col">
-			<div class="font-medium text-[32px] leading-[34px] tracking-[-1px] mb-4">
-				WEDLOCK FESTIVITY
-			</div>
-			<div class="text-[18px] leading-[24px] tracking-[-0.5px] text-dark">
-				Gather for our sacred union at the matrimonial celebration, where love intertwines in joyous
-				moments.
-			</div>
-		</div>
-		<div class="flex flex-col gap-8 md:min-w-56">
-			<div class="flex flex-col">
-				<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">
-					TIME
-				</div>
-				<div class="text-[24px] leading-[28px] tracking-[-1px]">
-					18:00
-				</div>
-			</div>
-			<div class="flex flex-col">
-				<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">
-					DRESSCODE
-				</div>
-				<div class="text-[24px] leading-[28px] tracking-[-1px]">
-					ANYTHING FANCY
-				</div>
-			</div>
-			<div class="flex flex-col">
-				<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">
-					WEDLOCK FESTIVITY
-				</div>
-				<div class="text-[24px] leading-[28px] tracking-[-1px]">
-					17:00
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<!-- <div class="flex flex-row justify-around my-10">
-
-		<div class="max-w-md mx-auto overflow-hidden shadow-lg transform transition-transform hover:scale-110">
-			<img class="w-full" src="../assets/img/us/1.jpg" alt="Card Image">
-			<div class="px-6 py-4">
-				<div class="font-bold text-xl mb-2">Card Title</div>
-				<p class="text-gray-700 text-base">
-					Your card content goes here.
-				</p>
-			</div>
-		</div>
-
-		<div class="max-w-md mx-auto overflow-hidden shadow-lg transform transition-transform hover:scale-110">
-			<img class="w-full" src="../assets/img/us/1.jpg" alt="Card Image">
-			<div class="px-6 py-4">
-				<div class="font-bold text-xl mb-2">Card Title</div>
-				<p class="text-gray-700 text-base">
-					Your card content goes here.
-				</p>
-			</div>
-		</div>
-
-		<div class="max-w-md mx-auto overflow-hidden shadow-lg transform transition-transform hover:scale-110">
-			<img class="w-full" src="../assets/img/us/1.jpg" alt="Card Image">
-			<div class="px-6 py-4">
-				<div class="font-bold text-xl mb-2">Card Title</div>
-				<p class="text-gray-700 text-base">
-					Your card content goes here.
-				</p>
-			</div>
-		</div>
-
-	</div> -->
-
-	<!-- <div class=" w-full">
-		<div class="max-w-lg w-full mx-auto rounded-xl overflow-hidden shadow-md md:flex">
-			<div class="md:flex-shrink-0">
-				<img class="w-[500px]  h-auto" src="../assets/img/us/1.jpg" alt="Card Image">
-			</div>
-			<div class="p-8">
-				<div class="uppercase tracking-wide text-sm text-indigo-500 font-semibold">Card Category</div>
-				<a href="#" class="block mt-1 text-lg leading-tight font-medium text-black hover:underline">Card
-					Title</a>
-				<p class="mt-2 text-gray-500">Your card content goes here. Customize this text as needed.</p>
-			</div>
-		</div>
-	</div> -->
-
-	<!-- <div class=" hidden max-w-lg mx-auto overflow-hidden shadow-lg transform transition-transform hover:scale-110">
-		<img class="w-full" src="../assets/img/us/1.jpg" alt="Card Image">
-		<div class="px-6 py-4">
-			<div class="font-bold text-xl mb-2">Card Title</div>
-			<p class="text-gray-700 text-base">
-				Your card content goes here.
-			</p>
-		</div>
-	</div> -->
-
-
-	<div class="hidden md:flex px-4 my-48 relative overflow-x-hidden">
-		<div class="flex flex-row items-center animate-marquee whitespace-nowrap">
-			<span class="mx-12"><img class="w-[500px]" src="../assets/img/us/1.jpg" alt=""></span>
-			<span class="mx-12"><img class="w-[400px]" src="../assets/img/us/2.jpg" alt=""></span>
-			<span class="mx-12"><img class="w-[500px]" src="../assets/img/us/3.jpg" alt=""></span>
-			<span class="mx-12"><img class="w-[400px]" src="../assets/img/us/4.JPG" alt=""></span>
-			<span class="mx-12"><img class="w-[500px]" src="../assets/img/us/5.jpg" alt=""></span>
-			<span class="mx-12"><img class="w-[400px]" src="../assets/img/us/6.jpg" alt=""></span>
-		</div>
-
-		<div class="flex flex-row items-center absolute top-0 animate-marquee2 whitespace-nowrap">
-			<span class="mx-12"><img class="w-[400px]" src="../assets/img/us/7.jpg" alt=""></span>
-			<span class="mx-12"><img class="w-[500px]" src="../assets/img/us/8.JPG" alt=""></span>
-			<span class="mx-12"><img class="w-[400px]" src="../assets/img/us/9.jpg" alt=""></span>
-			<span class="mx-12"><img class="w-[500px]" src="../assets/img/us/10.jpg" alt=""></span>
-			<span class="mx-12"><img class="w-[400px]" src="../assets/img/us/11.jpg" alt=""></span>
-			<span class="mx-12"><img class="w-[450px]" src="../assets/img/us/12.jpg" alt=""></span>
-		</div>
-	</div>
-
-	<div class="my-48 flex flex-col w-[90%] mx-auto">
-		<div class="mb-2 font-caption mb-2 text-[14px] leading-[16px] text-dark text-center text-dark">
-			ACCOMODATION
-		</div>
-		<div class="text-[32px] leading-[34px] tracking-[-1px] text-center">
-			THERE WILL BE SOME ROOMS BOOKED FOR <span class="italic">IMMEDIATE</span> FAMILY MEMBERS. PLEASE <span
-				class="italic">CONTACT</span> ME
-			OR ANYONE OF OUR FAMILY AT THE <span class="italic">EARLIEST</span>.
-		</div>
-	</div>
-
-	<!-- <div>Fun Fact Quiz
-		<div class="hidden flex flex-row justify-around my-10">
-
-			<div class="max-w-sm rounded overflow-hidden shadow-lg">
-				<img class="w-full" src="../assets/img/us/1.jpg" alt="Sunset in the mountains">
-				<div class="px-6 py-4">
-					<div class="font-bold text-xl mb-2">How We Met</div>
-					<p class="text-gray-700 text-base">
-						Starting as mere classmates, our souls found resonance in the uncharted realms of shared
-						thoughts and
-						silent understanding. With time, the unspoken connection quietly transformed us from
-						acquaintances to
-						soulmates, creating an inexplicable bond that defies the ordinary course of friendships
-					</p>
-				</div>
-				<div class="px-6 pt-4 pb-2">
-					<span
-						class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#classmatestosoumates</span>
-					<span
-						class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#engineering</span>
-					<span
-						class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#winter</span>
-				</div>
-			</div>
-
-			<div class="max-w-sm rounded overflow-hidden shadow-lg">
-				<img class="w-full" src="../assets/img/us/3.jpg" alt="Sunset in the mountains">
-				<div class="px-6 py-4">
-					<div class="font-bold text-xl mb-2">Shared Interests</div>
-					<p class="text-gray-700 text-base">
-						United by our love for series and the laughter-inducing allure of Tanmay Bhat's meme
-						reviews,
-						what began
-						as shared interests in pop culture blossomed into an unbreakable bond. Our journey from
-						classmates to
-						soulmates found its rhythm in the joyous moments of shared laughter and common passions.
-					</p>
-				</div>
-				<div class="px-6 pt-4 pb-2">
-					<span
-						class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#tanmatbhatt</span>
-					<span
-						class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#comedy</span>
-					<span
-						class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#anuvjain</span>
-				</div>
-			</div>
-
-			<div class="max-w-sm rounded overflow-hidden shadow-lg">
-				<img class="w-full" src="../assets/img/us/5.jpg" alt="Sunset in the mountains">
-				<div class="px-6 py-4">
-					<div class="font-bold text-xl mb-2">Milestones</div>
-					<p class="text-gray-700 text-base">
-						In the quietude of lockdown, amidst solitude and reflection, the realization dawned — the
-						subtle
-						shifts
-						in our conversations, the shared silences, and the comfort found in virtual togetherness.
-						Unbeknownst to
-						us, love quietly bloomed, turning the challenging times of lockdown into the unexpected
-						cocoon
-						where our
-						hearts found each other.
-					</p>
-				</div>
-				<div class="px-6 pt-4 pb-2">
-					<span
-						class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#lockdownlovers</span>
-					<span
-						class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#soltitude</span>
-					<span
-						class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#confession</span>
-				</div>
-			</div>
-
-			<div class="max-w-sm rounded overflow-hidden shadow-lg">
-				<img class="w-full" src="../assets/img/us/10.jpg" alt="Sunset in the mountains">
-				<div class="px-6 py-4">
-					<div class="font-bold text-xl mb-2">Fun Facts about Each Other:</div>
-					<p class="text-gray-700 text-base">
-						-----
-					</p>
-				</div>
-				<div class="px-6 pt-4 pb-2">
-					<span
-						class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#classmatestosoumates</span>
-					<span
-						class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#engineering</span>
-					<span
-						class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#winter</span>
-				</div>
-			</div>
-
-		</div>
-		<div class="hidden flex flex-row justify-around my-10">
-
-			<div class="max-w-sm rounded overflow-hidden shadow-lg">
-				<img class="w-full" src="../assets/img/us/2.jpg" alt="Sunset in the mountains">
-				<div class="px-6 py-4">
-					<div class="font-bold text-xl mb-2">Travel Adventures</div>
-					<p class="text-gray-700 text-base">
-
-					</p>
-				</div>
-				<div class="px-6 pt-4 pb-2">
-					<span
-						class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#classmatestosoumates</span>
-					<span
-						class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#engineering</span>
-					<span
-						class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#winter</span>
-				</div>
-			</div>
-
-			<div class="max-w-sm rounded overflow-hidden shadow-lg">
-				<img class="w-full" src="../assets/img/us/11.jpg" alt="Sunset in the mountains">
-				<div class="px-6 py-4">
-					<div class="font-bold text-xl mb-2">Pet Love</div>
-					<p class="text-gray-700 text-base">
-						From childhood doggie dreams to adult reality, thrilled to share a life with a partner who
-						loves
-						furry friends as much as I do. Our love story is written in paw prints
-
-					</p>
-				</div>
-				<div class="px-6 pt-4 pb-2">
-					<span
-						class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#classmatestosoumates</span>
-					<span
-						class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#engineering</span>
-					<span
-						class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#winter</span>
-				</div>
-			</div>
-
-			<div class="max-w-sm rounded overflow-hidden shadow-lg">
-				<img class="w-full" src="../assets/img/us/7.jpg" alt="Sunset in the mountains">
-				<div class="px-6 py-4">
-					<div class="font-bold text-xl mb-2">Favorite Date Spots</div>
-					<p class="text-gray-700 text-base">
-						In the heart of Rajkot, there's a cafe that has been witness to the chapters of our love
-						story.
-						But we would like to keep it to ourselves.
-
-					</p>
-				</div>
-				<div class="px-6 pt-4 pb-2">
-					<span
-						class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#classmatestosoumates</span>
-					<span
-						class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#engineering</span>
-					<span
-						class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#winter</span>
-				</div>
-			</div>
-
-			<div class="max-w-sm rounded overflow-hidden shadow-lg">
-				<img class="w-full" src="../assets/img/us/9.jpg" alt="Sunset in the mountains">
-				<div class="px-6 py-4">
-					<div class="font-bold text-xl mb-2">Advice from Loved Ones</div>
-					<p class="text-gray-700 text-base">
-
-					</p>
-				</div>
-				<div class="px-6 pt-4 pb-2">
-					<span
-						class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#classmatestosoumates</span>
-					<span
-						class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#engineering</span>
-					<span
-						class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#winter</span>
-				</div>
-			</div>
-
-		</div>
-	</div> -->
-
-	<div class="my-48 px-4">
+	<div class="relative z-[60] mt-8 sm:mt-24">
 		<div class="flex flex-col w-[90%] mx-auto">
 			<div class="font-caption mb-2 text-[14px] leading-[16px] text-center text-dark/60">
-				FUN FACT QUIZ
-			</div>
-			<div class="text-[32px] leading-[34px] tracking-[-1px] text-center">
-				HOW MUCH DO YOU <span class="italic">KNOW</span> ABOUT <span class="italic">TIRTH</span> & <span
-					class="italic">RAJVEE</span>?
-			</div>
-		</div>
-		<div class="mt-8 grid auto-rows-fr grid-cols-2 md:grid-cols-4 gap-4">
-			<div
-				class="border border-dark h-[300px] flex flex-col justify-between items-end hover:bg-dark group hover:rounded-br-[32px] ease-in-out duration-500">
-				<div class="p-2">
-					<div class="text-[16px] leading-[20px] tracking-[-0.5px] text-dark group-hover:text-light/60 mb-4">
-						WHAT DO WE DO FOR JOBS?
-					</div>
-					<div class="text-[18px] leading-[22px] text-light">
-						Rajvee is a Frontend Developer, and Tirth is a Product Designer.
-					</div>
-				</div>
-				<span
-					class="material-symbols-rounded text-[80px] text-dark group-hover:text-light group-hover:rotate-45 ease-in-out duration-500">
-					add
-				</span>
+				STORY
 			</div>
 			<div
-				class="border border-dark h-[300px] flex flex-col justify-between items-end hover:bg-dark group hover:rounded-br-[32px] ease-in-out duration-500">
-				<div class="p-2">
-					<div class="text-[16px] leading-[20px] tracking-[-0.5px] text-dark group-hover:text-light/60 mb-4">
-						WHAT DO WE DO FOR JOBS?
-					</div>
-					<div class="text-[18px] leading-[22px] text-light">
-						Rajvee is a Frontend Developer, and Tirth is a Product Designer.
-					</div>
-				</div>
-				<span
-					class="material-symbols-rounded text-[80px] text-dark group-hover:text-light group-hover:rotate-45 ease-in-out duration-500">
-					add
-				</span>
+				class="font-medium text-[32px] leading-[34px] tracking-[-1px] lg:text-[48px] lg:leading-[52px] lg:tracking-[-2px] text-center md:w-[60%] md:mx-auto">
+				CLASSMATES TO <span class="italic">SOULMATES</span> ! MANIFESTATION INTO <span
+					class="italic">REALITY</span>
+				🥰
 			</div>
-			<div
-				class="border border-dark h-[300px] flex flex-col justify-between items-end hover:bg-dark group hover:rounded-br-[32px] ease-in-out duration-500">
-				<div class="p-2">
-					<div class="text-[16px] leading-[20px] tracking-[-0.5px] text-dark group-hover:text-light/60 mb-4">
-						WHAT DO WE DO FOR JOBS?
-					</div>
-					<div class="text-[18px] leading-[22px] text-light">
-						Rajvee is a Frontend Developer, and Tirth is a Product Designer.
-					</div>
-				</div>
-				<span
-					class="material-symbols-rounded text-[80px] text-dark group-hover:text-light group-hover:rotate-45 ease-in-out duration-500">
-					add
-				</span>
-			</div>
-			<div
-				class="border border-dark h-[300px] flex flex-col justify-between items-end hover:bg-dark group hover:rounded-br-[32px] ease-in-out duration-500">
-				<div class="p-2">
-					<div class="text-[16px] leading-[20px] tracking-[-0.5px] text-dark group-hover:text-light/60 mb-4">
-						WHAT DO WE DO FOR JOBS?
-					</div>
-					<div class="text-[18px] leading-[22px] text-light">
-						Rajvee is a Frontend Developer, and Tirth is a Product Designer.
-					</div>
-				</div>
-				<span
-					class="material-symbols-rounded text-[80px] text-dark group-hover:text-light group-hover:rotate-45 ease-in-out duration-500">
-					add
-				</span>
-			</div>
-			<div
-				class="border border-dark h-[300px] flex flex-col justify-between items-end hover:bg-dark group hover:rounded-br-[32px] ease-in-out duration-500">
-				<div class="p-2">
-					<div class="text-[16px] leading-[20px] tracking-[-0.5px] text-dark group-hover:text-light/60 mb-4">
-						WHAT DO WE DO FOR JOBS?
-					</div>
-					<div class="text-[18px] leading-[22px] text-light">
-						Rajvee is a Frontend Developer, and Tirth is a Product Designer.
-					</div>
-				</div>
-				<span
-					class="material-symbols-rounded text-[80px] text-dark group-hover:text-light group-hover:rotate-45 ease-in-out duration-500">
-					add
-				</span>
-			</div>
-			<div
-				class="border border-dark h-[300px] flex flex-col justify-between items-end hover:bg-dark group hover:rounded-br-[32px] ease-in-out duration-500">
-				<div class="p-2">
-					<div class="text-[16px] leading-[20px] tracking-[-0.5px] text-dark group-hover:text-light/60 mb-4">
-						WHAT DO WE DO FOR JOBS?
-					</div>
-					<div class="text-[18px] leading-[22px] text-light">
-						Rajvee is a Frontend Developer, and Tirth is a Product Designer.
-					</div>
-				</div>
-				<span
-					class="material-symbols-rounded text-[80px] text-dark group-hover:text-light group-hover:rotate-45 ease-in-out duration-500">
-					add
-				</span>
-			</div>
-		</div>
-	</div>
-
-	<div class="px-4 py-16 text-center mt-12 md:mt-24 bg-dark/5">
-		<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark">
-			HOPE TO SEE YOU!
-		</div>
-		<div class="text-[32px] leading-[34px] tracking-[-1px]">
-			TIRTH <span class="italic">&</span> RAJVEE
-			<br />
-			18.02.2024
-		</div>
-		<div class="mt-4 text-[14px] leading-[14px]">Website made by <a class="px-px" href="/">Tirth & Rajvee
-			</a> with
-			<span class="inline-flex px-1"><img class="w-4"
-					src="https://em-content.zobj.net/source/apple/354/red-heart_2764-fe0f.png" alt=""></span>
 		</div>
 
-		<div class="mt-8 text-dark text-[14px] leading-[14px]">© Copyright 2024</div>
+		<div class="my-12 px-4 overflow-x-scroll">
+			<div class="flex flex-row items-center no-wrap gap-6">
+				<span class=""><img class="w-[300px] max-w-fit" src="../assets/img/us/1.jpg" alt=""></span>
+				<span class=""><img class="w-[200px] max-w-fit" src="../assets/img/us/2.jpg" alt=""></span>
+				<span class=""><img class="w-[300px] max-w-fit" src="../assets/img/us/3.jpg" alt=""></span>
+				<span class=""><img class="w-[200px] max-w-fit" src="../assets/img/us/4.jpg" alt=""></span>
+				<span class=""><img class="w-[300px] max-w-fit" src="../assets/img/us/5.jpg" alt=""></span>
+				<span class=""><img class="w-[200px] max-w-fit" src="../assets/img/us/6.jpg" alt=""></span>
+				<span class=""><img class="w-[200px] max-w-fit" src="../assets/img/us/7.jpg" alt=""></span>
+				<span class=""><img class="w-[200px] max-w-fit" src="../assets/img/us/8.jpg" alt=""></span>
+				<span class=""><img class="w-[300px] max-w-fit" src="../assets/img/us/9.jpg" alt=""></span>
+				<span class=""><img class="w-[200px] max-w-fit" src="../assets/img/us/10.jpg" alt=""></span>
+			</div>
+		</div>
+
+
+		<div class="mt-48 px-4 flex flex-col md:flex-row gap-8 mb-24">
+			<div class="flex flex-col w-[90%]">
+				<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">
+					DRESS CODE
+				</div>
+				<div class="text-[24px] leading-[24px] tracking-[-1px]">
+					DRESS TO IMPRESS
+				</div>
+			</div>
+			<div class="flex flex-col w-[90%]">
+				<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">
+					PARKING
+				</div>
+				<div class="text-[24px] leading-[24px] tracking-[-1px]">
+					FREE VALET PARKING
+				</div>
+			</div>
+			<div class="flex flex-col w-[90%]">
+				<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">
+					PARKING
+				</div>
+				<div class="text-[24px] leading-[24px] tracking-[-1px]">
+					FREE VALET PARKING
+				</div>
+			</div>
+		</div>
+
+		<div class="bg-partyplot h-[716px] xl:h-[1358px]">
+			<div class="bg-light/40 w-full h-full">
+				<div class="px-4 text-center h-full flex flex-col justify-center items-center mx-auto text-dark">
+					<div class="font-caption mb-2 text-[14px] leading-[16px] text-center text-dark">
+						JOIN US
+					</div>
+					<div
+						class="px-4 text-center mb-8 text-[64px] leading-[68px] tracking-[-3px] md:text-[87px] md:leading-[82px] md:tracking-[-6px] xl:text-[102px] xl:leading-[92px] xl:tracking-[-8px]">
+						<a href="https://maps.app.goo.gl/vhfEgyK7iHhfRray8" target="_blank" id="openMapsLink">SAMANVAY
+							PARTY LAWNS </a>
+
+						<br /> 18.02.2024
+					</div>
+
+					<div class="text-[24px] leading-[28px] tracking-[-1px] text-center">
+						SAMANVAY PARTY LAWNS, <br /> KANKOT RD, OF KALAWAD RD, <br /> RAJKOT, GUJARAT
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="py-24 px-4 bg-dark text-light flex flex-col md:flex-row md:justify-between gap-12 text-left">
+			<div class="flex flex-col md:basis-3/5">
+				<div class="font-caption mb-2 text-[14px] leading-[16px] text-light">
+					AGENDA
+				</div>
+				<div class="text-[32px] leading-[34px] tracking-[-1px]">
+					DON'T BE FASHIONABLY LATE!
+				</div>
+			</div>
+			<div class="flex flex-col gap-8 grow md:basis-2/5">
+				<div class="flex flex-col">
+					<div class="font-caption mb-2 text-[14px] leading-[16px] text-light">
+						MANDAP
+					</div>
+					<div class="text-[24px] leading-[28px] tracking-[-1px]">
+						07:00
+					</div>
+				</div>
+				<div class="flex flex-col">
+					<div class="font-caption mb-2 text-[14px] leading-[16px] text-light">
+						HUES OF HALDI
+					</div>
+					<div class="text-[24px] leading-[28px] tracking-[-1px]">
+						15:00
+					</div>
+				</div>
+				<div class="flex flex-col">
+					<div class="font-caption mb-2 text-[14px] leading-[16px] text-light">
+						DANCE NIGHT
+					</div>
+					<div class="text-[24px] leading-[28px] tracking-[-1px]">
+						20:00
+					</div>
+				</div>
+				<div class="flex flex-col">
+					<div class="font-caption mb-2 text-[14px] leading-[16px] text-light">
+						WEDLOCK FESTIVITY
+					</div>
+					<div class="text-[24px] leading-[28px] tracking-[-1px]">
+						18:00
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="py-24 px-4 bg-light text-dark flex flex-col md:flex-row md:justify-between gap-12 text-left">
+			<div class="flex flex-col md:basis-3/5">
+				<div class="font-medium text-[32px] leading-[34px] tracking-[-1px] mb-4">
+					MANDAP
+				</div>
+				<div class="text-[18px] leading-[24px] tracking-[-0.5px] text-dark">
+					Join us for the Mandap Ropan ceremony, a sacred moment as we set the stage for our union <br>
+				</div>
+			</div>
+			<div class="flex flex-col gap-8 md:basis-2/5">
+				<div class="flex flex-col">
+					<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">
+						TIME
+					</div>
+					<div class="text-[24px] leading-[28px] tracking-[-1px]">
+						07:00
+					</div>
+				</div>
+				<div class="flex flex-col">
+					<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">
+						DRESSCODE
+					</div>
+					<div class="text-[24px] leading-[28px] tracking-[-1px]">
+						STYLE IN ETHNIC
+					</div>
+				</div>
+				<div class="flex flex-col">
+					<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">
+						WHERE
+					</div>
+					<div class="text-[24px] leading-[28px] tracking-[-1px]">
+						UNDER MANDAP ON RIGHT OF LAWNS ENTRY
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<hr class="border-1 border-dark" />
+
+		<div class="py-24 px-4 bg-light text-dark flex flex-col md:flex-row md:justify-between gap-12 text-left">
+			<div class="flex flex-col md:basis-3/5">
+				<div class="font-medium text-[32px] leading-[34px] tracking-[-1px] mb-4">
+					HUES OF HALDI
+				</div>
+				<div class="text-[18px] leading-[24px] tracking-[-0.5px] text-dark">
+					Join us in the vibrant Haldi ceremony, as we embrace tradition with turmeric's golden touch. Let's
+					celebrate love, laughter, and the colorful blessings
+				</div>
+			</div>
+			<div class="flex flex-col gap-8 md:basis-2/5">
+				<div class="flex flex-col">
+					<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">
+						TIME
+					</div>
+					<div class="text-[24px] leading-[28px] tracking-[-1px]">
+						15:00
+					</div>
+				</div>
+				<div class="flex flex-col">
+					<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">
+						DRESSCODE
+					</div>
+					<div class="text-[24px] leading-[28px] tracking-[-1px]">
+						ANYTHING IN YELLOW
+					</div>
+				</div>
+				<div class="flex flex-col">
+					<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">
+						WHERE
+					</div>
+					<div class="text-[24px] leading-[28px] tracking-[-1px]">
+						SAME PLACE AS MANDAP
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<hr class="border-1 border-dark" />
+
+		<div class="py-24 px-4 bg-light text-dark flex flex-col md:flex-row md:justify-between gap-12 text-left">
+			<div class="flex flex-col md:basis-3/5">
+				<div class="font-medium text-[32px] leading-[34px] tracking-[-1px] mb-4">
+					DANCE NIGHT
+				</div>
+				<div class="text-[18px] leading-[24px] tracking-[-0.5px] text-dark">
+					Join us for the night filled with bollywood dance, Garba and DJ beats <br>
+				</div>
+			</div>
+			<div class="flex flex-col gap-8 md:basis-2/5">
+				<div class="flex flex-col">
+					<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">
+						TIME
+					</div>
+					<div class="text-[24px] leading-[28px] tracking-[-1px]">
+						20:00
+					</div>
+				</div>
+				<div class="flex flex-col">
+					<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">
+						DRESSCODE
+					</div>
+					<div class="text-[24px] leading-[28px] tracking-[-1px]">
+						DAZZLE IN LEHENGA CHOLI
+					</div>
+				</div>
+				<div class="flex flex-col">
+					<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">
+						DANCE PERFORMANCES
+					</div>
+					<div class="text-[24px] leading-[28px] tracking-[-1px]">
+						20:00 ONWARDS
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<hr class="border-1 border-dark" />
+
+		<div class="py-24 px-4 bg-light text-dark flex flex-col md:flex-row md:justify-between gap-12 text-left">
+			<div class="flex flex-col md:basis-3/5">
+				<div class="font-medium text-[32px] leading-[34px] tracking-[-1px] mb-4">
+					WEDLOCK FESTIVITY
+				</div>
+				<div class="text-[18px] leading-[24px] tracking-[-0.5px] text-dark">
+					Gather for our sacred union at the matrimonial celebration, where love intertwines in joyous
+					moments.
+				</div>
+			</div>
+			<div class="flex flex-col gap-8 md:basis-2/5">
+				<div class="flex flex-col">
+					<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">
+						TIME
+					</div>
+					<div class="text-[24px] leading-[28px] tracking-[-1px]">
+						18:00
+					</div>
+				</div>
+				<div class="flex flex-col">
+					<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">
+						DRESSCODE
+					</div>
+					<div class="text-[24px] leading-[28px] tracking-[-1px]">
+						ANYTHING FANCY
+					</div>
+				</div>
+				<div class="flex flex-col">
+					<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">
+						WEDLOCK FESTIVITY
+					</div>
+					<div class="text-[24px] leading-[28px] tracking-[-1px]">
+						17:00
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- <div class="flex flex-row justify-around my-10">
+	
+			<div class="max-w-md mx-auto overflow-hidden shadow-lg transform transition-transform hover:scale-110">
+				<img class="w-full" src="../assets/img/us/1.jpg" alt="Card Image">
+				<div class="px-6 py-4">
+					<div class="font-bold text-xl mb-2">Card Title</div>
+					<p class="text-gray-700 text-base">
+						Your card content goes here.
+					</p>
+				</div>
+			</div>
+	
+			<div class="max-w-md mx-auto overflow-hidden shadow-lg transform transition-transform hover:scale-110">
+				<img class="w-full" src="../assets/img/us/1.jpg" alt="Card Image">
+				<div class="px-6 py-4">
+					<div class="font-bold text-xl mb-2">Card Title</div>
+					<p class="text-gray-700 text-base">
+						Your card content goes here.
+					</p>
+				</div>
+			</div>
+	
+			<div class="max-w-md mx-auto overflow-hidden shadow-lg transform transition-transform hover:scale-110">
+				<img class="w-full" src="../assets/img/us/1.jpg" alt="Card Image">
+				<div class="px-6 py-4">
+					<div class="font-bold text-xl mb-2">Card Title</div>
+					<p class="text-gray-700 text-base">
+						Your card content goes here.
+					</p>
+				</div>
+			</div>
+	
+		</div> -->
+
+		<!-- <div class=" w-full">
+			<div class="max-w-lg w-full mx-auto rounded-xl overflow-hidden shadow-md md:flex">
+				<div class="md:flex-shrink-0">
+					<img class="w-[500px]  h-auto" src="../assets/img/us/1.jpg" alt="Card Image">
+				</div>
+				<div class="p-8">
+					<div class="uppercase tracking-wide text-sm text-indigo-500 font-semibold">Card Category</div>
+					<a href="#" class="block mt-1 text-lg leading-tight font-medium text-black hover:underline">Card
+						Title</a>
+					<p class="mt-2 text-gray-500">Your card content goes here. Customize this text as needed.</p>
+				</div>
+			</div>
+		</div> -->
+
+		<!-- <div class=" hidden max-w-lg mx-auto overflow-hidden shadow-lg transform transition-transform hover:scale-110">
+			<img class="w-full" src="../assets/img/us/1.jpg" alt="Card Image">
+			<div class="px-6 py-4">
+				<div class="font-bold text-xl mb-2">Card Title</div>
+				<p class="text-gray-700 text-base">
+					Your card content goes here.
+				</p>
+			</div>
+		</div> -->
+
+
+		<div class="my-8 px-4 overflow-x-scroll">
+			<div class="flex flex-row items-center no-wrap gap-6">
+				<span class=""><img class="w-[300px] max-w-fit" src="../assets/img/us/1.jpg" alt=""></span>
+				<span class=""><img class="w-[200px] max-w-fit" src="../assets/img/us/2.jpg" alt=""></span>
+				<span class=""><img class="w-[300px] max-w-fit" src="../assets/img/us/3.jpg" alt=""></span>
+				<span class=""><img class="w-[200px] max-w-fit" src="../assets/img/us/4.jpg" alt=""></span>
+				<span class=""><img class="w-[300px] max-w-fit" src="../assets/img/us/5.jpg" alt=""></span>
+				<span class=""><img class="w-[200px] max-w-fit" src="../assets/img/us/6.jpg" alt=""></span>
+				<span class=""><img class="w-[200px] max-w-fit" src="../assets/img/us/7.jpg" alt=""></span>
+				<span class=""><img class="w-[200px] max-w-fit" src="../assets/img/us/8.jpg" alt=""></span>
+				<span class=""><img class="w-[300px] max-w-fit" src="../assets/img/us/9.jpg" alt=""></span>
+				<span class=""><img class="w-[200px] max-w-fit" src="../assets/img/us/10.jpg" alt=""></span>
+			</div>
+		</div>
+
+		<div class="my-48 flex flex-col w-[90%] mx-auto">
+			<div class="mb-2 font-caption mb-2 text-[14px] leading-[16px] text-dark text-center text-dark">
+				ACCOMODATION
+			</div>
+			<div class="text-[32px] leading-[34px] tracking-[-1px] text-center md:w-[60%] md:mx-auto">
+				THERE WILL BE SOME ROOMS BOOKED FOR <span class="italic">IMMEDIATE</span> FAMILY MEMBERS. PLEASE <span
+					class="italic">CONTACT</span> ME
+				OR ANYONE OF OUR FAMILY AT THE <span class="italic">EARLIEST</span>.
+			</div>
+		</div>
+
+		<!-- <div>Fun Fact Quiz
+			<div class="hidden flex flex-row justify-around my-10">
+	
+				<div class="max-w-sm rounded overflow-hidden shadow-lg">
+					<img class="w-full" src="../assets/img/us/1.jpg" alt="Sunset in the mountains">
+					<div class="px-6 py-4">
+						<div class="font-bold text-xl mb-2">How We Met</div>
+						<p class="text-gray-700 text-base">
+							Starting as mere classmates, our souls found resonance in the uncharted realms of shared
+							thoughts and
+							silent understanding. With time, the unspoken connection quietly transformed us from
+							acquaintances to
+							soulmates, creating an inexplicable bond that defies the ordinary course of friendships
+						</p>
+					</div>
+					<div class="px-6 pt-4 pb-2">
+						<span
+							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#classmatestosoumates</span>
+						<span
+							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#engineering</span>
+						<span
+							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#winter</span>
+					</div>
+				</div>
+	
+				Mixture Press
+
+				<div class="max-w-sm rounded overflow-hidden shadow-lg">
+					<img class="w-full" src="../assets/img/us/3.jpg" alt="Sunset in the mountains">
+					<div class="px-6 py-4">
+						<div class="font-bold text-xl mb-2">Shared Interests</div>
+						<p class="text-gray-700 text-base">
+							United by our love for series and the laughter-inducing allure of Tanmay Bhat's meme
+							reviews,
+							what began
+							as shared interests in pop culture blossomed into an unbreakable bond. Our journey from
+							classmates to
+							soulmates found its rhythm in the joyous moments of shared laughter and common passions.
+						</p>
+					</div>
+					<div class="px-6 pt-4 pb-2">
+						<span
+							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#tanmatbhatt</span>
+						<span
+							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#comedy</span>
+						<span
+							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#anuvjain</span>
+					</div>
+				</div>
+	
+				<div class="max-w-sm rounded overflow-hidden shadow-lg">
+					<img class="w-full" src="../assets/img/us/5.jpg" alt="Sunset in the mountains">
+					<div class="px-6 py-4">
+						<div class="font-bold text-xl mb-2">Milestones</div>
+						<p class="text-gray-700 text-base">
+							In the quietude of lockdown, amidst solitude and reflection, the realization dawned — the
+							subtle
+							shifts
+							in our conversations, the shared silences, and the comfort found in virtual togetherness.
+							Unbeknownst to
+							us, love quietly bloomed, turning the challenging times of lockdown into the unexpected
+							cocoon
+							where our
+							hearts found each other.
+						</p>
+					</div>
+					<div class="px-6 pt-4 pb-2">
+						<span
+							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#lockdownlovers</span>
+						<span
+							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#soltitude</span>
+						<span
+							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#confession</span>
+					</div>
+				</div>
+	
+				<div class="max-w-sm rounded overflow-hidden shadow-lg">
+					<img class="w-full" src="../assets/img/us/10.jpg" alt="Sunset in the mountains">
+					<div class="px-6 py-4">
+						<div class="font-bold text-xl mb-2">Fun Facts about Each Other:</div>
+						<p class="text-gray-700 text-base">
+							-----
+						</p>
+					</div>
+					<div class="px-6 pt-4 pb-2">
+						<span
+							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#classmatestosoumates</span>
+						<span
+							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#engineering</span>
+						<span
+							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#winter</span>
+					</div>
+				</div>
+	
+			</div>
+			<div class="hidden flex flex-row justify-around my-10">
+	
+				<div class="max-w-sm rounded overflow-hidden shadow-lg">
+					<img class="w-full" src="../assets/img/us/2.jpg" alt="Sunset in the mountains">
+					<div class="px-6 py-4">
+						<div class="font-bold text-xl mb-2">Travel Adventures</div>
+						<p class="text-gray-700 text-base">
+	
+						</p>
+					</div>
+					<div class="px-6 pt-4 pb-2">
+						<span
+							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#classmatestosoumates</span>
+						<span
+							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#engineering</span>
+						<span
+							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#winter</span>
+					</div>
+				</div>
+	
+				<div class="max-w-sm rounded overflow-hidden shadow-lg">
+					<img class="w-full" src="../assets/img/us/11.jpg" alt="Sunset in the mountains">
+					<div class="px-6 py-4">
+						<div class="font-bold text-xl mb-2">Pet Love</div>
+						<p class="text-gray-700 text-base">
+							From childhood doggie dreams to adult reality, thrilled to share a life with a partner who
+							loves
+							furry friends as much as I do. Our love story is written in paw prints
+	
+						</p>
+					</div>
+					<div class="px-6 pt-4 pb-2">
+						<span
+							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#classmatestosoumates</span>
+						<span
+							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#engineering</span>
+						<span
+							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#winter</span>
+					</div>
+				</div>
+	
+				<div class="max-w-sm rounded overflow-hidden shadow-lg">
+					<img class="w-full" src="../assets/img/us/7.jpg" alt="Sunset in the mountains">
+					<div class="px-6 py-4">
+						<div class="font-bold text-xl mb-2">Favorite Date Spots</div>
+						<p class="text-gray-700 text-base">
+							In the heart of Rajkot, there's a cafe that has been witness to the chapters of our love
+							story.
+							But we would like to keep it to ourselves.
+	
+						</p>
+					</div>
+					<div class="px-6 pt-4 pb-2">
+						<span
+							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#classmatestosoumates</span>
+						<span
+							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#engineering</span>
+						<span
+							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#winter</span>
+					</div>
+				</div>
+	
+				<div class="max-w-sm rounded overflow-hidden shadow-lg">
+					<img class="w-full" src="../assets/img/us/9.jpg" alt="Sunset in the mountains">
+					<div class="px-6 py-4">
+						<div class="font-bold text-xl mb-2">Advice from Loved Ones</div>
+						<p class="text-gray-700 text-base">
+	
+						</p>
+					</div>
+					<div class="px-6 pt-4 pb-2">
+						<span
+							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#classmatestosoumates</span>
+						<span
+							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#engineering</span>
+						<span
+							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#winter</span>
+					</div>
+				</div>
+	
+			</div>
+		</div> -->
+
+		<div class="my-48 px-4">
+			<div class="flex flex-col w-[90%] mx-auto">
+				<div class="font-caption mb-2 text-[14px] leading-[16px] text-center text-dark/60">
+					FUN FACT QUIZ
+				</div>
+				<div class="text-[32px] leading-[34px] tracking-[-1px] text-center">
+					HOW MUCH DO YOU <span class="italic">KNOW</span> ABOUT <span class="italic">TIRTH</span> & <span
+						class="italic">RAJVEE</span>?
+				</div>
+			</div>
+			<div class="mt-8 grid auto-rows-fr grid-cols-2 md:grid-cols-4 gap-4">
+				<div
+					class="border border-dark h-[300px] flex flex-col justify-between items-end hover:bg-dark group hover:rounded-br-[32px] ease-in-out duration-500">
+					<div class="p-2">
+						<div
+							class="text-[16px] leading-[20px] tracking-[-0.5px] text-dark group-hover:text-light/60 mb-4">
+							WHAT DO WE DO FOR JOBS?
+						</div>
+						<div class="text-[18px] leading-[22px] text-light">
+							Rajvee is a Frontend Developer, and Tirth is a Product Designer.
+						</div>
+					</div>
+					<span
+						class="material-symbols-rounded text-[88px] text-dark group-hover:text-light group-hover:rotate-45 ease-in-out duration-500">
+						add
+					</span>
+				</div>
+				<div
+					class="border border-dark h-[300px] flex flex-col justify-between items-end hover:bg-dark group hover:rounded-br-[32px] ease-in-out duration-500">
+					<div class="p-2">
+						<div
+							class="text-[16px] leading-[20px] tracking-[-0.5px] text-dark group-hover:text-light/60 mb-4">
+							WHAT DO WE DO FOR JOBS?
+						</div>
+						<div class="text-[18px] leading-[22px] text-light">
+							Rajvee is a Frontend Developer, and Tirth is a Product Designer.
+						</div>
+					</div>
+					<span
+						class="material-symbols-rounded text-[88px] text-dark group-hover:text-light group-hover:rotate-45 ease-in-out duration-500">
+						add
+					</span>
+				</div>
+				<div
+					class="border border-dark h-[300px] flex flex-col justify-between items-end hover:bg-dark group hover:rounded-br-[32px] ease-in-out duration-500">
+					<div class="p-2">
+						<div
+							class="text-[16px] leading-[20px] tracking-[-0.5px] text-dark group-hover:text-light/60 mb-4">
+							WHAT DO WE DO FOR JOBS?
+						</div>
+						<div class="text-[18px] leading-[22px] text-light">
+							Rajvee is a Frontend Developer, and Tirth is a Product Designer.
+						</div>
+					</div>
+					<span
+						class="material-symbols-rounded text-[88px] text-dark group-hover:text-light group-hover:rotate-45 ease-in-out duration-500">
+						add
+					</span>
+				</div>
+				<div
+					class="border border-dark h-[300px] flex flex-col justify-between items-end hover:bg-dark group hover:rounded-br-[32px] ease-in-out duration-500">
+					<div class="p-2">
+						<div
+							class="text-[16px] leading-[20px] tracking-[-0.5px] text-dark group-hover:text-light/60 mb-4">
+							WHAT DO WE DO FOR JOBS?
+						</div>
+						<div class="text-[18px] leading-[22px] text-light">
+							Rajvee is a Frontend Developer, and Tirth is a Product Designer.
+						</div>
+					</div>
+					<span
+						class="material-symbols-rounded text-[88px] text-dark group-hover:text-light group-hover:rotate-45 ease-in-out duration-500">
+						add
+					</span>
+				</div>
+				<div
+					class="border border-dark h-[300px] flex flex-col justify-between items-end hover:bg-dark group hover:rounded-br-[32px] ease-in-out duration-500">
+					<div class="p-2">
+						<div
+							class="text-[16px] leading-[20px] tracking-[-0.5px] text-dark group-hover:text-light/60 mb-4">
+							WHAT DO WE DO FOR JOBS?
+						</div>
+						<div class="text-[18px] leading-[22px] text-light">
+							Rajvee is a Frontend Developer, and Tirth is a Product Designer.
+						</div>
+					</div>
+					<span
+						class="material-symbols-rounded text-[88px] text-dark group-hover:text-light group-hover:rotate-45 ease-in-out duration-500">
+						add
+					</span>
+				</div>
+				<div
+					class="border border-dark h-[300px] flex flex-col justify-between items-end hover:bg-dark group hover:rounded-br-[32px] ease-in-out duration-500">
+					<div class="p-2">
+						<div
+							class="text-[16px] leading-[20px] tracking-[-0.5px] text-dark group-hover:text-light/60 mb-4">
+							WHAT DO WE DO FOR JOBS?
+						</div>
+						<div class="text-[18px] leading-[22px] text-light">
+							Rajvee is a Frontend Developer, and Tirth is a Product Designer.
+						</div>
+					</div>
+					<span
+						class="material-symbols-rounded text-[88px] text-dark group-hover:text-light group-hover:rotate-45 ease-in-out duration-500">
+						add
+					</span>
+				</div>
+				<div
+					class="border border-dark h-[300px] flex flex-col justify-between items-end hover:bg-dark group hover:rounded-br-[32px] ease-in-out duration-500">
+					<div class="p-2">
+						<div
+							class="text-[16px] leading-[20px] tracking-[-0.5px] text-dark group-hover:text-light/60 mb-4">
+							WHAT DO WE DO FOR JOBS?
+						</div>
+						<div class="text-[18px] leading-[22px] text-light">
+							Rajvee is a Frontend Developer, and Tirth is a Product Designer.
+						</div>
+					</div>
+					<span
+						class="material-symbols-rounded text-[88px] text-dark group-hover:text-light group-hover:rotate-45 ease-in-out duration-500">
+						add
+					</span>
+				</div>
+				<div
+					class="border border-dark h-[300px] flex flex-col justify-between items-end hover:bg-dark group hover:rounded-br-[32px] ease-in-out duration-500">
+					<div class="p-2">
+						<div
+							class="text-[16px] leading-[20px] tracking-[-0.5px] text-dark group-hover:text-light/60 mb-4">
+							WHAT DO WE DO FOR JOBS?
+						</div>
+						<div class="text-[18px] leading-[22px] text-light">
+							Rajvee is a Frontend Developer, and Tirth is a Product Designer.
+						</div>
+					</div>
+					<span
+						class="material-symbols-rounded text-[88px] text-dark group-hover:text-light group-hover:rotate-45 ease-in-out duration-500">
+						add
+					</span>
+				</div>
+			</div>
+		</div>
+
+		<div class="px-4 py-16 text-center mt-12 md:mt-24 bg-dark text-light">
+			<div class="font-caption mb-2 text-[14px] leading-[16px] text-light/60">
+				HOPE TO SEE YOU THERE
+			</div>
+			<div class="text-[24px] leading-[26px] tracking-[-1px]">
+				TIRTH <span class="italic">&</span> RAJVEE
+				<br />
+				18.02.2024
+			</div>
+			<div class="mt-4 text-[14px] leading-[14px]">Website made by
+				<a class="px-px" href="/">Tirth & Rajvee</a>
+			</div>
+		</div>
 	</div>
 </body>
 

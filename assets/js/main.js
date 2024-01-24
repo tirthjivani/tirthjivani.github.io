@@ -60,16 +60,31 @@ hideCursorArray.forEach((hideCursor) => {
   });
 });
 
-// const text = document.querySelector(".text-to-scroll");
+var bgImage = document.querySelector(".transform-this-image");
+var bgText = document.querySelector(".transform-this-text");
 
-// const scrollAnimate = (element, position) => {
-//   element.style.transform = `translateY(${position}px)`;
-// };
+var throttle = function (type, name, obj) {
+  var obj = obj || window;
+  var running = false;
+  var func = function () {
+    if (running) {
+      return;
+    }
+    running = true;
+    requestAnimationFrame(function () {
+      obj.dispatchEvent(new CustomEvent(name));
+      running = false;
+    });
+  };
+  obj.addEventListener(type, func);
+};
 
-// document.addEventListener("scroll", function (e) {
-//   lastKnownScrollPosition = window.scrollY;
+throttle("scroll", "optimizedScroll");
 
-//   window.requestAnimationFrame(function () {
-//     scrollAnimate(text, lastKnownScrollPosition * +1.2);
-//   });
-// });
+window.addEventListener("optimizedScroll", function () {
+  bgImage.style.transform = "translateY(-" + window.scrollY * 0.1 + "px)";
+});
+
+window.addEventListener("optimizedScroll", function () {
+  bgText.style.transform = "translateY(" + window.scrollY * 2 + "px)";
+});
