@@ -1,778 +1,518 @@
 <!DOCTYPE html>
 <html lang="en-US">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
-    <meta name="description" content="This is a profile of a UX Designer who loves minimal designs. Keep it balanced! He is from India and wants to give the best out for a worthy impact. " />
-    <title>Tirth Jivani - UX Designer, Researcher and Developer</title>
-    <link rel="shortcut icon" href="../assets/img/logo.png" type="image/x-icon" />
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="HandheldFriendly" content="true" />
-    <meta name="MobileOptimized" content="320" />
+	<meta name="description"
+		content="This is a profile of a UX Designer who loves minimal designs. Keep it balanced! He is from India and wants to give the best out for a worthy impact. " />
+	<title>Tirth Jivani - UX Designer, Researcher and Developer</title>
+	<link rel="shortcut icon" href="../assets/img/logo.png" type="image/x-icon" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <style>
-      .material-symbols-rounded {
-        font-variation-settings: "FILL" 0, "wght" 100, "GRAD" 0, "opsz" 14;
-      }
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="HandheldFriendly" content="true" />
+	<meta name="MobileOptimized" content="320" />
 
-      .carousel-container {
-        width: 100%;
-        overflow: hidden;
-      }
+	<link rel="preconnect" href="https://fonts.googleapis.com" />
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&display=swap"
+		rel="stylesheet" />
+	<link rel="stylesheet"
+		href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+	<style>
+		.material-symbols-rounded {
+			font-variation-settings: "FILL" 0, "wght" 100, "GRAD" 0, "opsz" 14;
+		}
 
-      .carousel,
-      .carousel2 {
-        display: flex;
-        animation: scroll 1s ease-in-out;
-      }
+		.material-symbols-rounded.filled {
+			font-variation-settings: "FILL" 1, "wght" 300, "GRAD" 0, "opsz" 14;
+		}
 
-      .carousel img,
-      .carousel2 img {
-        object-fit: contain;
-      }
-    </style>
+		.carousel-container {
+			width: 100%;
+			overflow: hidden;
+		}
 
-    <link href="../assets/css/main.css" rel="stylesheet" />
+		.carousel,
+		.carousel2 {
+			display: flex;
+			animation: scroll 1s ease-in-out;
+		}
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          fontFamily: {
-            body: ["Satoshi-Variable, Satoshi-VariableItalic"],
-            caption: ["Inter"],
-          },
-          extend: {
-            colors: {
-              light: "#F1F1F1",
-              dark: "#0C0A0D",
-              accent: "#FFC645",
-            },
-          },
-          container: {
-            padding: {
-              DEFAULT: "1.5rem",
-              sm: "1.5rem",
-              lg: "4rem",
-              xl: "5rem",
-              "2xl": "6rem",
-            },
-          },
-        },
-      };
+		.carousel img,
+		.carousel2 img {
+			object-fit: contain;
+		}
+	</style>
 
-      document.addEventListener("DOMContentLoaded", function () {
-        const carousel = document.querySelector(".carousel");
-        let isTabActive = true;
-        let animation;
-        let animationStartTime;
-        let animationPausedTime = 0;
+	<link href="../assets/css/main.css" rel="stylesheet" />
 
-        // Set the width of the carousel container to fit all the images
-        const originalImages = document.querySelectorAll(".carousel img");
-        const carouselWidth = Array.from(originalImages).reduce((sum, img) => sum + img.clientWidth, 0);
-        carousel.style.width = `${carouselWidth}px`;
+	<script src="https://cdn.tailwindcss.com"></script>
+	<script>
+		tailwind.config = {
+			theme: {
+				fontFamily: {
+					body: ["Satoshi-Variable, Satoshi-VariableItalic"],
+					caption: ["Inter"],
+				},
+				extend: {
+					colors: {
+						light: "#F1F1F1",
+						dark: "#0C0A0D",
+						accent: "#FFC645",
+					},
+				},
+				container: {
+					padding: {
+						DEFAULT: "1.5rem",
+						sm: "1.5rem",
+						lg: "4rem",
+						xl: "5rem",
+						"2xl": "6rem",
+					},
+				},
+			},
+		};
 
-        // Intersection Observer to start animation when in the viewport
-        const observer = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                if (isTabActive) {
-                  startCarouselAnimation();
-                }
-              } else {
-                // Pause the animation when out of the viewport
-                pauseCarouselAnimation();
-              }
-            });
-          },
-          { threshold: 0.5 }
-        );
+	</script>
+</head>
 
-        observer.observe(carousel);
+<body class="bg-light text-dark font-body carlet-accent accent-accent selection:bg-accent cursor-none">
+	<div class="hidden lg:block cursorCustom"></div>
 
-        // Page Visibility API to detect tab visibility
-        document.addEventListener("visibilitychange", function () {
-          isTabActive = document.visibilityState === "visible";
+	<nav class="w-screen px-4 z-[70] fixed top-0 mix-blend-difference invert">
+		<div class="flex justify-between items-center h-14 text-[13px] leading-[16px]">
+			<div class="">
+				<a href="/">TIRVEE</a>
+			</div>
+			<div class="flex items-center">18.02.2024</div>
+		</div>
+	</nav>
 
-          if (isTabActive) {
-            // Resume the animation if the tab becomes active
-            resumeCarouselAnimation();
-          } else {
-            // Pause the animation if the tab becomes inactive
-            pauseCarouselAnimation();
-          }
-        });
+	<div style="transform: translateY(0); overflow-y: hidden"
+		class="h-[1025px] lg:h-[1777px] transform-this-image object-cover pt-48">
+		<div class="absolute block w-[100%] h-[100%] top-0 right-0 left-0">
+			<img src="../assets/img/bg.jpg" class="block object-cover w-[100%] h-[100%] object-center"
+				alt="Photo of the couple" />
+		</div>
+		<div class="transform-this-text sticky top-0">
+			<div
+				class="px-4 mb-24 text-left text-[64px] leading-[64px] tracking-[-2.5px] md:text-[87px] md:leading-[82px] md:tracking-[-6px] lg:text-[136px] lg:leading-[116px] lg:tracking-[-7px]">
+				<span>TIRTH</span><br />
+				<span class="mx-8"><span class="italic">&</span> RAJVEE</span>
+			</div>
+		</div>
+	</div>
 
-        // Function to start the carousel animation
-        function startCarouselAnimation() {
-          const keyframes = [{ transform: "translateX(0)" }, { transform: `translateX(-${carouselWidth}px)` }];
+	<div class="relative z-[60] mt-8 sm:mt-24">
+		<div class="flex flex-col w-[90%] mx-auto">
+			<div class="font-caption mb-2 text-[14px] leading-[16px] text-center text-dark/60">STORY</div>
+			<div
+				class="font-medium text-[32px] leading-[34px] tracking-[-1px] lg:text-[48px] lg:leading-[52px] lg:text-[48px] lg:leading-[52px] lg:tracking-[-2px] text-center md:w-[60%] md:mx-auto">
+				CLASSMATES TO <span class="italic">SOULMATES</span> ! MANIFESTATION INTO <span
+					class="italic">REALITY</span>
+				🥰
+			</div>
+		</div>
 
-          const options = {
-            duration: originalImages.length * 5000, // Adjust the duration based on the number of images
-            iterations: Infinity, // Run the animation infinitely
-          };
+		<div class="carousel-container px-4 py-12 lg:py-24 min-h-[325px]">
+			<div class="carousel flex gap-3 lg:gap-6">
+				<img class="w-[350px]" src="../assets/img/us/1.webp" alt="" />
+				<img class="w-[250px]" src="../assets/img/us/2.webp" alt="" />
+				<img class="w-[350px]" src="../assets/img/us/3.webp" alt="" />
+				<img class="w-[250px]" src="../assets/img/us/4.webp" alt="" />
+				<img class="w-[350px]" src="../assets/img/us/5.webp" alt="" />
+				<img class="w-[250px]" src="../assets/img/us/6.webp" alt="" />
+			</div>
+		</div>
 
-          animation = carousel.animate(keyframes, options);
-          animationStartTime = performance.now();
-        }
-
-        // Function to pause the carousel animation
-        function pauseCarouselAnimation() {
-          if (animation) {
-            animation.pause();
-            animationPausedTime = performance.now() - animationStartTime;
-          }
-        }
-
-        // Function to resume the carousel animation
-        function resumeCarouselAnimation() {
-          if (animation) {
-            animation.play();
-            animation.currentTime = animationPausedTime / 1000; // Convert milliseconds to seconds
-            animationStartTime = performance.now() - animationPausedTime;
-          }
-        }
-      });
-      document.addEventListener("DOMContentLoaded", function () {
-        const carousel = document.querySelector(".carousel2");
-        let isTabActive = true;
-        let animation;
-        let animationStartTime;
-        let animationPausedTime = 0;
-
-        // Set the width of the carousel container to fit all the images
-        const originalImages = document.querySelectorAll(".carousel2 img");
-        const carouselWidth = Array.from(originalImages).reduce((sum, img) => sum + img.clientWidth, 0);
-        carousel.style.width = `${carouselWidth}px`;
-
-        // Intersection Observer to start animation when in the viewport
-        const observer = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                if (isTabActive) {
-                  startCarouselAnimation();
-                }
-              } else {
-                // Pause the animation when out of the viewport
-                pauseCarouselAnimation();
-              }
-            });
-          },
-          { threshold: 0.5 }
-        );
-
-        observer.observe(carousel);
-
-        // Page Visibility API to detect tab visibility
-        document.addEventListener("visibilitychange", function () {
-          isTabActive = document.visibilityState === "visible";
-
-          if (isTabActive) {
-            // Resume the animation if the tab becomes active
-            resumeCarouselAnimation();
-          } else {
-            // Pause the animation if the tab becomes inactive
-            pauseCarouselAnimation();
-          }
-        });
-
-        // Function to start the carousel animation
-        function startCarouselAnimation() {
-          const keyframes = [{ transform: "translateX(0)" }, { transform: `translateX(-${carouselWidth}px)` }];
-
-          const options = {
-            duration: originalImages.length * 5000, // Adjust the duration based on the number of images
-            iterations: Infinity, // Run the animation infinitely
-          };
-
-          animation = carousel.animate(keyframes, options);
-          animationStartTime = performance.now();
-        }
-
-        // Function to pause the carousel animation
-        function pauseCarouselAnimation() {
-          if (animation) {
-            animation.pause();
-            animationPausedTime = performance.now() - animationStartTime;
-          }
-        }
-
-        // Function to resume the carousel animation
-        function resumeCarouselAnimation() {
-          if (animation) {
-            animation.play();
-            animation.currentTime = animationPausedTime / 1000; // Convert milliseconds to seconds
-            animationStartTime = performance.now() - animationPausedTime;
-          }
-        }
-      });
-    </script>
-  </head>
-
-  <body class="bg-light text-dark font-body carlet-accent accent-accent selection:bg-accent cursor-none">
-    <div class="hidden lg:block cursorCustom"></div>
-
-    <nav class="w-screen px-4 z-[70] fixed top-0 mix-blend-difference invert">
-      <div class="flex justify-between items-center h-14 text-[13px] leading-[16px]">
-        <div class="">
-          <a href="/">TIRVEE</a>
-        </div>
-        <div class="flex items-center">18.02.2024</div>
-      </div>
-    </nav>
-
-    <div style="transform: translateY(0); overflow-y: hidden" class="h-[1025px] lg:h-[1777px] transform-this-image object-cover pt-48">
-      <div class="absolute block w-[100%] h-[100%] top-0 right-0 left-0">
-        <img src="../assets/img/bg.jpg" class="block object-cover w-[100%] h-[100%] object-center" alt="Photo of the couple" />
-      </div>
-      <div class="transform-this-text sticky top-0">
-        <div class="px-4 mb-24 text-left text-[64px] leading-[64px] tracking-[-2.5px] md:text-[87px] md:leading-[82px] md:tracking-[-6px] lg:text-[136px] lg:leading-[116px] lg:tracking-[-7px]">
-          <span>TIRTH</span><br />
-          <span class="mx-8"><span class="italic">&</span> RAJVEE</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="relative z-[60] mt-8 sm:mt-24">
-      <div class="flex flex-col w-[90%] mx-auto">
-        <div class="font-caption mb-2 text-[14px] leading-[16px] text-center text-dark/60">STORY</div>
-        <div class="font-medium text-[32px] leading-[34px] tracking-[-1px] lg:text-[48px] lg:leading-[52px] lg:tracking-[-2px] text-center md:w-[60%] md:mx-auto">
-          CLASSMATES TO <span class="italic">SOULMATES</span> ! MANIFESTATION INTO <span class="italic">REALITY</span>
-          🥰
-        </div>
-      </div>
-
-      <div class="carousel-container pt-12 px-4 min-h-[325px]">
-        <div class="carousel flex lg:gap-6 gap-3">
-          <img class="w-[350px]" src="../assets/img/us/1.jpg" alt="" />
-          <img class="w-[250px]" src="../assets/img/us/2.jpg" alt="" />
-          <img class="w-[350px]" src="../assets/img/us/3.jpg" alt="" />
-          <img class="w-[250px]" src="../assets/img/us/4.jpg" alt="" />
-          <img class="w-[350px]" src="../assets/img/us/5.jpg" alt="" />
-          <img class="w-[250px]" src="../assets/img/us/6.jpg" alt="" />
-          <img class="w-[250px]" src="../assets/img/us/7.jpg" alt="" />
-          <img class="w-[250px]" src="../assets/img/us/8.jpg" alt="" />
-          <img class="w-[350px]" src="../assets/img/us/9.jpg" alt="" />
-          <img class="w-[250px]" src="../assets/img/us/10.jpg" alt="" />
-        </div>
-      </div>
-
-      <div class="lg:my-24 my-12 px-4 flex flex-col md:flex-row lg:gap-8 gap-4">
-        <div class="flex flex-col w-[90%]">
-          <div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">DRESS CODE</div>
-          <div class="text-[24px] leading-[24px] tracking-[-1px]">DRESS TO IMPRESS</div>
-        </div>
-        <div class="flex flex-col w-[90%]">
-          <div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">PARKING</div>
-          <div class="text-[24px] leading-[24px] tracking-[-1px]">FREE VALET PARKING</div>
-        </div>
-        <div class="flex flex-col w-[90%]">
-          <div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">PARKING</div>
-          <div class="text-[24px] leading-[24px] tracking-[-1px]">FREE VALET PARKING</div>
-        </div>
-      </div>
-
-      <div class="bg-partyplot h-[716px] xl:h-[1358px]">
-        <div class="bg-light/40 w-full h-full">
-          <div class="px-4 text-center h-full flex flex-col justify-center items-center mx-auto text-dark">
-            <div class="font-caption mb-2 text-[14px] leading-[16px] text-center text-dark">JOIN US</div>
-            <div class="px-4 text-center mb-8 text-[64px] leading-[68px] tracking-[-3px] md:text-[87px] md:leading-[82px] md:tracking-[-6px] xl:text-[102px] xl:leading-[92px] xl:tracking-[-8px]">
-              <a href="https://maps.app.goo.gl/vhfEgyK7iHhfRray8" target="_blank" id="openMapsLink">SAMANVAY PARTY LAWNS </a>
-
-              <br />
-              18.02.2024
-            </div>
-
-            <div class="text-[24px] leading-[28px] tracking-[-1px] text-center">
-              SAMANVAY PARTY LAWNS, <br />
-              KANKOT RD, OF KALAWAD RD, <br />
-              RAJKOT, GUJARAT
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="py-24 px-4 bg-dark text-light flex flex-col md:flex-row md:justify-between gap-12 text-left">
-        <div class="flex flex-col md:basis-3/5">
-          <div class="font-caption mb-2 text-[14px] leading-[16px] text-light">AGENDA</div>
-          <div class="text-[32px] leading-[34px] tracking-[-1px]">DON'T BE FASHIONABLY LATE!</div>
-        </div>
-        <div class="flex flex-col gap-8 grow md:basis-2/5">
-          <div class="flex flex-col">
-            <div class="font-caption mb-2 text-[14px] leading-[16px] text-light">MANDAP</div>
-            <div class="text-[24px] leading-[28px] tracking-[-1px]">07:00</div>
-          </div>
-          <div class="flex flex-col">
-            <div class="font-caption mb-2 text-[14px] leading-[16px] text-light">HUES OF HALDI</div>
-            <div class="text-[24px] leading-[28px] tracking-[-1px]">15:00</div>
-          </div>
-          <div class="flex flex-col">
-            <div class="font-caption mb-2 text-[14px] leading-[16px] text-light">DANCE NIGHT</div>
-            <div class="text-[24px] leading-[28px] tracking-[-1px]">20:00</div>
-          </div>
-          <div class="flex flex-col">
-            <div class="font-caption mb-2 text-[14px] leading-[16px] text-light">WEDLOCK FESTIVITY</div>
-            <div class="text-[24px] leading-[28px] tracking-[-1px]">18:00</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="py-24 px-4 bg-light text-dark flex flex-col md:flex-row md:justify-between gap-12 text-left">
-        <div class="flex flex-col md:basis-3/5">
-          <div class="font-medium text-[32px] leading-[34px] tracking-[-1px] mb-4">MANDAP</div>
-          <div class="text-[18px] leading-[24px] tracking-[-0.5px] text-dark">Join us for the Mandap Ropan ceremony, a sacred moment as we set the stage for our union <br /></div>
-        </div>
-        <div class="flex flex-col gap-8 md:basis-2/5">
-          <div class="flex flex-col">
-            <div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">TIME</div>
-            <div class="text-[24px] leading-[28px] tracking-[-1px]">07:00</div>
-          </div>
-          <div class="flex flex-col">
-            <div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">DRESSCODE</div>
-            <div class="text-[24px] leading-[28px] tracking-[-1px]">STYLE IN ETHNIC</div>
-          </div>
-          <div class="flex flex-col">
-            <div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">WHERE</div>
-            <div class="text-[24px] leading-[28px] tracking-[-1px]">UNDER MANDAP ON RIGHT OF LAWNS ENTRY</div>
-          </div>
-        </div>
-      </div>
-
-      <hr class="border-1 border-dark" />
-
-      <div class="py-24 px-4 bg-light text-dark flex flex-col md:flex-row md:justify-between gap-12 text-left">
-        <div class="flex flex-col md:basis-3/5">
-          <div class="font-medium text-[32px] leading-[34px] tracking-[-1px] mb-4">HUES OF HALDI</div>
-          <div class="text-[18px] leading-[24px] tracking-[-0.5px] text-dark">
-            Join us in the vibrant Haldi ceremony, as we embrace tradition with turmeric's golden touch. Let's celebrate love, laughter, and the colorful blessings
-          </div>
-        </div>
-        <div class="flex flex-col gap-8 md:basis-2/5">
-          <div class="flex flex-col">
-            <div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">TIME</div>
-            <div class="text-[24px] leading-[28px] tracking-[-1px]">15:00</div>
-          </div>
-          <div class="flex flex-col">
-            <div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">DRESSCODE</div>
-            <div class="text-[24px] leading-[28px] tracking-[-1px]">ANYTHING IN YELLOW</div>
-          </div>
-          <div class="flex flex-col">
-            <div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">WHERE</div>
-            <div class="text-[24px] leading-[28px] tracking-[-1px]">SAME PLACE AS MANDAP</div>
-          </div>
-        </div>
-      </div>
-
-      <hr class="border-1 border-dark" />
-
-      <div class="py-24 px-4 bg-light text-dark flex flex-col md:flex-row md:justify-between gap-12 text-left">
-        <div class="flex flex-col md:basis-3/5">
-          <div class="font-medium text-[32px] leading-[34px] tracking-[-1px] mb-4">DANCE NIGHT</div>
-          <div class="text-[18px] leading-[24px] tracking-[-0.5px] text-dark">Join us for the night filled with bollywood dance, Garba and DJ beats <br /></div>
-        </div>
-        <div class="flex flex-col gap-8 md:basis-2/5">
-          <div class="flex flex-col">
-            <div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">TIME</div>
-            <div class="text-[24px] leading-[28px] tracking-[-1px]">20:00</div>
-          </div>
-          <div class="flex flex-col">
-            <div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">DRESSCODE</div>
-            <div class="text-[24px] leading-[28px] tracking-[-1px]">DAZZLE IN LEHENGA CHOLI</div>
-          </div>
-          <div class="flex flex-col">
-            <div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">DANCE PERFORMANCES</div>
-            <div class="text-[24px] leading-[28px] tracking-[-1px]">20:00 ONWARDS</div>
-          </div>
-        </div>
-      </div>
-
-      <hr class="border-1 border-dark" />
-
-      <div class="py-24 px-4 bg-light text-dark flex flex-col md:flex-row md:justify-between gap-12 text-left">
-        <div class="flex flex-col md:basis-3/5">
-          <div class="font-medium text-[32px] leading-[34px] tracking-[-1px] mb-4">WEDLOCK FESTIVITY</div>
-          <div class="text-[18px] leading-[24px] tracking-[-0.5px] text-dark">Gather for our sacred union at the matrimonial celebration, where love intertwines in joyous moments.</div>
-        </div>
-        <div class="flex flex-col gap-8 md:basis-2/5">
-          <div class="flex flex-col">
-            <div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">TIME</div>
-            <div class="text-[24px] leading-[28px] tracking-[-1px]">18:00</div>
-          </div>
-          <div class="flex flex-col">
-            <div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">DRESSCODE</div>
-            <div class="text-[24px] leading-[28px] tracking-[-1px]">ANYTHING FANCY</div>
-          </div>
-          <div class="flex flex-col">
-            <div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">WEDLOCK FESTIVITY</div>
-            <div class="text-[24px] leading-[28px] tracking-[-1px]">17:00</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- <div class="flex flex-row justify-around my-10">
-	
-			<div class="max-w-md mx-auto overflow-hidden shadow-lg transform transition-transform hover:scale-110">
-				<img class="w-full" src="../assets/img/us/1.jpg" alt="Card Image">
-				<div class="px-6 py-4">
-					<div class="font-bold text-xl mb-2">Card Title</div>
-					<p class="text-gray-700 text-base">
-						Your card content goes here.
-					</p>
+		<div class="lg:my-24 my-12 px-4 flex flex-col md:flex-row gap-4">
+			<div class="flex flex-col w-[90%]">
+				<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">DRESS CODE</div>
+				<div class="font-medium text-[24px] leading-[28px] lg:text-[32px] lg:leading-[34px] tracking-[-1px]">
+					DRESS TO IMPRESS
 				</div>
 			</div>
-	
-			<div class="max-w-md mx-auto overflow-hidden shadow-lg transform transition-transform hover:scale-110">
-				<img class="w-full" src="../assets/img/us/1.jpg" alt="Card Image">
-				<div class="px-6 py-4">
-					<div class="font-bold text-xl mb-2">Card Title</div>
-					<p class="text-gray-700 text-base">
-						Your card content goes here.
-					</p>
-				</div>
+			<div class="flex flex-col w-[90%]">
+				<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">PARKING</div>
+				<div class="font-medium  text-[24px] leading-[28px] lg:text-[32px] lg:leading-[34px] tracking-[-1px]">
+					FREE VALET PARKING</div>
 			</div>
-	
-			<div class="max-w-md mx-auto overflow-hidden shadow-lg transform transition-transform hover:scale-110">
-				<img class="w-full" src="../assets/img/us/1.jpg" alt="Card Image">
-				<div class="px-6 py-4">
-					<div class="font-bold text-xl mb-2">Card Title</div>
-					<p class="text-gray-700 text-base">
-						Your card content goes here.
-					</p>
-				</div>
+			<div class="flex flex-col w-[90%]">
+				<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">PARKING</div>
+				<div class="font-medium text-[24px] leading-[28px] lg:text-[32px] lg:leading-[34px] tracking-[-1px]">
+					FREE VALET PARKING</div>
 			</div>
-	
-		</div> -->
+		</div>
 
-      <!-- <div class=" w-full">
-			<div class="max-w-lg w-full mx-auto rounded-xl overflow-hidden shadow-md md:flex">
-				<div class="md:flex-shrink-0">
-					<img class="w-[500px]  h-auto" src="../assets/img/us/1.jpg" alt="Card Image">
-				</div>
-				<div class="p-8">
-					<div class="uppercase tracking-wide text-sm text-indigo-500 font-semibold">Card Category</div>
-					<a href="#" class="block mt-1 text-lg leading-tight font-medium text-black hover:underline">Card
-						Title</a>
-					<p class="mt-2 text-gray-500">Your card content goes here. Customize this text as needed.</p>
-				</div>
-			</div>
-		</div> -->
+		<div class="bg-partyplot h-[716px] lg:h-[1358px]">
+			<div class="bg-light/40 w-full h-full">
+				<div class="px-8 text-center h-full flex flex-col justify-center items-center mx-auto text-dark">
+					<div class="font-caption mb-2 text-[14px] leading-[16px] text-center text-dark">JOIN US</div>
+					<div
+						class="px-4 text-center mb-8 text-[64px] leading-[64px] tracking-[-2.5px] md:text-[87px] md:leading-[82px] md:tracking-[-6px] lg:text-[136px] lg:leading-[116px] lg:tracking-[-7px]">
+						<a href="https://maps.app.goo.gl/vhfEgyK7iHhfRray8" target="_blank" id="openMapsLink">
+							SAMANVAY PARTY <br />
+							LAWNS </a>
 
-      <!-- <div class=" hidden max-w-lg mx-auto overflow-hidden shadow-lg transform transition-transform hover:scale-110">
-			<img class="w-full" src="../assets/img/us/1.jpg" alt="Card Image">
-			<div class="px-6 py-4">
-				<div class="font-bold text-xl mb-2">Card Title</div>
-				<p class="text-gray-700 text-base">
-					Your card content goes here.
-				</p>
-			</div>
-		</div> -->
-
-      <div class="carousel-container pt-12 px-4 min-h-[325px]">
-        <div class="carousel2 flex lg:gap-6 gap-3">
-          <img class="w-[350px]" src="../assets/img/us/1.jpg" alt="" />
-          <img class="w-[250px]" src="../assets/img/us/2.jpg" alt="" />
-          <img class="w-[350px]" src="../assets/img/us/3.jpg" alt="" />
-          <img class="w-[250px]" src="../assets/img/us/4.jpg" alt="" />
-          <img class="w-[350px]" src="../assets/img/us/5.jpg" alt="" />
-          <img class="w-[250px]" src="../assets/img/us/6.jpg" alt="" />
-          <img class="w-[250px]" src="../assets/img/us/7.jpg" alt="" />
-          <img class="w-[250px]" src="../assets/img/us/8.jpg" alt="" />
-          <img class="w-[350px]" src="../assets/img/us/9.jpg" alt="" />
-          <img class="w-[250px]" src="../assets/img/us/10.jpg" alt="" />
-        </div>
-      </div>
-
-      <!-- <div class="my-8 px-4 overflow-x-scroll">
-        <div class="flex flex-row items-center no-wrap gap-6">
-          <span class=""><img class="w-[300px] max-w-fit" src="../assets/img/us/1.jpg" alt="" /></span>
-          <span class=""><img class="w-[200px] max-w-fit" src="../assets/img/us/2.jpg" alt="" /></span>
-          <span class=""><img class="w-[300px] max-w-fit" src="../assets/img/us/3.jpg" alt="" /></span>
-          <span class=""><img class="w-[200px] max-w-fit" src="../assets/img/us/4.jpg" alt="" /></span>
-          <span class=""><img class="w-[300px] max-w-fit" src="../assets/img/us/5.jpg" alt="" /></span>
-          <span class=""><img class="w-[200px] max-w-fit" src="../assets/img/us/6.jpg" alt="" /></span>
-          <span class=""><img class="w-[200px] max-w-fit" src="../assets/img/us/7.jpg" alt="" /></span>
-          <span class=""><img class="w-[200px] max-w-fit" src="../assets/img/us/8.jpg" alt="" /></span>
-          <span class=""><img class="w-[300px] max-w-fit" src="../assets/img/us/9.jpg" alt="" /></span>
-          <span class=""><img class="w-[200px] max-w-fit" src="../assets/img/us/10.jpg" alt="" /></span>
-        </div>
-      </div> -->
-
-      <div class="lg:py-24 py-12 flex flex-col w-[90%] mx-auto">
-        <div class="mb-2 font-caption mb-2 text-[14px] leading-[16px] text-dark text-center text-dark">ACCOMODATION</div>
-        <div class="text-[32px] leading-[34px] tracking-[-1px] text-center md:w-[60%] md:mx-auto">
-          THERE WILL BE SOME ROOMS BOOKED FOR <span class="italic">IMMEDIATE</span> FAMILY MEMBERS. PLEASE <span class="italic">CONTACT</span> ME OR ANYONE OF OUR FAMILY AT THE
-          <span class="italic">EARLIEST</span>.
-        </div>
-      </div>
-
-      <!-- <div>Fun Fact Quiz
-			<div class="hidden flex flex-row justify-around my-10">
-	
-				<div class="max-w-sm rounded overflow-hidden shadow-lg">
-					<img class="w-full" src="../assets/img/us/1.jpg" alt="Sunset in the mountains">
-					<div class="px-6 py-4">
-						<div class="font-bold text-xl mb-2">How We Met</div>
-						<p class="text-gray-700 text-base">
-							Starting as mere classmates, our souls found resonance in the uncharted realms of shared
-							thoughts and
-							silent understanding. With time, the unspoken connection quietly transformed us from
-							acquaintances to
-							soulmates, creating an inexplicable bond that defies the ordinary course of friendships
-						</p>
+						<br />
+						18.02.2024
 					</div>
-					<div class="px-6 pt-4 pb-2">
-						<span
-							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#classmatestosoumates</span>
-						<span
-							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#engineering</span>
-						<span
-							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#winter</span>
+
+					<div
+						class="font-medium text-[24px] leading-[28px] lg:text-[32px] lg:leading-[34px] tracking-[-1px] text-center">
+						SAMANVAY PARTY LAWNS, <br />
+						KANKOT RD, OF KALAWAD RD, <br />
+						RAJKOT, GUJARAT
 					</div>
 				</div>
-	
-				Mixture Press
+			</div>
+		</div>
 
-				<div class="max-w-sm rounded overflow-hidden shadow-lg">
-					<img class="w-full" src="../assets/img/us/3.jpg" alt="Sunset in the mountains">
-					<div class="px-6 py-4">
-						<div class="font-bold text-xl mb-2">Shared Interests</div>
-						<p class="text-gray-700 text-base">
+		<div class="py-24 px-8 bg-dark text-light flex flex-col md:flex-row md:justify-between gap-12 text-left">
+			<div class="flex flex-col md:basis-3/5">
+				<div class="font-caption mb-2 text-[14px] leading-[16px] text-light/80">AGENDA</div>
+				<div class="font-medium text-[32px] leading-[34px] tracking-[-1px] lg:text-[48px] lg:leading-[52px]">
+					DON'T BE FASHIONABLY LATE!</div>
+			</div>
+			<div class="flex flex-col gap-8 grow md:basis-2/5">
+				<div class="flex flex-col">
+					<div class="font-caption mb-2 text-[14px] leading-[16px] text-light/80">MANDAP</div>
+					<div
+						class="font-medium text-[24px] leading-[28px] lg:text-[32px] lg:leading-[34px] tracking-[-1px]">
+						07:00</div>
+				</div>
+				<div class="flex flex-col">
+					<div class="font-caption mb-2 text-[14px] leading-[16px] text-light/80">HUES OF HALDI</div>
+					<div
+						class="font-medium text-[24px] leading-[28px] lg:text-[32px] lg:leading-[34px] tracking-[-1px]">
+						15:00</div>
+				</div>
+				<div class="flex flex-col">
+					<div class="font-caption mb-2 text-[14px] leading-[16px] text-light/80">DANCE NIGHT</div>
+					<div
+						class="font-medium text-[24px] leading-[28px] lg:text-[32px] lg:leading-[34px] tracking-[-1px]">
+						20:00</div>
+				</div>
+				<div class="flex flex-col">
+					<div class="font-caption mb-2 text-[14px] leading-[16px] text-light/80">WEDDING</div>
+					<div
+						class="font-medium text-[24px] leading-[28px] lg:text-[32px] lg:leading-[34px] tracking-[-1px]">
+						18:00</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="py-24 px-8 bg-light text-dark flex flex-col md:flex-row md:justify-between gap-12 text-left">
+			<div class="flex flex-col md:basis-3/5">
+				<div
+					class="font-medium text-[32px] leading-[34px] tracking-[-1px] lg:text-[48px] lg:leading-[52px] mb-4">
+					MANDAP</div>
+				<div class="text-[18px] leading-[24px] text-dark">Join us for the Mandap Ropan
+					ceremony, a sacred moment as we set the stage for our union <br /></div>
+			</div>
+			<div class="flex flex-col gap-8 md:basis-2/5">
+				<div class="flex flex-col">
+					<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">TIME</div>
+					<div
+						class="font-medium text-[24px] leading-[28px] lg:text-[32px] lg:leading-[34px] tracking-[-1px]">
+						07:00</div>
+				</div>
+				<div class="flex flex-col">
+					<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">DRESSCODE</div>
+					<div
+						class="font-medium text-[24px] leading-[28px] lg:text-[32px] lg:leading-[34px] tracking-[-1px]">
+						STYLE IN
+						ETHNIC</div>
+				</div>
+				<div class="flex flex-col">
+					<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">WHERE</div>
+					<div
+						class="font-medium text-[24px] leading-[28px] lg:text-[32px] lg:leading-[34px] tracking-[-1px]">
+						UNDER
+						MANDAP ON RIGHT OF LAWNS ENTRY</div>
+				</div>
+			</div>
+		</div>
+
+		<hr class="border-1 border-dark" />
+
+		<div class="py-24 px-8 bg-light text-dark flex flex-col md:flex-row md:justify-between gap-12 text-left">
+			<div class="flex flex-col md:basis-3/5">
+				<div
+					class="font-medium text-[32px] leading-[34px] tracking-[-1px] lg:text-[48px] lg:leading-[52px] mb-4">
+					HUES OF HALDI</div>
+				<div class="text-[18px] leading-[24px] text-dark">
+					Join us in the vibrant Haldi ceremony, as we embrace tradition with turmeric's golden touch. Let's
+					celebrate love, laughter, and the colorful blessings
+				</div>
+			</div>
+			<div class="flex flex-col gap-8 md:basis-2/5">
+				<div class="flex flex-col">
+					<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">TIME</div>
+					<div
+						class="font-medium text-[24px] leading-[28px] lg:text-[32px] lg:leading-[34px] tracking-[-1px]">
+						15:00</div>
+				</div>
+				<div class="flex flex-col">
+					<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">DRESSCODE</div>
+					<div
+						class="font-medium text-[24px] leading-[28px] lg:text-[32px] lg:leading-[34px] tracking-[-1px]">
+						ANYTHING IN YELLOW
+					</div>
+				</div>
+				<div class="flex flex-col">
+					<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">WHERE</div>
+					<div
+						class="font-medium text-[24px] leading-[28px] lg:text-[32px] lg:leading-[34px] tracking-[-1px]">
+						SAME PLACE AS MANDAP</div>
+				</div>
+			</div>
+		</div>
+
+		<hr class="border-1 border-dark" />
+
+		<div class="py-24 px-8 bg-light text-dark flex flex-col md:flex-row md:justify-between gap-12 text-left">
+			<div class="flex flex-col md:basis-3/5">
+				<div
+					class="font-medium text-[32px] leading-[34px] tracking-[-1px] lg:text-[48px] lg:leading-[52px] mb-4">
+					DANCE NIGHT</div>
+				<div class="text-[18px] leading-[24px] text-dark">Join us for the night filled with
+					bollywood dance, Garba and DJ beats <br /></div>
+			</div>
+			<div class="flex flex-col gap-8 md:basis-2/5">
+				<div class="flex flex-col">
+					<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">TIME</div>
+					<div
+						class="font-medium text-[24px] leading-[28px] lg:text-[32px] lg:leading-[34px] tracking-[-1px]">
+						20:00</div>
+				</div>
+				<div class="flex flex-col">
+					<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">DRESSCODE</div>
+					<div
+						class="font-medium text-[24px] leading-[28px] lg:text-[32px] lg:leading-[34px] tracking-[-1px]">
+						INDO-WESTERN</div>
+				</div>
+				<div class="flex flex-col">
+					<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">DANCE PERFORMANCES</div>
+					<div
+						class="font-medium text-[24px] leading-[28px] lg:text-[32px] lg:leading-[34px] tracking-[-1px]">
+						20:00
+						ONWARDS</div>
+				</div>
+			</div>
+		</div>
+
+		<hr class="border-1 border-dark" />
+
+		<div class="py-24 px-8 bg-light text-dark flex flex-col md:flex-row md:justify-between gap-12 text-left">
+			<div class="flex flex-col md:basis-3/5">
+				<div
+					class="font-medium text-[32px] leading-[34px] tracking-[-1px] lg:text-[48px] lg:leading-[52px] mb-4">
+					WEDDING</div>
+				<div class="text-[18px] leading-[24px] text-dark">Gather for our sacred union at the
+					matrimonial celebration, where love intertwines in joyous moments.</div>
+			</div>
+			<div class="flex flex-col gap-8 md:basis-2/5">
+				<div class="flex flex-col">
+					<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">TIME</div>
+					<div
+						class="font-medium text-[24px] leading-[28px] lg:text-[32px] lg:leading-[34px] tracking-[-1px]">
+						18:00</div>
+				</div>
+				<div class="flex flex-col">
+					<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">DRESSCODE</div>
+					<div
+						class="font-medium text-[24px] leading-[28px] lg:text-[32px] lg:leading-[34px] tracking-[-1px]">
+						INDIAN TRADITIONALS</div>
+				</div>
+				<div class="flex flex-col">
+					<div class="font-caption mb-2 text-[14px] leading-[16px] text-dark/60">WEDLOCK FESTIVITY</div>
+					<div
+						class="font-medium text-[24px] leading-[28px] lg:text-[32px] lg:leading-[34px] tracking-[-1px]">
+						17:00</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="carousel-container px-4 py-12 lg:py-24 min-h-[325px]">
+			<div class="carousel2 flex lg:gap-6 gap-3">
+				<img class="w-[250px]" src="../assets/img/us/7.webp" alt="" />
+				<img class="w-[250px]" src="../assets/img/us/8.webp" alt="" />
+				<img class="w-[350px]" src="../assets/img/us/9.webp" alt="" />
+				<img class="w-[250px]" src="../assets/img/us/10.webp" alt="" />
+				<img class="w-[350px]" src="../assets/img/us/11.webp" alt="" />
+				<img class="w-[250px]" src="../assets/img/us/12.webp" alt="" />
+			</div>
+		</div>
+
+		<div class="px-4 py-12 lg:py-24 flex flex-col w-[90%] mx-auto">
+			<div class="mb-2 font-caption mb-2 text-[14px] leading-[16px] text-dark text-center text-dark">ACCOMODATION
+			</div>
+			<div
+				class="font-medium text-[32px] leading-[34px] tracking-[-1px] lg:text-[48px] lg:leading-[52px] text-center md:w-[60%] md:mx-auto">
+				THERE WILL BE SOME ROOMS BOOKED FOR <span class="italic">IMMEDIATE</span> FAMILY MEMBERS. PLEASE <span
+					class="italic">CONTACT</span> ME OR ANYONE OF OUR FAMILY AT THE
+				<span class="italic">EARLIEST</span>.
+			</div>
+			<div class="flex justify-center mt-12 gap-4">
+				<a class="flex flex-row items-center gap-1 hideCursorElement cursor-none outline outline-1 hover:outline-dark hover:bg-dark px-6 py-2 rounded-full group ease-custom duration-200"
+					href="tel:09898219779">
+					<div class="w-6 h-6">
+						<span class="material-symbols-rounded filled group-hover:text-white"> phone_iphone </span>
+					</div>
+					<span class="font-semibold group-hover:text-white">Mine</span>
+				</a>
+				<a class="flex flex-row items-center gap-1 hideCursorElement cursor-none outline outline-1 hover:outline-dark hover:bg-dark px-6 py-2 rounded-full group ease-custom duration-200"
+					href="tel:09725075002">
+					<div class="w-6 h-6">
+						<span class="material-symbols-rounded filled group-hover:text-white"> phone_iphone </span>
+					</div>
+					<span class="font-semibold group-hover:text-white">Dad</span>
+				</a>
+			</div>
+		</div>
+
+		<div class="px-4 pt-12 lg:pt-24">
+			<div class="flex flex-col w-[90%] mx-auto">
+				<div class="font-caption mb-2 text-[14px] leading-[16px] text-center text-dark/60">FUN FACT QUIZ</div>
+				<div
+					class="font-medium text-[32px] leading-[34px] tracking-[-1px] lg:text-[48px] lg:leading-[52px] text-center md:w-[60%] md:mx-auto">
+					HOW MUCH DO YOU <span class="italic">KNOW</span> ABOUT <span class="italic">TIRTH</span> & <span
+						class="italic">RAJVEE</span>?
+				</div>
+			</div>
+			<div class="mt-8 grid auto-rows-fr grid-cols-2 md:grid-cols-4 gap-4">
+				<div
+					class="border border-dark h-[450px] flex flex-col justify-between items-end hover:bg-dark group hover:rounded-br-[32px] cursor-none ease-in-out duration-500">
+					<div class="p-2 w-full">
+						<div class="text-[16px] leading-[20px] text-dark group-hover:text-light/60 mb-4">
+							HOW WE MET?</div>
+						<div class="text-[18px] leading-[24px] text-light">Starting as mere classmates, our souls found
+							resonance in the uncharted realms of shared thoughts and silent understanding. With time,
+							the unspoken connection quietly transformed us from acquaintances to soulmates, creating an
+							inexplicable bond that defies the ordinary course of friendships
+						</div>
+					</div>
+					<span
+						class="material-symbols-rounded text-[88px] text-dark group-hover:text-light group-hover:rotate-45 ease-in-out duration-500">
+						add </span>
+				</div>
+				<div
+					class="border border-dark h-[450px] flex flex-col justify-between items-end hover:bg-dark group hover:rounded-br-[32px] cursor-none ease-in-out duration-500">
+					<div class="p-2 w-full">
+						<div class="text-[16px] leading-[20px] text-dark group-hover:text-light/60 mb-4">
+							SHARED INTEREST?</div>
+						<div class="text-[18px] leading-[24px] text-light">
 							United by our love for series and the laughter-inducing allure of Tanmay Bhat's meme
-							reviews,
-							what began
-							as shared interests in pop culture blossomed into an unbreakable bond. Our journey from
-							classmates to
-							soulmates found its rhythm in the joyous moments of shared laughter and common passions.
-						</p>
+							reviews, what began ... its rhythm in the joyous moments of shared
+							laughter and common passions.
+						</div>
 					</div>
-					<div class="px-6 pt-4 pb-2">
-						<span
-							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#tanmatbhatt</span>
-						<span
-							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#comedy</span>
-						<span
-							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#anuvjain</span>
-					</div>
+					<span
+						class="material-symbols-rounded text-[88px] text-dark group-hover:text-light group-hover:rotate-45 ease-in-out duration-500">
+						add </span>
 				</div>
-	
-				<div class="max-w-sm rounded overflow-hidden shadow-lg">
-					<img class="w-full" src="../assets/img/us/5.jpg" alt="Sunset in the mountains">
-					<div class="px-6 py-4">
-						<div class="font-bold text-xl mb-2">Milestones</div>
-						<p class="text-gray-700 text-base">
+				<div
+					class="border border-dark h-[450px] flex flex-col justify-between items-end hover:bg-dark group hover:rounded-br-[32px] cursor-none ease-in-out duration-500">
+					<div class="p-2 w-full">
+						<div class="text-[16px] leading-[20px] text-dark group-hover:text-light/60 mb-4">
+							MILESTONES?</div>
+						<div class="text-[18px] leading-[24px] text-light">
 							In the quietude of lockdown, amidst solitude and reflection, the realization dawned — the
-							subtle
-							shifts
-							in our conversations, the shared silences, and the comfort found in virtual togetherness.
-							Unbeknownst to
-							us, love quietly bloomed, turning the challenging times of lockdown into the unexpected
-							cocoon
-							where our
-							hearts found each other.
-						</p>
+							subtle ... turning the challenging times of
+							lockdown into the unexpected cocoon where our hearts found each other.
+						</div>
 					</div>
-					<div class="px-6 pt-4 pb-2">
-						<span
-							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#lockdownlovers</span>
-						<span
-							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#soltitude</span>
-						<span
-							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#confession</span>
-					</div>
+					<span
+						class="material-symbols-rounded text-[88px] text-dark group-hover:text-light group-hover:rotate-45 ease-in-out duration-500">
+						add </span>
 				</div>
-	
-				<div class="max-w-sm rounded overflow-hidden shadow-lg">
-					<img class="w-full" src="../assets/img/us/10.jpg" alt="Sunset in the mountains">
-					<div class="px-6 py-4">
-						<div class="font-bold text-xl mb-2">Fun Facts about Each Other:</div>
-						<p class="text-gray-700 text-base">
-							-----
-						</p>
+				<div
+					class="border border-dark h-[450px] flex flex-col justify-between items-end hover:bg-dark group hover:rounded-br-[32px] cursor-none ease-in-out duration-500">
+					<div class="p-2 w-full">
+						<div class="text-[16px] leading-[20px] text-dark group-hover:text-light/60 mb-4">
+							TRAVEL ADVENTURES?</div>
+						<div class="text-[18px] leading-[24px] text-light">
+							We will in future. Stay updated by following
+							@talesoftirvee on instagram.</div>
 					</div>
-					<div class="px-6 pt-4 pb-2">
-						<span
-							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#classmatestosoumates</span>
-						<span
-							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#engineering</span>
-						<span
-							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#winter</span>
-					</div>
+					<span
+						class="material-symbols-rounded text-[88px] text-dark group-hover:text-light group-hover:rotate-45 ease-in-out duration-500">
+						add </span>
 				</div>
-	
-			</div>
-			<div class="hidden flex flex-row justify-around my-10">
-	
-				<div class="max-w-sm rounded overflow-hidden shadow-lg">
-					<img class="w-full" src="../assets/img/us/2.jpg" alt="Sunset in the mountains">
-					<div class="px-6 py-4">
-						<div class="font-bold text-xl mb-2">Travel Adventures</div>
-						<p class="text-gray-700 text-base">
-	
-						</p>
-					</div>
-					<div class="px-6 pt-4 pb-2">
-						<span
-							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#classmatestosoumates</span>
-						<span
-							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#engineering</span>
-						<span
-							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#winter</span>
-					</div>
-				</div>
-	
-				<div class="max-w-sm rounded overflow-hidden shadow-lg">
-					<img class="w-full" src="../assets/img/us/11.jpg" alt="Sunset in the mountains">
-					<div class="px-6 py-4">
-						<div class="font-bold text-xl mb-2">Pet Love</div>
-						<p class="text-gray-700 text-base">
+				<div
+					class="border border-dark h-[450px] flex flex-col justify-between items-end hover:bg-dark group hover:rounded-br-[32px] cursor-none ease-in-out duration-500">
+					<div class="p-2 w-full">
+						<div class="text-[16px] leading-[20px] text-dark group-hover:text-light/60 mb-4">
+							OUR FAVORITE PET?</div>
+						<div class="text-[18px] leading-[24px] text-light">
 							From childhood doggie dreams to adult reality, thrilled to share a life with a partner who
-							loves
-							furry friends as much as I do. Our love story is written in paw prints
-	
-						</p>
+							loves furry friends as much as I do. Our love story is written in paw prints.
+						</div>
 					</div>
-					<div class="px-6 pt-4 pb-2">
-						<span
-							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#classmatestosoumates</span>
-						<span
-							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#engineering</span>
-						<span
-							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#winter</span>
-					</div>
+					<span
+						class="material-symbols-rounded text-[88px] text-dark group-hover:text-light group-hover:rotate-45 ease-in-out duration-500">
+						add </span>
 				</div>
-	
-				<div class="max-w-sm rounded overflow-hidden shadow-lg">
-					<img class="w-full" src="../assets/img/us/7.jpg" alt="Sunset in the mountains">
-					<div class="px-6 py-4">
-						<div class="font-bold text-xl mb-2">Favorite Date Spots</div>
-						<p class="text-gray-700 text-base">
+				<div
+					class="border border-dark h-[450px] flex flex-col justify-between items-end hover:bg-dark group hover:rounded-br-[32px] cursor-none ease-in-out duration-500">
+					<div class="p-2 w-full">
+						<div class="text-[16px] leading-[20px] text-dark group-hover:text-light/60 mb-4">
+							FAVORITE DATE SPOTS?</div>
+						<div class="text-[18px] leading-[24px] text-light">
 							In the heart of Rajkot, there's a cafe that has been witness to the chapters of our love
-							story.
-							But we would like to keep it to ourselves.
-	
-						</p>
+							story. But we would like to keep it to ourselves.
+						</div>
 					</div>
-					<div class="px-6 pt-4 pb-2">
-						<span
-							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#classmatestosoumates</span>
-						<span
-							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#engineering</span>
-						<span
-							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#winter</span>
-					</div>
+					<span
+						class="material-symbols-rounded text-[88px] text-dark group-hover:text-light group-hover:rotate-45 ease-in-out duration-500">
+						add </span>
 				</div>
-	
-				<div class="max-w-sm rounded overflow-hidden shadow-lg">
-					<img class="w-full" src="../assets/img/us/9.jpg" alt="Sunset in the mountains">
-					<div class="px-6 py-4">
-						<div class="font-bold text-xl mb-2">Advice from Loved Ones</div>
-						<p class="text-gray-700 text-base">
-	
-						</p>
+				<div
+					class="border border-dark h-[450px] flex flex-col justify-between items-end hover:bg-dark group hover:rounded-br-[32px] cursor-none ease-in-out duration-500">
+					<div class="p-2 w-full">
+						<div class="text-[16px] leading-[20px] text-dark group-hover:text-light/60 mb-4">
+							WHAT DO WE DO FOR JOBS?</div>
+						<div class="text-[18px] leading-[24px] text-light">Rajvee is a Frontend Developer, and Tirth is
+							a Product Designer.</div>
 					</div>
-					<div class="px-6 pt-4 pb-2">
-						<span
-							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#classmatestosoumates</span>
-						<span
-							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#engineering</span>
-						<span
-							class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#winter</span>
-					</div>
+					<span
+						class="material-symbols-rounded text-[88px] text-dark group-hover:text-light group-hover:rotate-45 ease-in-out duration-500">
+						add </span>
 				</div>
-	
+				<div
+					class="border border-dark h-[450px] flex flex-col justify-between items-end hover:bg-dark group hover:rounded-br-[32px] cursor-none ease-in-out duration-500">
+					<div class="p-2 w-full">
+						<div class="text-[16px] leading-[20px] text-dark group-hover:text-light/60 mb-4">
+							ADVICE FROM LOVED ONES?</div>
+						<div class="text-[18px] leading-[24px] text-light">
+							I don't know why this div was right aligned!
+						</div>
+					</div>
+					<span
+						class="material-symbols-rounded text-[88px] text-dark group-hover:text-light group-hover:rotate-45 ease-in-out duration-500">
+						add </span>
+				</div>
 			</div>
-		</div> -->
+		</div>
 
-      <div class="lg:py-24 py-12 px-4">
-        <div class="flex flex-col w-[90%] mx-auto">
-          <div class="font-caption mb-2 text-[14px] leading-[16px] text-center text-dark/60">FUN FACT QUIZ</div>
-          <div class="text-[32px] leading-[34px] tracking-[-1px] text-center">
-            HOW MUCH DO YOU <span class="italic">KNOW</span> ABOUT <span class="italic">TIRTH</span> & <span class="italic">RAJVEE</span>?
-          </div>
-        </div>
-        <div class="mt-8 grid auto-rows-fr grid-cols-2 md:grid-cols-4 gap-4">
-          <div class="border border-dark h-[300px] flex flex-col justify-between items-end hover:bg-dark group hover:rounded-br-[32px] ease-in-out duration-500">
-            <div class="p-2">
-              <div class="text-[16px] leading-[20px] tracking-[-0.5px] text-dark group-hover:text-light/60 mb-4">WHAT DO WE DO FOR JOBS?</div>
-              <div class="text-[18px] leading-[22px] text-light">Rajvee is a Frontend Developer, and Tirth is a Product Designer.</div>
-            </div>
-            <span class="material-symbols-rounded text-[88px] text-dark group-hover:text-light group-hover:rotate-45 ease-in-out duration-500"> add </span>
-          </div>
-          <div class="border border-dark h-[300px] flex flex-col justify-between items-end hover:bg-dark group hover:rounded-br-[32px] ease-in-out duration-500">
-            <div class="p-2">
-              <div class="text-[16px] leading-[20px] tracking-[-0.5px] text-dark group-hover:text-light/60 mb-4">WHAT DO WE DO FOR JOBS?</div>
-              <div class="text-[18px] leading-[22px] text-light">Rajvee is a Frontend Developer, and Tirth is a Product Designer.</div>
-            </div>
-            <span class="material-symbols-rounded text-[88px] text-dark group-hover:text-light group-hover:rotate-45 ease-in-out duration-500"> add </span>
-          </div>
-          <div class="border border-dark h-[300px] flex flex-col justify-between items-end hover:bg-dark group hover:rounded-br-[32px] ease-in-out duration-500">
-            <div class="p-2">
-              <div class="text-[16px] leading-[20px] tracking-[-0.5px] text-dark group-hover:text-light/60 mb-4">WHAT DO WE DO FOR JOBS?</div>
-              <div class="text-[18px] leading-[22px] text-light">Rajvee is a Frontend Developer, and Tirth is a Product Designer.</div>
-            </div>
-            <span class="material-symbols-rounded text-[88px] text-dark group-hover:text-light group-hover:rotate-45 ease-in-out duration-500"> add </span>
-          </div>
-          <div class="border border-dark h-[300px] flex flex-col justify-between items-end hover:bg-dark group hover:rounded-br-[32px] ease-in-out duration-500">
-            <div class="p-2">
-              <div class="text-[16px] leading-[20px] tracking-[-0.5px] text-dark group-hover:text-light/60 mb-4">WHAT DO WE DO FOR JOBS?</div>
-              <div class="text-[18px] leading-[22px] text-light">Rajvee is a Frontend Developer, and Tirth is a Product Designer.</div>
-            </div>
-            <span class="material-symbols-rounded text-[88px] text-dark group-hover:text-light group-hover:rotate-45 ease-in-out duration-500"> add </span>
-          </div>
-          <div class="border border-dark h-[300px] flex flex-col justify-between items-end hover:bg-dark group hover:rounded-br-[32px] ease-in-out duration-500">
-            <div class="p-2">
-              <div class="text-[16px] leading-[20px] tracking-[-0.5px] text-dark group-hover:text-light/60 mb-4">WHAT DO WE DO FOR JOBS?</div>
-              <div class="text-[18px] leading-[22px] text-light">Rajvee is a Frontend Developer, and Tirth is a Product Designer.</div>
-            </div>
-            <span class="material-symbols-rounded text-[88px] text-dark group-hover:text-light group-hover:rotate-45 ease-in-out duration-500"> add </span>
-          </div>
-          <div class="border border-dark h-[300px] flex flex-col justify-between items-end hover:bg-dark group hover:rounded-br-[32px] ease-in-out duration-500">
-            <div class="p-2">
-              <div class="text-[16px] leading-[20px] tracking-[-0.5px] text-dark group-hover:text-light/60 mb-4">WHAT DO WE DO FOR JOBS?</div>
-              <div class="text-[18px] leading-[22px] text-light">Rajvee is a Frontend Developer, and Tirth is a Product Designer.</div>
-            </div>
-            <span class="material-symbols-rounded text-[88px] text-dark group-hover:text-light group-hover:rotate-45 ease-in-out duration-500"> add </span>
-          </div>
-          <div class="border border-dark h-[300px] flex flex-col justify-between items-end hover:bg-dark group hover:rounded-br-[32px] ease-in-out duration-500">
-            <div class="p-2">
-              <div class="text-[16px] leading-[20px] tracking-[-0.5px] text-dark group-hover:text-light/60 mb-4">WHAT DO WE DO FOR JOBS?</div>
-              <div class="text-[18px] leading-[22px] text-light">Rajvee is a Frontend Developer, and Tirth is a Product Designer.</div>
-            </div>
-            <span class="material-symbols-rounded text-[88px] text-dark group-hover:text-light group-hover:rotate-45 ease-in-out duration-500"> add </span>
-          </div>
-          <div class="border border-dark h-[300px] flex flex-col justify-between items-end hover:bg-dark group hover:rounded-br-[32px] ease-in-out duration-500">
-            <div class="p-2">
-              <div class="text-[16px] leading-[20px] tracking-[-0.5px] text-dark group-hover:text-light/60 mb-4">WHAT DO WE DO FOR JOBS?</div>
-              <div class="text-[18px] leading-[22px] text-light">Rajvee is a Frontend Developer, and Tirth is a Product Designer.</div>
-            </div>
-            <span class="material-symbols-rounded text-[88px] text-dark group-hover:text-light group-hover:rotate-45 ease-in-out duration-500"> add </span>
-          </div>
-        </div>
-      </div>
+		<div class="px-4 py-16 text-center mt-12 md:mt-24 bg-dark text-light">
+			<div class="font-caption mb-2 text-[14px] leading-[16px] text-light/60">HOPE TO SEE YOU THERE</div>
+			<div class="text-[24px] leading-[28px] lg:text-[32px] lg:leading-[34px] tracking-[-1px]">
+				TIRTH <span class="italic">&</span> RAJVEE
+				<br />
+				18.02.2024
+			</div>
+			<div class="mt-4 text-[14px] leading-[14px]">
+				Website made by
+				<a class="px-px" href="/">Tirth & Rajvee</a>
+			</div>
+		</div>
+	</div>
+</body>
 
-      <div class="px-4 py-16 text-center mt-12 md:mt-24 bg-dark text-light">
-        <div class="font-caption mb-2 text-[14px] leading-[16px] text-light/60">HOPE TO SEE YOU THERE</div>
-        <div class="text-[24px] leading-[26px] tracking-[-1px]">
-          TIRTH <span class="italic">&</span> RAJVEE
-          <br />
-          18.02.2024
-        </div>
-        <div class="mt-4 text-[14px] leading-[14px]">
-          Website made by
-          <a class="px-px" href="/">Tirth & Rajvee</a>
-        </div>
-      </div>
-    </div>
-  </body>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js"></script>
+<script src="../assets/js/main.js"></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js"></script>
-  <script src="../assets/js/main.js"></script>
 </html>

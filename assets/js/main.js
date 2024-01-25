@@ -88,3 +88,152 @@ window.addEventListener("optimizedScroll", function () {
 window.addEventListener("optimizedScroll", function () {
   bgText.style.transform = "translateY(" + window.scrollY * 2 + "px)";
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+  const carousel = document.querySelector(".carousel");
+  let isTabActive = true;
+  let animation;
+  let animationStartTime;
+  let animationPausedTime = 0;
+
+  // Set the width of the carousel container to fit all the images
+  const originalImages = document.querySelectorAll(".carousel img");
+  const carouselWidth = Array.from(originalImages).reduce((sum, img) => sum + img.clientWidth, 0);
+  carousel.style.width = `${carouselWidth}px`;
+
+  // Intersection Observer to start animation when in the viewport
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          if (isTabActive) {
+            startCarouselAnimation();
+          }
+        } else {
+          // Pause the animation when out of the viewport
+          pauseCarouselAnimation();
+        }
+      });
+    },
+    { threshold: 0.5 }
+  );
+
+  observer.observe(carousel);
+
+  // Page Visibility API to detect tab visibility
+  document.addEventListener("visibilitychange", function () {
+    isTabActive = document.visibilityState === "visible";
+
+    if (isTabActive) {
+      // Resume the animation if the tab becomes active
+      resumeCarouselAnimation();
+    } else {
+      // Pause the animation if the tab becomes inactive
+      pauseCarouselAnimation();
+    }
+  });
+
+  // Function to start the carousel animation
+  function startCarouselAnimation() {
+    const keyframes = [{ transform: "translateX(0)" }, { transform: `translateX(-${carouselWidth}px)` }];
+
+    const options = {
+      duration: originalImages.length * 5000, // Adjust the duration based on the number of images
+      iterations: Infinity, // Run the animation infinitely
+    };
+
+    animation = carousel.animate(keyframes, options);
+    animationStartTime = performance.now();
+  }
+
+  // Function to pause the carousel animation
+  function pauseCarouselAnimation() {
+    if (animation) {
+      animation.pause();
+      animationPausedTime = performance.now() - animationStartTime;
+    }
+  }
+
+  // Function to resume the carousel animation
+  function resumeCarouselAnimation() {
+    if (animation) {
+      animation.play();
+      animation.currentTime = animationPausedTime / 1000; // Convert milliseconds to seconds
+      animationStartTime = performance.now() - animationPausedTime;
+    }
+  }
+});
+document.addEventListener("DOMContentLoaded", function () {
+  const carousel = document.querySelector(".carousel2");
+  let isTabActive = true;
+  let animation;
+  let animationStartTime;
+  let animationPausedTime = 0;
+
+  // Set the width of the carousel container to fit all the images
+  const originalImages = document.querySelectorAll(".carousel2 img");
+  const carouselWidth = Array.from(originalImages).reduce((sum, img) => sum + img.clientWidth, 0);
+  carousel.style.width = `${carouselWidth}px`;
+
+  // Intersection Observer to start animation when in the viewport
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          if (isTabActive) {
+            startCarouselAnimation();
+          }
+        } else {
+          // Pause the animation when out of the viewport
+          pauseCarouselAnimation();
+        }
+      });
+    },
+    { threshold: 0.5 }
+  );
+
+  observer.observe(carousel);
+
+  // Page Visibility API to detect tab visibility
+  document.addEventListener("visibilitychange", function () {
+    isTabActive = document.visibilityState === "visible";
+
+    if (isTabActive) {
+      // Resume the animation if the tab becomes active
+      resumeCarouselAnimation();
+    } else {
+      // Pause the animation if the tab becomes inactive
+      pauseCarouselAnimation();
+    }
+  });
+
+  // Function to start the carousel animation
+  function startCarouselAnimation() {
+    const keyframes = [{ transform: "translateX(0)" }, { transform: `translateX(-${carouselWidth}px)` }];
+
+    const options = {
+      duration: originalImages.length * 5000, // Adjust the duration based on the number of images
+      iterations: Infinity, // Run the animation infinitely
+    };
+
+    animation = carousel.animate(keyframes, options);
+    animationStartTime = performance.now();
+  }
+
+  // Function to pause the carousel animation
+  function pauseCarouselAnimation() {
+    if (animation) {
+      animation.pause();
+      animationPausedTime = performance.now() - animationStartTime;
+    }
+  }
+
+  // Function to resume the carousel animation
+  function resumeCarouselAnimation() {
+    if (animation) {
+      animation.play();
+      animation.currentTime = animationPausedTime / 1000; // Convert milliseconds to seconds
+      animationStartTime = performance.now() - animationPausedTime;
+    }
+  }
+});
