@@ -3,12 +3,33 @@
 @tailwind utilities;
 
 @layer components {
+
+  h2,
+  .h2 {
+    @apply font-[600] leading-[1.2] text-[36px] md:text-[40px] lg:text-[48px];
+  }
+
+  h3,
+  .h3 {
+    @apply font-[600] leading-[1.2] text-[24px] lg:text-[48px] tracking-tight;
+  }
+
+  h4,
+  .h4 {
+    @apply font-[500] text-[32px] leading-[38px] md:text-[40px] md:leading-[44px] lg:text-[48px] lg:leading-[48px];
+  }
+
+  h5,
+  .h5 {
+    @apply font-[300] text-[18px] leading-[26px] md:text-[22px] md:leading-[26px] lg:text-[28px] lg:leading-[36px];
+  }
+
   .body-text {
-    @apply font-[300] text-[4vw] sm:text-[3vw] md:text-[2vw] lg:text-[1vw] leading-[1.4] text-dark;
+    @apply font-[300] md:leading-[1.2] text-[18px] md:text-[24px];
   }
 
   .navbar-text {
-    @apply font-[300] text-[4vw] sm:text-[3vw] md:text-[2vw] lg:text-[1vw] leading-[1.4] text-dark;
+    @apply font-[300] text-[14px] md:text-[18px] lg:text-[20px] leading-[1.2];
   }
 
   .a-hover {
@@ -20,16 +41,23 @@
 body {
   margin: 0;
   font-family: 'Nunito Sans', sans-serif;
-  background: #EDEBE9;
+  background: #010101;
+  overflow-x: hidden;
 }
 
-nav {
-  padding: 1.5rem 2rem;
-  position: sticky;
-  top: 0;
-  transition: transform 350ms ease-in;
+::-webkit-scrollbar {
+  width: 10px;
+  background-color: #000000;
 }
 
-nav.nav-bar--hidden {
-  transform: translateY(-100%);
+::-webkit-scrollbar-track {
+  background: #363636;
+  border-radius: 100vw;
+  margin-block: 40vh;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #f5f5f5;
+  border-radius: 100vw;
+  height: 4vh;
 }
