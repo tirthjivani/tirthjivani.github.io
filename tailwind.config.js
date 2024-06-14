@@ -4,11 +4,19 @@ module.exports = {
   content: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
   theme: {
     extend: {
+      fontFamily: {
+        'j-light': ['J-Light', 'sans-serif'],
+        'j-semibold': ['J-Semibold', 'sans-serif'],
+      },
       colors: {
         dark: '#010101',
         light: '#EDEBE9',
         gray: '#908D8A',
         accent: '#b05b60',
+      },
+      backgroundImage: {
+        'footer-pattern': "url('./assets/img/background.jpeg')",
+        'about-pattern': "url('./assets/img/background2.jpeg')",
       },
     },
   },

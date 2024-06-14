@@ -3,10 +3,14 @@ import TJ from '../assets/loader/Tirth Jivani.svg';
 import { motion } from 'framer-motion';
 
 export default function Tirth() {
+  const handleContextMenu = (event) => {
+    event.preventDefault();
+  };
+
   return (
     <>
       <div className="relative top-0 my-12 mb-16 overflow-x-hidden">
-        <img src={TJ} alt="Tirth Jivani Text" className="w-full" />
+        <img src={TJ} alt="Tirth Jivani Text" onContextMenu={handleContextMenu} className="w-full" />
         <motion.div
           initial={{ x: 0 }}
           animate={{ x: '100%' }}
