@@ -21,7 +21,7 @@ export default function Navbar() {
       <nav className="flex justify-between items-center navbar-text py-8">
         <div className="opacity-30">©2024</div>
         <Link to="/" className="hover:a-hover flex justify-center">
-          <img src={logo} onContextMenu={handleContextMenu} className="w-20" />
+          <img src={logo} alt="tirth-jivani-logo" onContextMenu={handleContextMenu} className="w-20" />
         </Link>
         <div onClick={handleScroll} className="hover:a-hover text-right">
           Contact

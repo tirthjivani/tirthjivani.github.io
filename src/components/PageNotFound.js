@@ -13,10 +13,10 @@ export default function PageNotFound() {
   return (
     <div className="text-white overflow-hidden">
       <Link to="/" className="hover:a-hover absolute w-screen text-center top-8 flex justify-center z-50">
-        <img src={logo} onContextMenu={handleContextMenu} className="w-20" />
+        <img src={logo} alt="tirth-jivani-logo" onContextMenu={handleContextMenu} className="w-20" />
       </Link>
       <div className="w-4/5 lg:w-3/5 h-screen mx-auto flex justify-center items-center overflow-x-hidden">
-        <img src={Img404} alt="Tirth Jivani Text" onContextMenu={handleContextMenu} className="w-full" />
+        <img src={Img404} alt="tirth-jivani-text" onContextMenu={handleContextMenu} className="w-full" />
         <motion.div
           initial={{ x: 0 }}
           animate={{ x: '100%' }}
