@@ -51,6 +51,7 @@ export default function Homescreen() {
               link={'https://tirthjivani.myportfolio.com/mooddl'}
             />
           </div>
+
           {/* <div className="w-full flex flex-col md:flex-row gap-8 lg:gap-12">
             <Project
               title={'Tea Cup'}
@@ -67,6 +68,15 @@ export default function Homescreen() {
               link={'https://cdn.loom.com/sessions/thumbnails/db5148b5cff94e21ab7e4b047b3c0f70-00001.mp4'}
             />
           </div> */}
+
+          <div className="w-full flex flex-col md:flex-row gap-8 lg:gap-12">
+            <div className="h-max w-full md:w-1/2 overflow-hidden rounded-3xl">
+              <img src={me} alt="me" onContextMenu={handleContextMenu} className="w-full" />
+            </div>
+            <div className="h-max w-full md:w-1/2 overflow-hidden rounded-3xl">
+              <img src={me} alt="me" onContextMenu={handleContextMenu} className="w-full" />
+            </div>
+          </div>
           <About />
           <div className="flex flex-col md:flex-row gap-8 lg:gap-12">
             <Project

@@ -17,7 +17,7 @@ export default function About() {
   return (
     <div className="p-8 md:p-12 lg:p-16 bg-about-pattern bg-no-repeat bg-cover rounded-3xl">
       <h4 className="w-full lg:w-3/4 mb-16 md:mb-24">
-        I’m Tirth Jivani, Indian Product Designer specialised in Branding and Visual Identities.
+        I’m Tirth Jivani, Product Designer who is specialised in Branding and Visual Identities.
         <br />
         <br />
         After spending more than 12 years in the most acclaimed creative agencies in France as Ogilvy, AKQA, Marcel I
@@ -25,7 +25,12 @@ export default function About() {
         <br />
         <br />
         Now i’m opening my own Design Agency,{' '}
-        <a href="https://thesummerdesign.com" className="hover:opacity-50" target="_blank">
+        <a
+          href="https://thesummerdesign.com"
+          className="hover:opacity-50 hover:cursor-pointer"
+          target="_blank"
+          rel="noreferrer"
+        >
           SummerDesigns
         </a>
         .
