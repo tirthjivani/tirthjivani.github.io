@@ -69,14 +69,15 @@ export default function Homescreen() {
             />
           </div> */}
 
-          <div className="w-full flex flex-col md:flex-row gap-8 lg:gap-12">
+          {/* <div className="w-full flex flex-col md:flex-row gap-8 lg:gap-12">
             <div className="h-max w-full md:w-1/2 overflow-hidden rounded-3xl">
               <img src={me} alt="me" onContextMenu={handleContextMenu} className="w-full" />
             </div>
             <div className="h-max w-full md:w-1/2 overflow-hidden rounded-3xl">
               <img src={me} alt="me" onContextMenu={handleContextMenu} className="w-full" />
             </div>
-          </div>
+          </div> */}
+
           <About />
           <div className="flex flex-col md:flex-row gap-8 lg:gap-12">
             <Project
