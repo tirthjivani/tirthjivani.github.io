@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.48c32b7f.css",
-    "main.js": "/static/js/main.ede7ef99.js",
+    "main.css": "/static/css/main.1b7968a1.css",
+    "main.js": "/static/js/main.0a096d46.js",
     "static/js/453.a0819baa.chunk.js": "/static/js/453.a0819baa.chunk.js",
     "static/media/petpuja.png": "/static/media/petpuja.6ddbb9aaf065f2074ac6.png",
     "static/media/afterglow.png": "/static/media/afterglow.1548f93dc935a086e263.png",
@@ -15,13 +15,13 @@
     "static/media/Tirth Jivani.svg": "/static/media/Tirth Jivani.4c626bee25ff3cda6ad451e870a4cf61.svg",
     "static/media/404.svg": "/static/media/404.bdbd1bd78a47ae6478fed7c567d33329.svg",
     "index.html": "/index.html",
-    "static/media/logo.svg": "/static/media/logo.0e51660a2e431ec0583b0e26895d49fb.svg",
-    "main.48c32b7f.css.map": "/static/css/main.48c32b7f.css.map",
-    "main.ede7ef99.js.map": "/static/js/main.ede7ef99.js.map",
+    "static/media/logo.svg": "/static/media/logo.dee1bb092caa5c84eb142badb02a398f.svg",
+    "main.1b7968a1.css.map": "/static/css/main.1b7968a1.css.map",
+    "main.0a096d46.js.map": "/static/js/main.0a096d46.js.map",
     "453.a0819baa.chunk.js.map": "/static/js/453.a0819baa.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.48c32b7f.css",
-    "static/js/main.ede7ef99.js"
+    "static/css/main.1b7968a1.css",
+    "static/js/main.0a096d46.js"
   ]
 }
