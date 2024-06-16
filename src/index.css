@@ -45,14 +45,13 @@
 
 body {
   margin: 0;
-  font-family: 'Nunito Sans', sans-serif;
   background: #010101;
   overflow-x: hidden;
 }
 
 ::-webkit-scrollbar {
   width: 10px;
-  background-color: #000000;
+  background-color: #010101;
 }
 
 ::-webkit-scrollbar-track {
@@ -64,5 +63,5 @@ body {
 ::-webkit-scrollbar-thumb {
   background: #f5f5f5;
   border-radius: 100vw;
-  height: 4vh;
+  min-height: 5vh;
 }
