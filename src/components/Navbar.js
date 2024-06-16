@@ -25,7 +25,9 @@ export default function Navbar() {
         transition={{ delay: 1, duration: 1, ease: 'easeOut' }}
         className="flex justify-between items-center navbar-text py-8"
       >
-        <div className="opacity-30">©2024</div>
+        <a href="https://www.instagram.com/randomshot.png" target="_blank" className="hover:a-hover">
+          Photos
+        </a>
         <Link to="/" className="hover:a-hover flex justify-center">
           <img src={logo} alt="tirth-jivani-logo" onContextMenu={handleContextMenu} className="w-28" />
         </Link>
