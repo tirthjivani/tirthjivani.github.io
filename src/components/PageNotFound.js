@@ -21,7 +21,7 @@ export default function PageNotFound() {
           initial={{ x: 0 }}
           animate={{ x: '100%' }}
           transition={{ duration: 2, ease: 'easeInOut' }}
-          className="absolute top-0 z-10 w-full h-[70%] my-auto bg-dark/80"
+          className="absolute top-0 z-10 w-full h-[80%] my-auto bg-dark/80"
         ></motion.div>
       </div>
       <a href="/" className="hover:text-accent absolute w-screen text-center bottom-8 h5 z-50">

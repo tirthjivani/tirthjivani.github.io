@@ -27,7 +27,7 @@ export default function Navbar() {
       >
         <div className="opacity-30">©2024</div>
         <Link to="/" className="hover:a-hover flex justify-center">
-          <img src={logo} alt="tirth-jivani-logo" onContextMenu={handleContextMenu} className="w-20" />
+          <img src={logo} alt="tirth-jivani-logo" onContextMenu={handleContextMenu} className="w-24" />
         </Link>
         <div onClick={handleScroll} className="hover:a-hover text-right">
           Contact
