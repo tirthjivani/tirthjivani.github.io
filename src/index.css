@@ -47,23 +47,19 @@ body {
   margin: 0;
   background: #010101;
   overflow-x: hidden;
-  height: 100vh;
 }
 
-.scrollbar-track-y {
-  top: 0 !important;
-  right: 0px !important;
-  width: 4px !important;
-  height: 100dvh !important;
-  border-radius: 100vh !important;
-  background-color: #212121 !important;
-  overflow-y: hidden;
+::-webkit-scrollbar {
+  width: 4px;
+  background-color: #020202;
 }
 
-.scrollbar-thumb {
-  background-color: #ffffff !important;
-  width: 4px !important;
-  height: 20vh !important;
-  border-radius: 100vh !important;
-  background-clip: content-box !important;
+::-webkit-scrollbar-track {
+  background: #020202;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #f5f5f5;
+  border-radius: 100vw;
+  height: 5vh;
 }

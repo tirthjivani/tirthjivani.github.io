@@ -4,7 +4,6 @@ import Tirth from './Tirth';
 import About from './About';
 import Project from './Project';
 import Footer from './Footer';
-import Scroll from './Scroll';
 import { motion } from 'framer-motion';
 import me from '../assets/img/me.png';
 import branding from '../assets/img/projects/branding.avif';
@@ -19,7 +18,6 @@ export default function Homescreen() {
 
   return (
     <div className="max-w-screen-xl mx-auto px-6 lg:px-12 bg-dark text-light selection:bg-accent/80">
-      <Scroll />
       <Navbar />
       <Tirth />
 
