@@ -68,7 +68,7 @@ export default function About() {
           </a>
           .
         </h4>
-        <div className="flex flex-row justify-between md:justify-end items-end gap-24 body-text h-fit">
+        <div className="flex flex-col sm:flex-row justify-between md:justify-end items-end gap-24 body-text h-fit">
           <div className="flex items-start md:items-end flex-col text-left md:text-right gap-1">
             <div className="opacity-50 mb-4">Worked with</div>
             {Clients.map((cli, key) => (
