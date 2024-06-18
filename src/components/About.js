@@ -2,17 +2,16 @@ import { motion, useAnimation, useInView } from 'framer-motion';
 import React, { useEffect, useRef } from 'react';
 
 const Skills = [
-  'UX/UI Design',
   'Brand Strategy',
-  'Art Direction',
-  'Packaging',
-  'Communication',
+  'UX Design',
   'Digital Design',
+  'Pitch Deck',
+  'Marketing Assets',
   'Graphic Design',
-  'Marketing Design',
+  'Communication',
 ];
 
-const Clients = ['SellerApp', 'MeriStreet', 'IIRS, ISRO', 'Google'];
+const Clients = ['SellerApp', 'Truein', 'MeriStreet', 'IIRS, ISRO', 'Google'];
 
 export default function About() {
   const ref = useRef(null);
@@ -55,8 +54,7 @@ export default function About() {
           <br />
           <br />
           Through past experiences in tech, and product, my work aims to promote an holistic approach of aesthetics and
-          balanced designs. FYI I developed this website by myself. In addition to designing digital products, I'm die
-          hard part of OG CSGO community.
+          balanced designs. FYI I developed this website by myself.
           <br />
           <br />
           Now i’m opening my own Design Agency,{' '}
