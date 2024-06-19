@@ -6,7 +6,7 @@ import Project from './Project';
 import Footer from './Footer';
 import { motion } from 'framer-motion';
 import me from '../assets/img/me.png';
-import branding from '../assets/img/projects/branding.avif';
+import loot from '../assets/img/projects/loot.webp';
 import petpuja from '../assets/img/projects/petpuja.png';
 import afterglow from '../assets/img/projects/afterglow.png';
 import mooddl from '../assets/img/projects/mooddl.png';
@@ -34,11 +34,13 @@ export default function Homescreen() {
                 Visual identities.
               </h5>
               <Project
-                title={'Tea Cup'}
-                desc={'Rebranded the company X which is the fastest tea selling company in India.'}
-                image={branding}
+                title={'LooT'}
+                desc={
+                  'It is a coupon management platform for users to save and use all the coupon codes they have at one place.'
+                }
+                image={loot}
                 alt={'tirth-jivani-branding'}
-                link={'https://cdn.loom.com/sessions/thumbnails/db5148b5cff94e21ab7e4b047b3c0f70-00001.mp4'}
+                link={'https://tome.app/tirthjivani/tirth-jivani-loot-case-study-cluzgmpuc0sfnod61bcuw31x6'}
               />
             </div>
             <div className="h-max w-full md:w-1/2 overflow-hidden rounded-3xl">
@@ -91,7 +93,7 @@ export default function Homescreen() {
               image={petpuja}
               alt={'tirth-jivani-project-petpuja'}
               linkName={'Case Study'}
-              link={'https://tome.app/tirthjivani/petpuja-case-study-tirth-jivani-clurbhdtg057bpq5zx0ix07m5'}
+              link={'https://tome.app/tirthjivani/tirth-jivani-petpuja-case-study-clurbhdtg057bpq5zx0ix07m5'}
             />
             <Project
               title={'Afterglow'}
@@ -101,7 +103,7 @@ export default function Homescreen() {
               image={afterglow}
               alt={'tirth-jivani-project-afterglow'}
               linkName={'Case Study'}
-              link={'https://tirthjivani.myportfolio.com/interior-design'}
+              link={'https://tome.app/tirthjivani/tirth-jivani-afterglow-case-study-cluygcfe00evepl615yuu69i2'}
             />
           </div>
         </div>
