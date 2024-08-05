@@ -57,6 +57,7 @@ export default function Footer() {
         </h3>
         <div className="flex flex-col-reverse md:flex-row justify-between gap-3 body-text">
           <div className="w-fit flex flex-col md:gap-1">
+            <SocialLink name={'Resume'} link={'./Resume.pdf'} />
             <SocialLink name={'Linkedin'} link={'https://www.linkedin.com/in/tirthjivani'} />
             <SocialLink name={'Instagram'} link={'https://www.instagram.com/tirthjivani'} />
             <SocialLink name={'Read.cv'} link={'https://read.cv/tirth'} />
