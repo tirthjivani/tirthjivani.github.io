@@ -12,14 +12,14 @@ export default function Tirth() {
       <motion.div
         initial={{ y: '25vh' }}
         animate={{ y: 0 }}
-        transition={{ delay: 3, duration: 0.6, ease: 'easeOut' }}
+        transition={{ delay: 2, duration: 0.6, ease: 'easeOut' }}
         className="relative top-0 my-12 mb-16 overflow-x-hidden"
       >
         <img src={TJ} alt="Tirth Jivani Text" onContextMenu={handleContextMenu} className="w-full" />
         <motion.div
           initial={{ x: 0 }}
           animate={{ x: '100%' }}
-          transition={{ duration: 3, ease: cubicBezier(0.62, 0.02, 0.11, 1.15) }}
+          transition={{ duration: 2, ease: cubicBezier(0.77, 0.79, 0.99, 0.1) }}
           className="absolute top-0 z-10 w-full h-full bg-dark/80"
         ></motion.div>
       </motion.div>

@@ -16,7 +16,7 @@ const Clients = ['SellerApp', 'Truein', 'MeriStreet', 'IIRS, ISRO', 'Google'];
 export default function About() {
   const ref = useRef(null);
   const inView = useInView(ref, {
-    rootMargin: '0px 0px 200px 0px', // top right bottom left
+    rootMargin: '200px 200px 200px 200px', // top right bottom left
   });
   const controls = useAnimation();
 

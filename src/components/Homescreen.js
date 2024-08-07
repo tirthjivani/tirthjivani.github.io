@@ -24,7 +24,7 @@ export default function Homescreen() {
       <motion.div
         initial={{ y: 200, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 1, duration: 1, ease: 'easeOut' }}
+        transition={{ delay: 2, duration: 1, ease: 'easeOut' }}
       >
         <div className="flex flex-col gap-8 lg:gap-12 my-8 lg:my-12">
           <div className="flex flex-col-reverse md:flex-row gap-8 lg:gap-12">

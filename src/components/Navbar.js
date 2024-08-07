@@ -22,7 +22,7 @@ export default function Navbar() {
       <motion.nav
         initial={{ y: -200, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 1, duration: 1, ease: 'easeOut' }}
+        transition={{ delay: 2, duration: 1, ease: 'easeOut' }}
         className="flex justify-between items-center navbar-text py-8"
       >
         <a href="https://www.instagram.com/randomshot.png" target="_blank" rel="noreferrer" className="hover:a-hover">
