@@ -19,7 +19,7 @@ export default function Tirth() {
         <motion.div
           initial={{ x: 0 }}
           animate={{ x: '100%' }}
-          transition={{ duration: 2, ease: cubicBezier(0.62, 0.02, 0.11, 1.15) }}
+          transition={{ duration: 3, ease: cubicBezier(0.62, 0.02, 0.11, 1.15) }}
           className="absolute top-0 z-10 w-full h-full bg-dark/80"
         ></motion.div>
       </motion.div>
