@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.f0be1964.css",
-    "main.js": "/static/js/main.8b03b5d3.js",
+    "main.css": "/static/css/main.8933a782.css",
+    "main.js": "/static/js/main.e15fab3d.js",
     "static/js/453.a0819baa.chunk.js": "/static/js/453.a0819baa.chunk.js",
     "static/media/petpuja.png": "/static/media/petpuja.dd8918162f6bccb5bad6.png",
     "static/media/afterglow.png": "/static/media/afterglow.5d57f05e37d12471e718.png",
@@ -11,18 +11,22 @@
     "static/media/me.png": "/static/media/me.2302c62c50947fc59501.png",
     "static/media/background2.jpeg": "/static/media/background2.cde0a4175571ffc3e0dd.jpeg",
     "static/media/background.jpeg": "/static/media/background.7ba48555772169f5b120.jpeg",
-    "static/media/SemiBold.ttf": "/static/media/SemiBold.2e34db3490edd3889c75.ttf",
-    "static/media/Light.ttf": "/static/media/Light.c61c964657466399c9d2.ttf",
-    "static/media/Tirth Jivani.svg": "/static/media/Tirth Jivani.4c626bee25ff3cda6ad451e870a4cf61.svg",
+    "static/media/Druk.ttf": "/static/media/Druk.9c659f356277c01eb408.ttf",
+    "static/media/Thin.ttf": "/static/media/Thin.cc886c2747bf6f2c4888.ttf",
+    "static/media/Light.ttf": "/static/media/Light.1dde435cdc2a9b6a7130.ttf",
+    "static/media/SemiBold.ttf": "/static/media/SemiBold.50b60017b2706bf654f4.ttf",
+    "static/media/arrow.svg": "/static/media/arrow.0c80237386d0d66d68d4.svg",
+    "static/media/link.svg": "/static/media/link.77400283900e51764c28.svg",
+    "static/media/Tirth Jivani.svg": "/static/media/Tirth Jivani.67ff5f1c2d99d424de9fc7a64904655f.svg",
     "static/media/404.svg": "/static/media/404.bdbd1bd78a47ae6478fed7c567d33329.svg",
     "index.html": "/index.html",
     "static/media/logo.svg": "/static/media/logo.dee1bb092caa5c84eb142badb02a398f.svg",
-    "main.f0be1964.css.map": "/static/css/main.f0be1964.css.map",
-    "main.8b03b5d3.js.map": "/static/js/main.8b03b5d3.js.map",
+    "main.8933a782.css.map": "/static/css/main.8933a782.css.map",
+    "main.e15fab3d.js.map": "/static/js/main.e15fab3d.js.map",
     "453.a0819baa.chunk.js.map": "/static/js/453.a0819baa.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.f0be1964.css",
-    "static/js/main.8b03b5d3.js"
+    "static/css/main.8933a782.css",
+    "static/js/main.e15fab3d.js"
   ]
 }
