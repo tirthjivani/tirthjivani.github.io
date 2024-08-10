@@ -48,7 +48,7 @@ export default function About() {
         variants={containerVariants}
         className="p-8 md:p-12 lg:p-16 bg-about-pattern bg-no-repeat bg-cover rounded-3xl"
       >
-        <h4 className="w-full lg:w-3/4 mb-16 md:mb-24">
+        <h4 className="w-full lg:w-4/5 mb-16 md:mb-24">
           I’m Tirth Jivani, Product Designer who is specialised in Branding, Interactions and Visual Identities. I
           design products.
           <br />

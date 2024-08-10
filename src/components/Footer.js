@@ -50,7 +50,7 @@ export default function Footer() {
         initial="hidden"
         animate={controls}
         variants={containerVariants}
-        className="p-8 md:p-12 lg:p-16 mb-8 md:mb-12 bg-footer-pattern bg-no-repeat bg-cover rounded-3xl"
+        className="p-8 md:p-12 lg:p-16 mb-4 md:mb-8 bg-footer-pattern bg-no-repeat bg-cover rounded-3xl"
       >
         <h3 className="w-full lg:w-3/4 mb-8 md:mb-24 lg:mb-48">
           Currently I’m open to new opportunities and projects. Feel free to reach out.

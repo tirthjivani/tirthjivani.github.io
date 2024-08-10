@@ -2,16 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { motion, useAnimation, useInView } from 'framer-motion';
 import { FiArrowUpRight } from 'react-icons/fi';
 
-export default function Project({
-  image,
-  alt = 'tirth-jivani-project',
-  title,
-  desc,
-  link,
-  linkName = 'Checkout',
-  accentColor = 'dark',
-  textColor = 'light',
-}) {
+export default function Project({ image, alt = 'tirth-jivani-project', title, desc, link, linkName = 'Checkout' }) {
   const ref = useRef(null);
   const inView = useInView(ref, {
     rootMargin: '200px 200px 200px 200px', // top right bottom left
@@ -52,6 +43,21 @@ export default function Project({
     final: { opacity: 1, y: 0 },
   };
 
+  const arrowVariants = {
+    initial: {
+      x: 0,
+      rotate: 0,
+    },
+    rotate: {
+      x: 10,
+      rotate: 45,
+
+      transition: {
+        duration: 0.2,
+      },
+    },
+  };
+
   return (
     <div className={'w-full'} ref={ref}>
       <motion.div initial="hidden" animate={controls} variants={containerVariants}>
@@ -63,33 +69,34 @@ export default function Project({
           animate="initial"
           className="relative group w-full rounded-3xl flex flex-row overflow-hidden cursor-pointer"
         >
-          <div className="relative blur-0 group-hover:blur-lg transition ease-out duration-700 flex place-content-center w-full h-full place-items-center">
+          <div className="relative blur-0 group-hover:blur-2xl transition ease-out duration-700 flex place-content-center w-full h-full place-items-center">
             <img src={image} alt={alt} onContextMenu={handleContextMenu} className="w-full" />
           </div>
           <div className="absolute h-[100%] w-full">
             <motion.div className="p-8 flex flex-col justify-between h-[100%] w-full">
               <motion.div className="w-4/5">
-                <motion.h3
-                  className={`text-${textColor}`}
-                  variants={titleVariants}
-                  transition={{ duration: 0.3, delay: 0.2, type: 'spring', stiffness: 160, damping: 17, mass: 3 }}
-                >
+                <motion.h3 className="text-light" variants={titleVariants} transition={{ duration: 0.3, delay: 0.1 }}>
                   {title}
                 </motion.h3>
                 <motion.div
-                  className={`text-${textColor}`}
+                  className={'text-light navbar-text bg-blend-difference	'}
                   variants={titleVariants}
-                  transition={{ duration: 0.4, delay: 0.2, type: 'spring', stiffness: 160, damping: 17, mass: 1 }}
+                  transition={{ duration: 0.4, delay: 0.1 }}
                 >
                   {desc}
                 </motion.div>
               </motion.div>
               <motion.div
-                className={`w-fit p-3 px-6 bg-${accentColor} text-${textColor} rounded-full flex flex-row items-center gap-2`}
+                className={`w-fit p-3 px-6 bg-light text-dark rounded-full flex flex-row items-center gap-2`}
                 variants={buttonVariants}
-                transition={{ duration: 0.3, delay: 0.2, type: 'spring', stiffness: 160, damping: 17, mass: 2 }}
+                transition={{ duration: 0.3, delay: 0.1 }}
               >
-                {linkName} <FiArrowUpRight size={20} />
+                <motion.div className="flex items-center" whileHover="rotate">
+                  {linkName}
+                  <motion.div variants={arrowVariants}>
+                    <FiArrowUpRight size={20} />
+                  </motion.div>
+                </motion.div>
               </motion.div>
             </motion.div>
           </div>
