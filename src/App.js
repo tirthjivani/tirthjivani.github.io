@@ -5,7 +5,7 @@ import PageNotFound from './components/PageNotFound';
 
 function App() {
   return (
-    <>
+    <div className="cursor-default">
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Homescreen />}></Route>
@@ -13,7 +13,7 @@ function App() {
           <Route path="*" element={<PageNotFound />}></Route>
         </Routes>
       </BrowserRouter>
-    </>
+    </div>
   );
 }
 

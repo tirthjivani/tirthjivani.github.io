@@ -5,18 +5,24 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        'j-light': ['J-Light', 'sans-serif'],
-        'j-semibold': ['J-Semibold', 'sans-serif'],
+        thin: ['Thin', 'sans-serif'],
+        light: ['Light', 'sans-serif'],
+        semibold: ['Semibold', 'sans-serif'],
+        druk: ['Druk', 'sans-serif'],
       },
       colors: {
         dark: '#010101',
         light: '#EDEBE9',
         gray: '#908D8A',
-        accent: '#b05b60',
+        accent: '#b66166',
       },
       backgroundImage: {
         'footer-pattern': "url('./assets/img/background.jpeg')",
         'about-pattern': "url('./assets/img/background2.jpeg')",
+      },
+      cursor: {
+        default: 'url(./assets/cursor/arrow.svg), auto',
+        pointer: "url('./assets/cursor/link.svg'), auto",
       },
     },
   },

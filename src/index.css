@@ -3,44 +3,57 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: 'J-Light';
+  font-family: 'Thin';
+  src: url('../src/assets/font/Thin.ttf');
+}
+
+@font-face {
+  font-family: 'Light';
   src: url('../src/assets/font/Light.ttf');
 }
 
 @font-face {
-  font-family: 'J-Semibold';
+  font-family: 'Semibold';
   src: url('../src/assets/font/SemiBold.ttf');
+}
+
+@font-face {
+  font-family: 'Druk';
+  src: url('../src/assets/font/Druk.ttf');
 }
 
 @layer components {
 
   h3,
   .h3 {
-    @apply font-j-semibold tracking-tight leading-[1.2] text-[24px] md:text-[36px] lg:text-[48px];
+    @apply font-druk leading-[1.2] text-[24px] md:text-[36px] lg:text-[48px];
   }
 
   h4,
   .h4 {
-    @apply font-j-semibold tracking-tight leading-[1.1] text-[20px] md:text-[32px];
+    @apply font-semibold leading-[1.2] text-[20px] md:text-[32px];
   }
 
   h5,
   .h5 {
-    @apply font-j-light tracking-tight leading-[1.2] text-[18px] md:text-[28px];
+    @apply font-thin leading-[1.2] text-[18px] md:text-[28px];
   }
 
   .body-text {
-    @apply font-j-light tracking-tight leading-[1.2] text-[18px] md:text-[24px];
+    @apply font-light leading-[1.2] text-[18px] md:text-[24px];
   }
 
   .navbar-text {
-    @apply font-j-light tracking-tight leading-[1.2] text-[14px] md:text-[18px] lg:text-[20px];
+    @apply font-light leading-[1.2] text-[14px] md:text-[18px] lg:text-[20px];
   }
 
   .a-hover {
     @apply text-accent transition ease-in-out duration-300 cursor-pointer;
   }
 
+  em {
+    @apply font-light;
+  }
 }
 
 body {

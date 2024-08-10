@@ -51,7 +51,6 @@ export default function Project({ image, alt = 'tirth-jivani-project', title, de
     rotate: {
       x: 10,
       rotate: 45,
-
       transition: {
         duration: 0.2,
       },
@@ -73,13 +72,17 @@ export default function Project({ image, alt = 'tirth-jivani-project', title, de
             <img src={image} alt={alt} onContextMenu={handleContextMenu} className="w-full" />
           </div>
           <div className="absolute h-[100%] w-full">
-            <motion.div className="p-8 flex flex-col justify-between h-[100%] w-full">
-              <motion.div className="w-4/5">
-                <motion.h3 className="text-light" variants={titleVariants} transition={{ duration: 0.2, delay: 0.1 }}>
+            <motion.div className="p-8 flex flex-col justify-between h-[100%] w-full group-hover:bg-dark/60">
+              <motion.div className="w-4/5 ">
+                <motion.h3
+                  className="text-light mb-2"
+                  variants={titleVariants}
+                  transition={{ duration: 0.2, delay: 0.1 }}
+                >
                   {title}
                 </motion.h3>
                 <motion.div
-                  className={'text-light navbar-text bg-blend-difference	'}
+                  className={'text-light navbar-text'}
                   variants={titleVariants}
                   transition={{ duration: 0.3, delay: 0.1 }}
                 >
