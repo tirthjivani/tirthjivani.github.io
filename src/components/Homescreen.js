@@ -35,7 +35,7 @@ export default function Homescreen() {
             <div className="flex flex-col justify-between gap-8 lg:gap-0 w-full md:w-1/2">
               <h5>
                 a bangalore-based designer & developer with an insatiable passion for <em>minimalism</em>, crafting
-                impactful <em className="text-accent">user experiences</em>, <em>branding</em>, and{' '}
+                impactful <em className="text-accent selection:text-light">user experiences</em>, <em>branding</em>, and{' '}
                 <em>visual identities</em>.
               </h5>
               <Project
