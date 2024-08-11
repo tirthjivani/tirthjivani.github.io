@@ -1,7 +1,8 @@
-import Homescreen from './components/Homescreen';
 import React from 'react';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
+import Homescreen from './components/Homescreen';
 import PageNotFound from './components/PageNotFound';
+import './index.css';
 
 function App() {
   return (

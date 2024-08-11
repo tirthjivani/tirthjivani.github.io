@@ -62,14 +62,14 @@ export default function Footer() {
             <SocialLink name={'Instagram'} link={'https://www.instagram.com/tirthjivani'} />
             <SocialLink name={'Read.cv'} link={'https://read.cv/tirth'} />
           </div>
-          <div className="flex justify-start items-start md:justify-end md:items-end flex-col text-right gap-0 md:gap-2 mt-4 mb-24 md:mb-0 md:mt-0">
+          <div className="flex justify-start items-start md:justify-end md:items-end flex-col text-right gap-2 mt-4 mb-24 md:mb-0 md:mt-0">
             <a
-              className="hover:text-light/40 w-fit body-text"
+              className="hover:text-light/40 w-fit body-text cursor-pointer"
               href="mailto:tirthjivani17@gmail.com?subject=Hey%20Tirth%20%3A)%20"
             >
               tirthjivani17@gmail.com
             </a>
-            <a className="hover:text-light/40 w-fit body-text" href="tel:09898219779">
+            <a className="hover:text-light/40 w-fit body-text cursor-pointer" href="tel:09898219779">
               +91 98 98 219 779
             </a>
           </div>

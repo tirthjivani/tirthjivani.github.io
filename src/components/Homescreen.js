@@ -34,8 +34,8 @@ export default function Homescreen() {
           <div className="flex flex-col-reverse md:flex-row gap-4 lg:gap-8">
             <div className="flex flex-col justify-between gap-8 lg:gap-0 w-full md:w-1/2">
               <h5>
-                A Bangalore based designer & developer with an insatiable passion for <em>Minimalism</em>, crafting
-                impactful <em>User Experiences</em>, <em>Branding</em>, and <em>Visual Identities</em>.
+                Bangalore-based designer & developer. Passionate about <em>minimalism</em>. Crafting impactful{' '}
+                <em>UX</em>,<em>branding</em>, and <em>visual identities</em>.
               </h5>
               <Project
                 title={'LooT'}
