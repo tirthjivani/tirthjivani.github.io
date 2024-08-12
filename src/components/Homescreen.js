@@ -62,7 +62,7 @@ export default function Homescreen() {
               alt={'tirth-jivani-project-sellerapp-services'}
               linkName={'Case Study'}
               link={
-                'https://www.figma.com/proto/iY4SvuHQ5UgIoPK2GTXDY3/Case-Studies?page-id=1%3A4&node-id=1-5&viewport=785%2C323%2C0.36&t=9F5BGkwBXSW9PSdj-8&scaling=scale-down-width&content-scaling=fixed&hide-ui=1'
+                'https://www.figma.com/proto/iY4SvuHQ5UgIoPK2GTXDY3/Case-Studies?page-id=1%3A4&node-id=1-5&viewport=828%2C667%2C0.57&t=QeKxRH57a21KJyxP-8&scaling=min-zoom&content-scaling=fixed&disable-default-keyboard-nav=1&hotspot-hints=0&hide-ui=1'
               }
             />
           </div>
