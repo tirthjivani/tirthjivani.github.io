@@ -69,7 +69,14 @@ export default function Project({ image, alt = 'tirth-jivani-project', title, de
           className="relative group w-full rounded-3xl flex flex-row overflow-hidden cursor-pointer"
         >
           <div className="relative blur-0 group-hover:blur-lg transition ease-out duration-700 flex place-content-center w-full h-full place-items-center">
-            <img src={image} alt={alt} onContextMenu={handleContextMenu} className="w-full" />
+            <img
+              fetchPriority="high"
+              loading="eager"
+              src={image}
+              alt={alt}
+              onContextMenu={handleContextMenu}
+              className="w-full"
+            />
           </div>
           <div className="absolute h-[100%] w-full">
             <motion.div className="p-8 flex flex-col justify-between h-[100%] w-full group-hover:bg-dark/60">
