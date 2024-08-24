@@ -1,20 +1,21 @@
 {
   "files": {
     "main.css": "/static/css/main.f1c1113a.css",
-    "main.js": "/static/js/main.9ff99723.js",
+    "main.js": "/static/js/main.cf95fa99.js",
     "static/js/453.a0819baa.chunk.js": "/static/js/453.a0819baa.chunk.js",
-    "static/media/petpuja.png": "/static/media/petpuja.dd8918162f6bccb5bad6.png",
-    "static/media/afterglow.png": "/static/media/afterglow.5d57f05e37d12471e718.png",
-    "static/media/loot.png": "/static/media/loot.33471147b86fa24f96d0.png",
-    "static/media/sellerapp-service.png": "/static/media/sellerapp-service.e6eb03cdc2a5058cee6b.png",
-    "static/media/mooddl.png": "/static/media/mooddl.252381ade07945fa5ffa.png",
-    "static/media/me.png": "/static/media/me.2302c62c50947fc59501.png",
+    "static/media/loot.webp": "/static/media/loot.85ad340a7614fefcbc2b.webp",
+    "static/media/afterglow.webp": "/static/media/afterglow.777118176d8f07ff10c3.webp",
     "static/media/background2.jpeg": "/static/media/background2.cde0a4175571ffc3e0dd.jpeg",
     "static/media/background.jpeg": "/static/media/background.7ba48555772169f5b120.jpeg",
+    "static/media/me.webp": "/static/media/me.7dd5835896eda7a94cd6.webp",
+    "static/media/petpuja.webp": "/static/media/petpuja.c723729dae46686f5bab.webp",
     "static/media/Druk.ttf": "/static/media/Druk.9c659f356277c01eb408.ttf",
+    "static/media/sellerapp-service.webp": "/static/media/sellerapp-service.5c427ac9e478aa2b18ef.webp",
     "static/media/Thin.ttf": "/static/media/Thin.cc886c2747bf6f2c4888.ttf",
     "static/media/Light.ttf": "/static/media/Light.1dde435cdc2a9b6a7130.ttf",
     "static/media/SemiBold.ttf": "/static/media/SemiBold.50b60017b2706bf654f4.ttf",
+    "static/media/mooddl.webp": "/static/media/mooddl.33fcc037b240290be597.webp",
+    "static/media/design-system.webp": "/static/media/design-system.41b29532a43550cc5d01.webp",
     "static/media/arrow.svg": "/static/media/arrow.0c80237386d0d66d68d4.svg",
     "static/media/link.svg": "/static/media/link.77400283900e51764c28.svg",
     "static/media/Tirth Jivani.svg": "/static/media/Tirth Jivani.67ff5f1c2d99d424de9fc7a64904655f.svg",
@@ -22,11 +23,11 @@
     "index.html": "/index.html",
     "static/media/logo.svg": "/static/media/logo.dee1bb092caa5c84eb142badb02a398f.svg",
     "main.f1c1113a.css.map": "/static/css/main.f1c1113a.css.map",
-    "main.9ff99723.js.map": "/static/js/main.9ff99723.js.map",
+    "main.cf95fa99.js.map": "/static/js/main.cf95fa99.js.map",
     "453.a0819baa.chunk.js.map": "/static/js/453.a0819baa.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.f1c1113a.css",
-    "static/js/main.9ff99723.js"
+    "static/js/main.cf95fa99.js"
   ]
 }
