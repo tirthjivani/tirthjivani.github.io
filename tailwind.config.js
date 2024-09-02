@@ -20,10 +20,6 @@ module.exports = {
         'footer-pattern': "url('./assets/img/background.jpeg')",
         'about-pattern': "url('./assets/img/background2.jpeg')",
       },
-      cursor: {
-        default: 'url(./assets/cursor/arrow.svg), auto',
-        pointer: "url('./assets/cursor/link.svg'), auto",
-      },
     },
   },
   plugins: [],

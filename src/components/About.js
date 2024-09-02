@@ -55,18 +55,6 @@ export default function About() {
           <br />
           Through past experiences in tech, and product, my work aims to promote an holistic approach of aesthetics and
           balanced designs. FYI I developed this website by myself.
-          <br />
-          <br />
-          Now i’m opening my own Design Agency,{' '}
-          <a
-            href="https://thesummerdesign.com"
-            className="hover:opacity-50 hover:cursor-pointer"
-            target="_blank"
-            rel="noreferrer"
-          >
-            SummerDesigns
-          </a>
-          .
         </h4>
         <div className="flex flex-col sm:flex-row justify-between md:justify-end items-end gap-24 body-text h-fit">
           <div className="flex items-start md:items-end flex-col text-left md:text-right gap-1">

@@ -19,7 +19,7 @@ export default function Tirth() {
           src={TJ}
           fetchPriority="high"
           loading="eager"
-          alt="Tirth Jivani Text"
+          alt="tirth-jivani-text"
           onContextMenu={handleContextMenu}
           className="w-full"
         />
