@@ -2,7 +2,14 @@
 
 import { useEffect, useRef, useState } from "react";
 
-export function Navbar() {
+export type ViewMode = "list" | "grid";
+
+type Props = {
+  view: ViewMode;
+  onViewChange: (next: ViewMode) => void;
+};
+
+export function Navbar({ view, onViewChange }: Props) {
   const [hidden, setHidden] = useState(false);
   const lastY = useRef(0);
 
@@ -37,19 +44,35 @@ export function Navbar() {
       <div className="grid grid-cols-12 items-center px-[10px] py-[10px] text-[16px] leading-none text-white">
         <div className="col-start-1 col-span-2 font-bold">Tirth Jivani</div>
 
-        <div className="col-start-3 col-span-4 flex gap-[20px]">
-          <span>List</span>
-          <span className="text-white/30">Grid</span>
+        <div className="col-start-3 col-span-4 flex gap-[10px]">
+          <button
+            type="button"
+            onClick={() => onViewChange("list")}
+            className={`transition-colors duration-300 ease-in-out ${
+              view === "list" ? "text-white" : "text-white/30 hover:text-white/60"
+            }`}
+          >
+            List
+          </button>
+          <button
+            type="button"
+            onClick={() => onViewChange("grid")}
+            className={`transition-colors duration-300 ease-in-out ${
+              view === "grid" ? "text-white" : "text-white/30 hover:text-white/60"
+            }`}
+          >
+            Grid
+          </button>
         </div>
 
-        <div className="col-start-7 col-span-5 flex gap-[20px]">
+        <div className="col-start-7 col-span-5 flex gap-[10px]">
           <a href="#outbox-labs">Work</a>
           <span className="text-white/30">Photos</span>
           <span className="text-white/30">Archives</span>
           <span className="text-white/30">Information</span>
         </div>
 
-        <div className="col-start-12 col-span-1 flex justify-end gap-[20px]">
+        <div className="col-start-12 col-span-1 flex justify-end gap-[10px]">
           <span className="text-white/30">IN</span>
           <span className="text-white/30">LN</span>
           <span className="text-white/30">X</span>

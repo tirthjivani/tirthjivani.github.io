@@ -1,14 +1,6 @@
-import { Navbar } from "@/components/Navbar";
-import { ProjectList } from "@/components/ProjectList";
+import { PortfolioView } from "@/components/PortfolioView";
 import { projects } from "@/data/projects";
 
 export default function Home() {
-  return (
-    <>
-      <Navbar />
-      <main>
-        <ProjectList projects={projects} />
-      </main>
-    </>
-  );
+  return <PortfolioView projects={projects} />;
 }
