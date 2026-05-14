@@ -12,7 +12,9 @@ export type Project = {
   title: string;
   category?: string;
   liveLink?: string;
-  images: [ImageEntry, ImageEntry];
+  impact?: string;
+  video?: string;
+  image: ImageEntry;
 };
 
 type ProjectSeed = {
@@ -23,6 +25,9 @@ type ProjectSeed = {
   year: string;
   category?: string;
   liveLink?: string;
+  impact?: string;
+  src?: string;
+  video?: string;
 };
 
 const make = (seed: ProjectSeed): Project => ({
@@ -30,24 +35,16 @@ const make = (seed: ProjectSeed): Project => ({
   title: seed.title,
   category: seed.category,
   liveLink: seed.liveLink,
-  images: [
-    {
-      id: `${seed.slug}__0`,
-      src: `https://picsum.photos/seed/${seed.slug}a/900/1240`,
-      client: seed.client,
-      role: seed.role,
-      category: seed.category ?? "—",
-      year: seed.year,
-    },
-    {
-      id: `${seed.slug}__1`,
-      src: `https://picsum.photos/seed/${seed.slug}b/900/1240`,
-      client: seed.client,
-      role: seed.role,
-      category: seed.category ?? "—",
-      year: seed.year,
-    },
-  ],
+  impact: seed.impact,
+  video: seed.video,
+  image: {
+    id: seed.slug,
+    src: seed.src ?? `https://picsum.photos/seed/${seed.slug}/1920/1080`,
+    client: seed.client,
+    role: seed.role,
+    category: seed.category ?? "—",
+    year: seed.year,
+  },
 });
 
 const HIDDEN = new Set<string>(["zappedin", "yaad-app", "humoniq"]);
@@ -86,6 +83,7 @@ const allProjects: Project[] = [
     year: "2022 – 2024",
     category: "Product Redesign",
     liveLink: "https://sellerapp.com",
+    src: "/projects/sellerapp.webp",
   }),
   make({
     slug: "sellerapp-qc",
@@ -95,6 +93,8 @@ const allProjects: Project[] = [
     year: "2023 – 2024",
     category: "Product Redesign",
     liveLink: "https://www.sellerapp.com/quick-commerce.html",
+    impact: "Partnered with ONDC & Google",
+    src: "/projects/sellerapp-qc.webp",
   }),
   make({
     slug: "sellerapp-enterprise",
@@ -104,6 +104,7 @@ const allProjects: Project[] = [
     year: "2023 – 2024",
     category: "Exploration",
     liveLink: "https://www.sellerapp.com/ecommerce-data-api.html",
+    impact: "Presented to 50+ Enterprise Companies",
   }),
   make({
     slug: "google",
@@ -113,6 +114,8 @@ const allProjects: Project[] = [
     year: "2023",
     category: "UX Flow",
     liveLink: "https://opencommerce.withgoogle.com/",
+    impact: "Featured in Google I/O",
+    src: "/projects/google.webp",
   }),
   make({
     slug: "outbox-labs",
@@ -122,6 +125,8 @@ const allProjects: Project[] = [
     year: "2025",
     category: "Website",
     liveLink: "https://outbox.vc",
+    impact: "0 → 30M+ ARR",
+    video: "/projects/outbox.mp4",
   }),
   make({
     slug: "reachinbox",
@@ -131,6 +136,8 @@ const allProjects: Project[] = [
     year: "2026",
     category: "Product Redesign",
     liveLink: "https://reachinbox.ai",
+    impact: "80%+ UX Improvement",
+    src: "/projects/reachinbox.webp",
   }),
   make({
     slug: "zapmail",
@@ -140,6 +147,8 @@ const allProjects: Project[] = [
     year: "2026",
     category: "Product Redesign",
     liveLink: "https://zapmail.ai",
+    impact: "4 → 25M+ ARR",
+    src: "/projects/zapmail.webp",
   }),
   make({
     slug: "mailwarmup",
@@ -149,6 +158,7 @@ const allProjects: Project[] = [
     year: "2025",
     category: "0 → 1 Product",
     liveLink: "https://mailwarmup.ai",
+    src: "/projects/mailwarmup.webp",
   }),
   make({
     slug: "visitoriq",
@@ -158,6 +168,7 @@ const allProjects: Project[] = [
     year: "2025",
     category: "0 → 1 Product",
     liveLink: "https://visitoriq.co",
+    src: "/projects/visitoriq.webp",
   }),
   make({
     slug: "coldstats",
@@ -167,6 +178,8 @@ const allProjects: Project[] = [
     year: "2025",
     category: "0 → 1 Product",
     liveLink: "https://coldstats.ai",
+    impact: "Partnered with outboundleads.com",
+    src: "/projects/coldstats.webp",
   }),
   make({
     slug: "referralstack",
@@ -176,6 +189,7 @@ const allProjects: Project[] = [
     year: "2025",
     category: "0 → 1 Product",
     liveLink: "https://referralstack.ai",
+    src: "/projects/referralstack.webp",
   }),
   make({
     slug: "threadjet",
@@ -185,6 +199,8 @@ const allProjects: Project[] = [
     year: "2025",
     category: "0 → 1 Product",
     liveLink: "https://threadjet.ai",
+    impact: "Superhuman for LinkedIn Messaging",
+    src: "/projects/threadjet.webp",
   }),
   make({
     slug: "inboundiq",
@@ -194,6 +210,8 @@ const allProjects: Project[] = [
     year: "2025",
     category: "0 → 1 Product",
     liveLink: "https://inboundiq-website.vercel.app/",
+    impact: "100+ leads in 24hrs of MVP",
+    src: "/projects/inboundiq.webp",
   }),
   make({
     slug: "socialgigs",
@@ -221,6 +239,4 @@ function latestYear(yearStr: string): number {
 
 export const projects: Project[] = allProjects
   .filter((p) => !HIDDEN.has(p.id))
-  .sort(
-    (a, b) => latestYear(b.images[0].year) - latestYear(a.images[0].year)
-  );
+  .sort((a, b) => latestYear(b.image.year) - latestYear(a.image.year));

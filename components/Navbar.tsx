@@ -1,81 +1,45 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-
 export type ViewMode = "list" | "grid";
 
-type Props = {
-  view: ViewMode;
-  onViewChange: (next: ViewMode) => void;
-};
-
-export function Navbar({ view, onViewChange }: Props) {
-  const [hidden, setHidden] = useState(false);
-  const lastY = useRef(0);
-
-  useEffect(() => {
-    lastY.current = window.scrollY;
-
-    const onScroll = () => {
-      const y = window.scrollY;
-      const delta = y - lastY.current;
-
-      if (y < 24) {
-        setHidden(false);
-      } else if (delta > 6) {
-        setHidden(true);
-      } else if (delta < -6) {
-        setHidden(false);
-      }
-
-      lastY.current = y;
-    };
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
+export function Navbar() {
   return (
-    <header
-      className={`sticky top-0 z-50 transition-transform duration-300 ease-out ${
-        hidden ? "-translate-y-full" : "translate-y-0"
-      }`}
-    >
-      <div className="grid grid-cols-12 items-center px-[10px] py-[10px] text-[16px] leading-none text-white">
-        <div className="col-start-1 col-span-2 font-bold">Tirth Jivani</div>
+    <header className="fixed top-0 left-0 right-0 z-50">
+      <div className="grid grid-cols-12 items-center px-[20px] py-[20px] text-[16px] leading-none tracking-[-0.03em] text-white">
+        <div className="col-start-1 col-span-3 font-bold">Tirth Jivani</div>
 
-        <div className="col-start-3 col-span-4 flex gap-[10px]">
-          <button
-            type="button"
-            onClick={() => onViewChange("list")}
-            className={`transition-colors duration-300 ease-in-out ${
-              view === "list" ? "text-white" : "text-white/30 hover:text-white/60"
-            }`}
-          >
-            List
-          </button>
-          <button
-            type="button"
-            onClick={() => onViewChange("grid")}
-            className={`transition-colors duration-300 ease-in-out ${
-              view === "grid" ? "text-white" : "text-white/30 hover:text-white/60"
-            }`}
-          >
-            Grid
-          </button>
-        </div>
-
-        <div className="col-start-7 col-span-5 flex gap-[10px]">
+        <div className="col-start-7 col-span-3 flex gap-[10px]">
           <a href="#outbox-labs">Work</a>
           <span className="text-white/30">Photos</span>
-          <span className="text-white/30">Archives</span>
-          <span className="text-white/30">Information</span>
+          <span className="text-white/30">Archive</span>
+          <span className="text-white/30">Info</span>
         </div>
 
-        <div className="col-start-12 col-span-1 flex justify-end gap-[10px]">
-          <span className="text-white/30">IN</span>
-          <span className="text-white/30">LN</span>
-          <span className="text-white/30">X</span>
+        <div className="col-start-10 col-span-3 flex justify-end gap-[10px] text-white/30">
+          <a
+            href="https://www.instagram.com/tirth.design/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-white/60"
+          >
+            Instagram
+          </a>
+          <a
+            href="https://www.linkedin.com/in/tirthjivani/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-white/60"
+          >
+            Linkedin
+          </a>
+          <a
+            href="https://x.com/tirthjivani"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-white/60"
+          >
+            The X
+          </a>
         </div>
       </div>
     </header>

@@ -5,9 +5,9 @@ type Props = {
   total: number;
 };
 
-const SIZE = 96;
-const DOT = 10;
-const RADIUS = 40;
+const SIZE = 56;
+const DOT = 6;
+const RADIUS = 22;
 
 export function Compass({ activeIndex, total }: Props) {
   const step = total > 0 ? 360 / total : 0;
@@ -16,7 +16,7 @@ export function Compass({ activeIndex, total }: Props) {
   return (
     <div
       aria-hidden
-      className="pointer-events-none fixed bottom-[20px] right-[20px] z-30 hidden md:block"
+      className="pointer-events-none"
       style={{ width: SIZE, height: SIZE }}
     >
       <div
