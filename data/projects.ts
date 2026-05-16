@@ -12,8 +12,11 @@ export type Project = {
   title: string;
   category?: string;
   liveLink?: string;
+  caseStudy: boolean;
   impact?: string;
   video?: string;
+  introduction?: string;
+  timeline?: string;
   image: ImageEntry;
 };
 
@@ -23,11 +26,14 @@ type ProjectSeed = {
   client: string;
   role: string;
   year: string;
+  caseStudy: boolean;
   category?: string;
   liveLink?: string;
   impact?: string;
   src?: string;
   video?: string;
+  introduction?: string;
+  timeline?: string;
 };
 
 const make = (seed: ProjectSeed): Project => ({
@@ -35,8 +41,11 @@ const make = (seed: ProjectSeed): Project => ({
   title: seed.title,
   category: seed.category,
   liveLink: seed.liveLink,
+  caseStudy: seed.caseStudy,
   impact: seed.impact,
   video: seed.video,
+  introduction: seed.introduction,
+  timeline: seed.timeline,
   image: {
     id: seed.slug,
     src: seed.src ?? `https://picsum.photos/seed/${seed.slug}/1920/1080`,
@@ -47,7 +56,7 @@ const make = (seed: ProjectSeed): Project => ({
   },
 });
 
-const HIDDEN = new Set<string>(["zappedin", "yaad-app", "humoniq"]);
+const HIDDEN = new Set<string>(["zappedin", "yaad-app", "humoniq", "socialgigs", "inreach", "sellerapp-enterprise"]);
 
 const allProjects: Project[] = [
   make({
@@ -57,6 +66,7 @@ const allProjects: Project[] = [
     role: "Art Direction",
     year: "2025",
     category: "Website",
+    caseStudy: false,
   }),
   make({
     slug: "yaad-app",
@@ -65,6 +75,7 @@ const allProjects: Project[] = [
     role: "Designer / Engineer",
     year: "2025",
     category: "App Design",
+    caseStudy: false,
   }),
   make({
     slug: "humoniq",
@@ -74,6 +85,7 @@ const allProjects: Project[] = [
     year: "2025",
     category: "Website",
     liveLink: "https://humoniq.ai",
+    caseStudy: false,
   }),
   make({
     slug: "sellerapp",
@@ -84,6 +96,9 @@ const allProjects: Project[] = [
     category: "Product Redesign",
     liveLink: "https://sellerapp.com",
     src: "/projects/sellerapp.webp",
+    caseStudy: true,
+    introduction:
+      "We rebuilt SellerApp as the unified seller workspace, pulling fragmented marketplace tools — ads, inventory, listings, analytics — into one decision surface. The redesign moved sellers from juggling dashboards to acting on a single source of truth, with workflows tuned for the daily rhythm of Amazon, not the data team's hierarchy.",
   }),
   make({
     slug: "sellerapp-qc",
@@ -95,6 +110,9 @@ const allProjects: Project[] = [
     liveLink: "https://www.sellerapp.com/quick-commerce.html",
     impact: "Partnered with ONDC & Google",
     src: "/projects/sellerapp-qc.webp",
+    caseStudy: true,
+    introduction:
+      "A bet on what India's commerce stack looks like next. We partnered with ONDC and Google to design SellerApp's Quick Commerce surface — onboarding small sellers onto open networks, normalising catalogs across buyer apps, and making the unfamiliar feel ordinary on day one.",
   }),
   make({
     slug: "sellerapp-enterprise",
@@ -105,6 +123,7 @@ const allProjects: Project[] = [
     category: "Exploration",
     liveLink: "https://www.sellerapp.com/ecommerce-data-api.html",
     impact: "Presented to 50+ Enterprise Companies",
+    caseStudy: true,
   }),
   make({
     slug: "google",
@@ -116,6 +135,7 @@ const allProjects: Project[] = [
     liveLink: "https://opencommerce.withgoogle.com/",
     impact: "Featured in Google I/O",
     src: "/projects/google.webp",
+    caseStudy: false,
   }),
   make({
     slug: "outbox-labs",
@@ -127,6 +147,7 @@ const allProjects: Project[] = [
     liveLink: "https://outbox.vc",
     impact: "0 → 30M+ ARR",
     video: "/projects/outbox.mp4",
+    caseStudy: false,
   }),
   make({
     slug: "reachinbox",
@@ -138,6 +159,9 @@ const allProjects: Project[] = [
     liveLink: "https://reachinbox.ai",
     impact: "80%+ UX Improvement",
     src: "/projects/reachinbox.webp",
+    caseStudy: true,
+    introduction:
+      "ReachInbox needed to feel less like a tool and more like a workspace. We rebuilt the entire UX around what sequence operators actually do all day — drafting, reviewing, replying, triaging — and cut the time to get there by 80%. Every surface argues for the next action instead of asking the user to assemble one.",
   }),
   make({
     slug: "zapmail",
@@ -149,6 +173,9 @@ const allProjects: Project[] = [
     liveLink: "https://zapmail.ai",
     impact: "4 → 25M+ ARR",
     src: "/projects/zapmail.webp",
+    caseStudy: true,
+    introduction:
+      "Zapmail's job is to make cold email infrastructure invisible. The redesign focused on the few moments that matter — domain setup, deliverability, and inbox warm-up — and made everything else recede. ARR moved from $4M to $25M+ on the back of that focus.",
   }),
   make({
     slug: "mailwarmup",
@@ -159,6 +186,7 @@ const allProjects: Project[] = [
     category: "0 → 1 Product",
     liveLink: "https://mailwarmup.ai",
     src: "/projects/mailwarmup.webp",
+    caseStudy: false,
   }),
   make({
     slug: "visitoriq",
@@ -169,6 +197,7 @@ const allProjects: Project[] = [
     category: "0 → 1 Product",
     liveLink: "https://visitoriq.co",
     src: "/projects/visitoriq.webp",
+    caseStudy: false,
   }),
   make({
     slug: "coldstats",
@@ -180,6 +209,7 @@ const allProjects: Project[] = [
     liveLink: "https://coldstats.ai",
     impact: "Partnered with outboundleads.com",
     src: "/projects/coldstats.webp",
+    caseStudy: false,
   }),
   make({
     slug: "referralstack",
@@ -190,6 +220,7 @@ const allProjects: Project[] = [
     category: "0 → 1 Product",
     liveLink: "https://referralstack.ai",
     src: "/projects/referralstack.webp",
+    caseStudy: false,
   }),
   make({
     slug: "threadjet",
@@ -201,6 +232,9 @@ const allProjects: Project[] = [
     liveLink: "https://threadjet.ai",
     impact: "Superhuman for LinkedIn Messaging",
     src: "/projects/threadjet.webp",
+    caseStudy: true,
+    introduction:
+      "ThreadJet treats LinkedIn like an inbox, not a feed. We designed the messaging surface a power user actually wants — keyboard-first, omni-search, AI-drafted replies — pitched as Superhuman for the platform that didn't have one. The shape of the product is the argument.",
   }),
   make({
     slug: "inboundiq",
@@ -212,6 +246,9 @@ const allProjects: Project[] = [
     liveLink: "https://inboundiq-website.vercel.app/",
     impact: "100+ leads in 24hrs of MVP",
     src: "/projects/inboundiq.webp",
+    caseStudy: true,
+    introduction:
+      "InboundIQ ships intent without the warehouse. We designed and built the product end to end — sourcing signals, scoring, and outreach — into one surface lean teams can run from. 100+ leads landed in the first 24 hours of the MVP.",
   }),
   make({
     slug: "socialgigs",
@@ -219,7 +256,8 @@ const allProjects: Project[] = [
     client: "Outbox Labs",
     role: "Designer / Engineer",
     year: "2026",
-    category: "0 → 1 Product",
+    category: "Website & Art Direction",
+    caseStudy: false,
   }),
   make({
     slug: "inreach",
@@ -228,6 +266,40 @@ const allProjects: Project[] = [
     role: "Designer / Engineer",
     year: "2026",
     category: "0 → 1 Product",
+    caseStudy: false,
+  }),
+  make({
+    slug: "shutterhalf",
+    title: "Studio Shutterhalf",
+    client: "The Summer Design",
+    role: "Designer / Engineer",
+    year: "2026",
+    category: "Website & Art Direction",
+    liveLink: "https://shutterhalf.com",
+    src: "/projects/shutterhalf.webp",
+    caseStudy: false,
+  }),
+  make({
+    slug: "golden",
+    title: "Golden Group",
+    client: "The Summer Design",
+    role: "Art Director",
+    year: "2026",
+    category: "Website & Art Direction",
+    liveLink: "https://golden-website-three.vercel.app/",
+    src: "/projects/golden.webp",
+    caseStudy: false,
+  }),
+  make({
+    slug: "salesmonk",
+    title: "SalesMonk",
+    client: "The Summer Design",
+    role: "Website",
+    year: "2025",
+    category: "Website & Art Direction",
+    liveLink: "https://salesmonk.ai",
+    video: "/projects/salesmonk.mov",
+    caseStudy: false,
   }),
 ];
 

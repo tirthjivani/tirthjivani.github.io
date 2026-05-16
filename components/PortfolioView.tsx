@@ -1,177 +1,148 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import gsap from "gsap";
 import { Navbar, type ViewMode } from "./Navbar";
-import { ProjectsCanvas } from "./ProjectsCanvas";
+import { ProjectsIndex } from "./ProjectsIndex";
 import { ProjectSidebar } from "./ProjectSidebar";
 import { BottomBar } from "./BottomBar";
 import { BottomBlur } from "./BottomBlur";
-import { Slideshow, type SlideDirection } from "./Slideshow";
+import { ListView } from "./ListView";
+import { SurfCanvas } from "./SurfCanvas";
+import { getLenis } from "@/lib/lenis";
+import { EASE_IN_OUT } from "@/lib/gsap/eases";
 import type { Project } from "@/data/projects";
 
 type Props = {
   projects: Project[];
 };
 
-const NAV_COOLDOWN = 1700;
+function smoothScrollTo(y: number) {
+  const lenis = getLenis();
+  if (lenis) lenis.scrollTo(y);
+  else window.scrollTo({ top: y, behavior: "smooth" });
+}
+
+function SidebarPresence({
+  visible,
+  children,
+}: {
+  visible: boolean;
+  children: React.ReactNode;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = useState(visible);
+
+  useEffect(() => {
+    if (visible) setMounted(true);
+  }, [visible]);
+
+  useLayoutEffect(() => {
+    if (!mounted || !ref.current) return;
+    if (visible) {
+      const t = gsap.fromTo(
+        ref.current,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.4, ease: EASE_IN_OUT }
+      );
+      return () => {
+        t.kill();
+      };
+    }
+    const t = gsap.to(ref.current, {
+      opacity: 0,
+      duration: 0.4,
+      ease: EASE_IN_OUT,
+      onComplete: () => setMounted(false),
+    });
+    return () => {
+      t.kill();
+    };
+  }, [visible, mounted]);
+
+  if (!mounted) return null;
+  return (
+    <div ref={ref} style={{ opacity: 0 }}>
+      {children}
+    </div>
+  );
+}
 
 export function PortfolioView({ projects }: Props) {
   const total = projects.length;
   const [view, setView] = useState<ViewMode>("list");
-  const [current, setCurrent] = useState(0);
-  const [direction, setDirection] = useState<SlideDirection>("next");
-  const lastNavRef = useRef(0);
-  const wheelAccumRef = useRef(0);
-  const touchStartRef = useRef(0);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  const SECTION_PX = 360;
 
   const navigateTo = useCallback(
     (target: number) => {
-      if (target === current) return;
-      const now = Date.now();
-      if (now - lastNavRef.current < NAV_COOLDOWN) return;
-      lastNavRef.current = now;
-
-      const goingForward =
-        current < target
-          ? !(current === 0 && target === total - 1)
-          : current === total - 1 && target === 0;
-      setDirection(goingForward ? "next" : "prev");
-      setCurrent(target);
-    },
-    [current, total]
-  );
-
-  const step = useCallback(
-    (dir: SlideDirection) => {
-      const now = Date.now();
-      if (now - lastNavRef.current < NAV_COOLDOWN) return;
-      lastNavRef.current = now;
-      setDirection(dir);
-      setCurrent((c) => {
-        if (dir === "next") return c < total - 1 ? c + 1 : 0;
-        return c > 0 ? c - 1 : total - 1;
-      });
+      const copyH = total * SECTION_PX;
+      const curCopy = Math.floor(window.scrollY / copyH);
+      smoothScrollTo(curCopy * copyH + target * SECTION_PX);
     },
     [total]
   );
 
-  useEffect(() => {
-    if (view !== "list") return;
-    const body = document.body;
-    const prev = body.style.overflow;
-    body.style.overflow = "hidden";
-    return () => {
-      body.style.overflow = prev;
-    };
-  }, [view]);
-
-  useEffect(() => {
-    if (view !== "list") return;
-    const TOLERANCE = 10;
-
-    const onWheel = (e: WheelEvent) => {
-      e.preventDefault();
-      const now = Date.now();
-      if (now - lastNavRef.current < NAV_COOLDOWN) {
-        wheelAccumRef.current = 0;
-        return;
-      }
-      wheelAccumRef.current += e.deltaY;
-      if (Math.abs(wheelAccumRef.current) >= TOLERANCE) {
-        const dir: SlideDirection = wheelAccumRef.current > 0 ? "next" : "prev";
-        wheelAccumRef.current = 0;
-        step(dir);
-      }
-    };
-
-    const onTouchStart = (e: TouchEvent) => {
-      touchStartRef.current = e.touches[0]?.clientY ?? 0;
-    };
-
-    const onTouchMove = (e: TouchEvent) => {
-      e.preventDefault();
-    };
-
-    const onTouchEnd = (e: TouchEvent) => {
-      const endY = e.changedTouches[0]?.clientY ?? 0;
-      const delta = touchStartRef.current - endY;
-      if (Math.abs(delta) < 30) return;
-      step(delta > 0 ? "next" : "prev");
-    };
-
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "ArrowDown" || e.key === "PageDown" || e.key === " ")
-        step("next");
-      else if (e.key === "ArrowUp" || e.key === "PageUp") step("prev");
-    };
-
-    window.addEventListener("wheel", onWheel, { passive: false });
-    window.addEventListener("touchstart", onTouchStart, { passive: true });
-    window.addEventListener("touchmove", onTouchMove, { passive: false });
-    window.addEventListener("touchend", onTouchEnd, { passive: true });
-    window.addEventListener("keydown", onKey);
-    return () => {
-      window.removeEventListener("wheel", onWheel);
-      window.removeEventListener("touchstart", onTouchStart);
-      window.removeEventListener("touchmove", onTouchMove);
-      window.removeEventListener("touchend", onTouchEnd);
-      window.removeEventListener("keydown", onKey);
-    };
-  }, [view, step]);
-
   const handleViewChange = (next: ViewMode) => {
     if (next === view) return;
-    if (next === "grid") window.scrollTo({ top: 0, behavior: "auto" });
+    // Each view positions itself to activeIndex on mount — keeps the user on
+    // the same project across List / Grid / Surf.
     setView(next);
   };
 
-  const handleSelectFromGrid = (target: number) => {
-    setDirection("next");
-    setCurrent(target);
+  const handleSelectProject = (target: number) => {
+    setActiveIndex(target);
     setView("list");
   };
 
-  const safeCurrent = Math.min(Math.max(current, 0), Math.max(0, total - 1));
+  const safeCurrent = Math.min(Math.max(activeIndex, 0), Math.max(0, total - 1));
   const activeProject = projects[safeCurrent];
   const activeImage = useMemo(() => activeProject?.image, [activeProject]);
+  const hoveredProject =
+    hoveredIndex !== null ? projects[hoveredIndex] ?? null : null;
 
   return (
     <>
-      <Navbar />
+      <Navbar view={view} />
       <main>
         {view === "list" ? (
-          <Slideshow
+          <ListView
             projects={projects}
-            current={safeCurrent}
-            direction={direction}
+            activeIndex={safeCurrent}
+            onActiveChange={setActiveIndex}
+          />
+        ) : view === "surf" ? (
+          <SurfCanvas
+            projects={projects}
+            activeIndex={safeCurrent}
+            onHoverProject={setHoveredIndex}
           />
         ) : (
-          <ProjectsCanvas
+          <ProjectsIndex
             projects={projects}
-            view={view}
-            onSelectProject={handleSelectFromGrid}
+            activeIndex={safeCurrent}
+            onSelectProject={handleSelectProject}
+            onHoverProject={setHoveredIndex}
           />
         )}
       </main>
       <BottomBlur />
-      <AnimatePresence>
-        {view === "list" && (
-          <motion.div
-            key="sidebar"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.4, ease: "easeInOut" }}
-          >
-            <ProjectSidebar
-              projects={projects}
-              activeIndex={safeCurrent}
-              onNavigate={navigateTo}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <SidebarPresence visible={view === "list"}>
+        <ProjectSidebar
+          projects={projects}
+          activeIndex={safeCurrent}
+          onNavigate={navigateTo}
+        />
+      </SidebarPresence>
       <BottomBar
         view={view}
         onViewChange={handleViewChange}
@@ -179,6 +150,8 @@ export function PortfolioView({ projects }: Props) {
         activeImage={activeImage}
         activeIndex={safeCurrent}
         total={total}
+        hoveredProject={hoveredProject}
+        hoveredIndex={hoveredIndex}
       />
     </>
   );

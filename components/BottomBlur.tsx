@@ -1,15 +1,29 @@
 "use client";
 
-import { motion } from "motion/react";
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { EASE_IN_OUT } from "@/lib/gsap/eases";
 
 export function BottomBlur() {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!ref.current) return;
+    const tween = gsap.fromTo(
+      ref.current,
+      { opacity: 0 },
+      { opacity: 1, duration: 0.3, ease: EASE_IN_OUT }
+    );
+    return () => {
+      tween.kill();
+    };
+  }, []);
+
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.3, ease: "easeInOut" }}
+    <div
+      ref={ref}
       aria-hidden
+      style={{ opacity: 0 }}
       className="pointer-events-none fixed bottom-0 left-0 right-0 z-20 hidden h-[240px] md:block"
     >
       <div
@@ -42,6 +56,6 @@ export function BottomBlur() {
             "linear-gradient(to top, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 100%)",
         }}
       />
-    </motion.div>
+    </div>
   );
 }

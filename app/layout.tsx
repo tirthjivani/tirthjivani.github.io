@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { ClickSound } from "@/components/ClickSound";
 import { DevTools } from "@/components/DevTools";
+import { SmoothScroll } from "@/components/SmoothScroll";
 import "./globals.css";
 
 const circularStd = localFont({
@@ -50,7 +52,12 @@ export default function RootLayout({
       lang="en"
       className={`${circularStd.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-black text-white">
+      <body
+        className="min-h-full flex flex-col bg-black text-white"
+        suppressHydrationWarning
+      >
+        <SmoothScroll />
+        <ClickSound />
         {children}
         <DevTools />
       </body>

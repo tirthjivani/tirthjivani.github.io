@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
+
 type Props = {
   activeIndex: number;
   total: number;
@@ -11,7 +13,21 @@ const RADIUS = 22;
 
 export function Compass({ activeIndex, total }: Props) {
   const step = total > 0 ? 360 / total : 0;
-  const ringRotation = -90 + step * activeIndex;
+  const lastIndexRef = useRef(activeIndex);
+  const [cumulative, setCumulative] = useState(activeIndex);
+
+  useEffect(() => {
+    if (total <= 0) return;
+    const prev = lastIndexRef.current;
+    if (prev === activeIndex) return;
+    let delta = activeIndex - prev;
+    if (delta > total / 2) delta -= total;
+    else if (delta < -total / 2) delta += total;
+    lastIndexRef.current = activeIndex;
+    setCumulative((c) => c + delta);
+  }, [activeIndex, total]);
+
+  const ringRotation = -90 + step * cumulative;
 
   return (
     <div

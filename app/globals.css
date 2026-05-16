@@ -4,15 +4,27 @@ html,
 body {
   background-color: #000000;
   color: #ffffff;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
-html {
-  scroll-behavior: smooth;
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+* {
+  scrollbar-width: none;
 }
 
 body {
   font-family: var(--font-circular), Arial, Helvetica, sans-serif;
   font-weight: 400;
+  font-size: 14px;
+  line-height: 1;
 }
 
 @theme inline {
