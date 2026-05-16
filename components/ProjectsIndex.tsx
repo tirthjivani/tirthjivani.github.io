@@ -18,11 +18,15 @@ type Props = {
 const COLS = 6;
 const COPIES = 3;
 const MIDDLE_COPY = 1;
-const ROW_GAP = 80;
+const ROW_GAP = 32;
 const COL_GAP = 10;
-// Make the inter-copy spacing match the inter-row spacing so the wrap point
-// reads as just another row of the grid — no visible boundary between copies.
+// Every gap in the stack — between rows and between copies — is uniform so
+// the wrap boundary reads as just another row.
 const COPY_GAP = ROW_GAP;
+// Projects are separated by a random number of empty cells in this range —
+// looser than a fixed step so the grid breathes instead of marching.
+const MIN_GAP = 0;
+const MAX_GAP = 4;
 
 export function ProjectsIndex({
   projects,
@@ -30,6 +34,21 @@ export function ProjectsIndex({
   onSelectProject,
   onHoverProject,
 }: Props) {
+  const { slotToProject, totalCells } = useMemo(() => {
+    const map = new Map<number, number>();
+    let slot = 0;
+    let lastSlot = -1;
+    const span = MAX_GAP - MIN_GAP + 1;
+    projects.forEach((_, i) => {
+      map.set(slot, i);
+      lastSlot = slot;
+      const gap = MIN_GAP + Math.floor(Math.random() * span);
+      slot += 1 + gap;
+    });
+    const total = lastSlot < 0 ? 0 : Math.ceil((lastSlot + 1) / COLS) * COLS;
+    return { slotToProject: map, totalCells: total };
+  }, [projects.length]);
+
   const containerRef = useRef<HTMLDivElement>(null);
   const firstCopyRef = useRef<HTMLDivElement>(null);
   const adjustingRef = useRef(false);
@@ -76,8 +95,6 @@ export function ProjectsIndex({
 
     const stride = () => first.offsetHeight + COPY_GAP;
 
-    // Land scroll on the active project's tile inside the middle copy so
-    // switching from List/Surf keeps the user on the same project.
     const landOnActive = () => {
       const s = stride();
       const middleCopyTop = s * MIDDLE_COPY;
@@ -130,11 +147,21 @@ export function ProjectsIndex({
     };
   }, []);
 
-  const renderProject = (
-    project: Project,
-    projectIndex: number,
-    copyKey: string
-  ) => {
+  const renderCell = (cellIndex: number, copyKey: string) => {
+    const projectIndex = slotToProject.get(cellIndex);
+    if (projectIndex === undefined) {
+      return (
+        <div
+          key={`${copyKey}-${cellIndex}`}
+          className="relative aspect-[16/10] w-full self-start overflow-hidden text-left"
+        >
+          <span className="absolute left-0 top-0 text-[14px] leading-none text-white/50">
+            {String(cellIndex + 1).padStart(2, "0")}
+          </span>
+        </div>
+      );
+    }
+    const project = projects[projectIndex];
     const action = getProjectAction(project);
     const handleClick = () => {
       if (action) {
@@ -150,7 +177,7 @@ export function ProjectsIndex({
     return (
       <button
         type="button"
-        key={`${copyKey}-${projectIndex}`}
+        key={`${copyKey}-${cellIndex}`}
         data-project={projectIndex}
         onClick={handleClick}
         onMouseEnter={(e) => {
@@ -205,7 +232,7 @@ export function ProjectsIndex({
         columnGap: COL_GAP,
       }}
     >
-      {projects.map((p, i) => renderProject(p, i, copyKey))}
+      {Array.from({ length: totalCells }, (_, i) => renderCell(i, copyKey))}
     </div>
   );
 
