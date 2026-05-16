@@ -189,7 +189,7 @@ export function BottomBar({
   const titleClass = isGridHover ? "text-[24px] leading-none" : "text-[14px] leading-[1.4]";
 
   return (
-    <div className="pointer-events-none fixed bottom-[20px] left-0 right-0 z-30 hidden md:block">
+    <div className="pointer-events-none fixed bottom-[20px] left-0 right-0 z-30">
       <div
         className="pointer-events-auto absolute bottom-0 left-[20px] flex gap-[10px] text-[14px] leading-none tracking-[-0.03em] text-white"
         style={{ mixBlendMode: "difference" }}
@@ -206,7 +206,7 @@ export function BottomBar({
         <button
           type="button"
           onClick={() => onViewChange("index")}
-          className={`transition-colors duration-150 ease-in-out ${
+          className={`hidden transition-colors duration-150 ease-in-out md:inline-block ${
             view === "index" ? "text-white" : "text-white/30 hover:text-white/50 active:text-white/20"
           }`}
         >
@@ -222,6 +222,15 @@ export function BottomBar({
           Surf
         </button>
       </div>
+
+      {view === "surf" && (
+        <div
+          className="pointer-events-none absolute bottom-0 right-[20px] text-[14px] leading-none tracking-[-0.03em] text-white/60"
+          style={{ mixBlendMode: "difference" }}
+        >
+          (Scroll or drag)
+        </div>
+      )}
 
       <div className="grid min-h-[80px] grid-cols-12 items-end px-[20px] text-[14px] leading-none tracking-[-0.03em] text-white">
         {presence.mounted && chromeProject && chromeImage && (

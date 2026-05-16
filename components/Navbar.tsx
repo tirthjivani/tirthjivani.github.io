@@ -25,19 +25,28 @@ export function Navbar({ view = "list" }: Props) {
   useEffect(() => {
     const el = logoRef.current;
     if (!el) return;
-    const target = isList ? LOGO_LARGE : LOGO_SMALL;
-    const t = gsap.to(el, {
-      fontSize: target.fontSize,
-      letterSpacing: target.letterSpacing,
-      duration: 0.65,
-      ease: EASE_IN_OUT,
-    });
+    const apply = () => {
+      const isDesktop = window.matchMedia("(min-width: 768px)").matches;
+      const target = isList && isDesktop ? LOGO_LARGE : LOGO_SMALL;
+      gsap.to(el, {
+        fontSize: target.fontSize,
+        letterSpacing: target.letterSpacing,
+        duration: 0.65,
+        ease: EASE_IN_OUT,
+        overwrite: "auto",
+      });
+    };
+    apply();
+    const mq = window.matchMedia("(min-width: 768px)");
+    mq.addEventListener("change", apply);
     return () => {
-      t.kill();
+      mq.removeEventListener("change", apply);
+      gsap.killTweensOf(el);
     };
   }, [isList]);
 
   const [copied, setCopied] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const timerRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -46,11 +55,20 @@ export function Navbar({ view = "list" }: Props) {
     };
   }, []);
 
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    if (menuOpen) document.body.style.overflow = "hidden";
+    else document.body.style.overflow = prev;
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [menuOpen]);
+
   const handleContact = async () => {
     try {
       await navigator.clipboard.writeText(EMAIL);
     } catch {
-      // ignore — still flash "Copied!" so the affordance feels responsive
+      // ignore - still flash "Copied!" so the affordance feels responsive
     }
     setCopied(true);
     if (timerRef.current) window.clearTimeout(timerRef.current);
@@ -58,6 +76,7 @@ export function Navbar({ view = "list" }: Props) {
   };
 
   return (
+    <>
     <header
       className="fixed top-0 left-0 right-0 z-50"
       style={{ mixBlendMode: "difference" }}
@@ -72,7 +91,7 @@ export function Navbar({ view = "list" }: Props) {
           TIRTH J.
         </a>
 
-        <div className="col-start-9 col-span-3 flex max-w-[340px] flex-col gap-[32px] text-[14px] leading-none">
+        <div className="col-start-9 col-span-3 hidden max-w-[340px] flex-col gap-[32px] text-[14px] leading-none md:flex">
           <div className="flex gap-[10px]">
             <a href="/" className="text-white">
               Selected Work
@@ -92,6 +111,8 @@ export function Navbar({ view = "list" }: Props) {
               </CharReveal>
               <a
                 href={`mailto:${EMAIL}`}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="hover:underline"
               >
                 <CharReveal visible={isList}>{EMAIL}</CharReveal>
@@ -138,12 +159,82 @@ export function Navbar({ view = "list" }: Props) {
           <button
             type="button"
             onClick={handleContact}
-            className="text-[14px] leading-none text-white/30 transition-opacity duration-150 hover:text-white"
+            className="hidden text-[14px] leading-none text-white/30 transition-opacity duration-150 hover:text-white md:inline-block"
           >
             {copied ? "Copied!" : "Contact"}
+          </button>
+          <button
+            type="button"
+            onClick={() => setMenuOpen((o) => !o)}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-menu"
+            className="relative z-[60] text-[14px] leading-none text-white transition-opacity duration-150 md:hidden"
+          >
+            {menuOpen ? "Close" : "Menu"}
           </button>
         </div>
       </div>
     </header>
+
+    <div
+      id="mobile-menu"
+      aria-hidden={!menuOpen}
+      className={`fixed inset-0 z-40 flex flex-col gap-[40px] bg-black px-[20px] pb-[40px] pt-[60px] text-white transition-opacity duration-300 ease-out md:hidden ${
+        menuOpen
+          ? "pointer-events-auto opacity-100"
+          : "pointer-events-none opacity-0"
+      }`}
+    >
+        <nav className="flex flex-col gap-[20px] text-[28px] leading-none tracking-[-0.03em]">
+          <a href="/" onClick={() => setMenuOpen(false)}>
+            Selected Work
+          </a>
+          <span className="text-white/30">Archives</span>
+          <span className="text-white/30">About</span>
+        </nav>
+
+        <p className="text-[16px] leading-[1.35] text-white/80">{BIO}</p>
+
+        <div className="mt-auto flex flex-col gap-[12px] text-[15px] leading-none">
+          <div className="flex gap-[6px]">
+            <span className="text-white/30">Email:</span>
+            <a
+              href={`mailto:${EMAIL}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {EMAIL}
+            </a>
+          </div>
+          <div className="flex flex-wrap gap-[6px]">
+            <span className="text-white/30">Insta:</span>
+            <a
+              href="https://instagram.com/tirth.design"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              @tirth.design
+            </a>
+            <a
+              href="https://instagram.com/tirth.photos"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              @tirth.photos
+            </a>
+          </div>
+          <div className="flex gap-[6px]">
+            <span className="text-white/30">Linkedin:</span>
+            <a
+              href="https://linkedin.com/in/tirthjivani"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              /tirthjivani
+            </a>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }

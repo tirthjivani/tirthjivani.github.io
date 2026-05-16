@@ -11,10 +11,13 @@ gsap.registerPlugin(ScrollTrigger);
 export function SmoothScroll() {
   useEffect(() => {
     const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      wheelMultiplier: 1,
-      touchMultiplier: 1,
+      lerp: 0.07,
+      duration: 1.6,
+      // easeOutQuint — long, gentle tail so motion settles without a hard stop
+      easing: (t) => 1 - Math.pow(1 - t, 5),
+      wheelMultiplier: 0.9,
+      touchMultiplier: 1.5,
+      syncTouch: true,
     });
     setLenis(lenis);
 

@@ -1,8 +1,9 @@
 import { InfiniteCanvas } from "@/components/InfiniteCanvas";
 import { Navbar } from "@/components/Navbar";
+import { PHOTO_PATHS } from "@/data/photos";
 
 export const metadata = {
-  title: "Photos — Tirth Jivani",
+  title: "Photos - Tirth Jivani",
 };
 
 export default function PhotosPage() {
@@ -10,12 +11,7 @@ export default function PhotosPage() {
     <>
       <Navbar />
       <main>
-        <InfiniteCanvas
-          imageRootPath="/photos"
-          numberOfImages={12}
-          imageSize="20vw"
-          gap="8vw"
-        />
+        <InfiniteCanvas images={PHOTO_PATHS} imageSize="20vw" gap="8vw" />
       </main>
     </>
   );

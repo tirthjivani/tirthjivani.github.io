@@ -15,14 +15,14 @@ type Props = {
   onHoverProject?: (index: number | null) => void;
 };
 
-const TOTAL_CELLS = 60;
-const COPIES = 7;
-const COPY_GAP = 80;
+const COLS = 6;
+const COPIES = 3;
+const MIDDLE_COPY = 1;
 const ROW_GAP = 80;
 const COL_GAP = 10;
-const PROJECT_SLOTS = [
-  0, 4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56,
-];
+// Make the inter-copy spacing match the inter-row spacing so the wrap point
+// reads as just another row of the grid — no visible boundary between copies.
+const COPY_GAP = ROW_GAP;
 
 export function ProjectsIndex({
   projects,
@@ -30,14 +30,6 @@ export function ProjectsIndex({
   onSelectProject,
   onHoverProject,
 }: Props) {
-  const slotToProject = useMemo(() => {
-    const map = new Map<number, number>();
-    PROJECT_SLOTS.forEach((slotIndex, projectIndex) => {
-      if (projectIndex < projects.length) map.set(slotIndex, projectIndex);
-    });
-    return map;
-  }, [projects.length]);
-
   const containerRef = useRef<HTMLDivElement>(null);
   const firstCopyRef = useRef<HTMLDivElement>(null);
   const adjustingRef = useRef(false);
@@ -83,154 +75,137 @@ export function ProjectsIndex({
     };
 
     const stride = () => first.offsetHeight + COPY_GAP;
-    const center = () => container.scrollHeight / 2;
 
-    // Land scroll on the active project's image inside the middle copy so
+    // Land scroll on the active project's tile inside the middle copy so
     // switching from List/Surf keeps the user on the same project.
     const landOnActive = () => {
-      const middleCopyIndex = Math.floor(COPIES / 2);
-      const slotIndex = PROJECT_SLOTS[initialActiveRef.current];
-      const fallback = () => jump(center());
-      if (slotIndex === undefined) {
-        fallback();
-        return;
-      }
+      const s = stride();
+      const middleCopyTop = s * MIDDLE_COPY;
       const target = first.querySelector(
-        `[data-slot="${slotIndex}"]`
+        `[data-project="${initialActiveRef.current}"]`
       ) as HTMLElement | null;
       if (!target) {
-        fallback();
+        jump(middleCopyTop);
         return;
       }
-      const middleCopyTop = (first.offsetHeight + COPY_GAP) * middleCopyIndex;
-      const slotCenter = target.offsetTop + target.offsetHeight / 2;
-      jump(middleCopyTop + slotCenter - window.innerHeight / 2);
+      const tileCenter = target.offsetTop + target.offsetHeight / 2;
+      jump(middleCopyTop + tileCenter - window.innerHeight / 2);
     };
 
-    const recenter = () => landOnActive();
-    recenter();
+    landOnActive();
 
-    const onScroll = () => {
+    const wrap = () => {
       if (adjustingRef.current) return;
       const s = stride();
-      const c = center();
       const y = window.scrollY;
-      if (y < c - s) {
-        adjustingRef.current = true;
-        jump(y + s);
-        requestAnimationFrame(() => {
-          adjustingRef.current = false;
-        });
-      } else if (y > c + s) {
-        adjustingRef.current = true;
-        jump(y - s);
-        requestAnimationFrame(() => {
-          adjustingRef.current = false;
-        });
-      }
+      let target: number | null = null;
+      if (y < s * 0.5) target = y + s;
+      else if (y > s * 2.5) target = y - s;
+      if (target === null) return;
+      adjustingRef.current = true;
+      jump(target);
+      requestAnimationFrame(() => {
+        adjustingRef.current = false;
+      });
     };
 
     const ro = new ResizeObserver(() => {
-      // First-copy size may shift as images decode; re-center to keep
-      // the wrap thresholds aligned with the (possibly new) stride.
-      if (!adjustingRef.current) recenter();
+      if (!adjustingRef.current) landOnActive();
     });
     ro.observe(first);
 
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", recenter);
+    const lenis = getLenis();
+    if (lenis) {
+      lenis.on("scroll", wrap);
+    } else {
+      window.addEventListener("scroll", wrap, { passive: true });
+    }
+    window.addEventListener("resize", landOnActive);
     return () => {
       ro.disconnect();
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", recenter);
+      const l = getLenis();
+      if (l) l.off("scroll", wrap);
+      else window.removeEventListener("scroll", wrap);
+      window.removeEventListener("resize", landOnActive);
     };
   }, []);
 
-  const renderCell = (cellIndex: number, copyKey: string) => {
-    const num = cellIndex + 1;
-    const projectIndex = slotToProject.get(cellIndex);
-    const project = projectIndex !== undefined ? projects[projectIndex] : null;
-
-    if (project) {
-      const action = getProjectAction(project);
-      const handleClick = () => {
-        if (action) {
-          if (action.external) {
-            window.open(action.href, "_blank", "noopener,noreferrer");
-          } else {
-            router.push(action.href);
-          }
+  const renderProject = (
+    project: Project,
+    projectIndex: number,
+    copyKey: string
+  ) => {
+    const action = getProjectAction(project);
+    const handleClick = () => {
+      if (action) {
+        if (action.external) {
+          window.open(action.href, "_blank", "noopener,noreferrer");
         } else {
-          onSelectProject(projectIndex!);
+          router.push(action.href);
         }
-      };
-      return (
-        <button
-          type="button"
-          key={`${copyKey}-${cellIndex}`}
-          data-slot={cellIndex}
-          onClick={handleClick}
-          onMouseEnter={(e) => {
-            playHover();
-            onHoverProject?.(projectIndex!);
-            if (action) {
-              setCursor({ x: e.clientX, y: e.clientY, text: action.text });
-            }
-          }}
-          onMouseMove={(e) => {
-            if (action) {
-              setCursor({ x: e.clientX, y: e.clientY, text: action.text });
-            }
-          }}
-          onMouseLeave={() => {
-            onHoverProject?.(null);
-            setCursor(null);
-          }}
-          className="relative block w-full self-start overflow-hidden text-left"
-        >
-          {project.video ? (
-            <video
-              src={project.video}
-              autoPlay
-              loop
-              muted
-              playsInline
-              width={2880}
-              height={1800}
-              className="block h-auto w-full"
-            />
-          ) : (
-            <Image
-              src={project.image.src}
-              alt={project.title}
-              width={2880}
-              height={1800}
-              sizes="16vw"
-              className="block h-auto w-full"
-            />
-          )}
-        </button>
-      );
-    }
+      } else {
+        onSelectProject(projectIndex);
+      }
+    };
     return (
-      <div
-        key={`${copyKey}-${cellIndex}`}
-        data-slot={cellIndex}
-        className="relative aspect-[16/10] w-full self-start overflow-hidden text-left"
+      <button
+        type="button"
+        key={`${copyKey}-${projectIndex}`}
+        data-project={projectIndex}
+        onClick={handleClick}
+        onMouseEnter={(e) => {
+          playHover();
+          onHoverProject?.(projectIndex);
+          if (action) {
+            setCursor({ x: e.clientX, y: e.clientY, text: action.text });
+          }
+        }}
+        onMouseMove={(e) => {
+          if (action) {
+            setCursor({ x: e.clientX, y: e.clientY, text: action.text });
+          }
+        }}
+        onMouseLeave={() => {
+          onHoverProject?.(null);
+          setCursor(null);
+        }}
+        className="relative block w-full self-start overflow-hidden text-left"
       >
-        <span className="absolute left-0 top-0 text-[14px] leading-none text-white/50">
-          {String(num).padStart(2, "0")}
-        </span>
-      </div>
+        {project.video ? (
+          <video
+            src={project.video}
+            autoPlay
+            loop
+            muted
+            playsInline
+            width={2880}
+            height={1800}
+            className="block h-auto w-full"
+          />
+        ) : (
+          <Image
+            src={project.image.src}
+            alt={project.title}
+            width={2880}
+            height={1800}
+            sizes="16vw"
+            className="block h-auto w-full"
+          />
+        )}
+      </button>
     );
   };
 
   const renderCopy = (copyKey: string) => (
     <div
-      className="grid grid-cols-6 items-start"
-      style={{ rowGap: ROW_GAP, columnGap: COL_GAP }}
+      className="grid items-start"
+      style={{
+        gridTemplateColumns: `repeat(${COLS}, minmax(0, 1fr))`,
+        rowGap: ROW_GAP,
+        columnGap: COL_GAP,
+      }}
     >
-      {Array.from({ length: TOTAL_CELLS }, (_, i) => renderCell(i, copyKey))}
+      {projects.map((p, i) => renderProject(p, i, copyKey))}
     </div>
   );
 

@@ -2,23 +2,16 @@
 
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { getLenis } from "@/lib/lenis";
 import { getProjectAction } from "@/lib/projectAction";
 import { Compass } from "./Compass";
 import { sizeForAspect } from "./three/list/BendingPlane";
 import type { Project } from "@/data/projects";
 
-const ListCanvas = dynamic(
-  () => import("./three/list/ListCanvas").then((m) => m.ListCanvas),
-  { ssr: false, loading: () => null }
-);
-
 const COPIES = 3;
 const MIDDLE = 1;
-const SECTION_HEIGHT = 360;
+const GAP = 20;
 const DEFAULT_ASPECT = 1.6;
 
 type Cursor = { x: number; y: number; text: string } | null;
@@ -34,7 +27,6 @@ function jumpTo(y: number) {
   if (lenis) lenis.scrollTo(y, { immediate: true });
   else window.scrollTo({ top: y, behavior: "auto" });
 }
-
 
 function useImageAspects(projects: Project[]): Record<string, number> {
   const [map, setMap] = useState<Record<string, number>>({});
@@ -97,11 +89,18 @@ function ProjectSection({
   return (
     <section
       className="relative flex items-center justify-center"
-      style={{ height: SECTION_HEIGHT }}
+      style={{ height: h, marginBottom: GAP }}
     >
       <div
-        style={{ width: w, height: h, background: "#0b0b0b" }}
-        className={action ? "cursor-pointer" : ""}
+        style={{
+          width: w,
+          height: h,
+          transform: "scaleY(var(--list-vel-scale, 1))",
+          willChange: "transform",
+        }}
+        className={`relative overflow-hidden bg-[#0b0b0b] ${
+          action ? "cursor-pointer" : ""
+        }`}
         onClick={action ? onClick : undefined}
         onMouseEnter={(e) =>
           action && setCursor({ x: e.clientX, y: e.clientY, text: action.text })
@@ -111,7 +110,28 @@ function ProjectSection({
         }
         onMouseLeave={() => setCursor(null)}
         aria-label={project.title}
-      />
+      >
+        {project.video ? (
+          <video
+            src={project.video}
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="metadata"
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        ) : (
+          <img
+            src={project.image.src}
+            alt={project.title}
+            loading="lazy"
+            decoding="async"
+            draggable={false}
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        )}
+      </div>
     </section>
   );
 }
@@ -126,36 +146,99 @@ export function ListView({ projects, activeIndex, onActiveChange }: Props) {
 
   const aspects = useImageAspects(projects);
 
+  // Per-project image heights and their tops within one copy (height + 10px gap each).
+  const { sectionTops, copyH } = useMemo(() => {
+    const tops: number[] = [];
+    let acc = 0;
+    projects.forEach((p) => {
+      tops.push(acc);
+      const h = sizeForAspect(aspects[p.id] ?? DEFAULT_ASPECT).h;
+      acc += h + GAP;
+    });
+    return { sectionTops: tops, copyH: acc };
+  }, [projects, aspects]);
+
+  // Keep latest geometry in refs for scroll handler without re-binding listeners.
+  const geomRef = useRef({ sectionTops, copyH });
+  geomRef.current = { sectionTops, copyH };
+
   useEffect(() => setMounted(true), []);
 
+  // Drive a CSS variable from lenis scroll velocity so each tile subtly
+  // stretches with motion and settles back as velocity decays to zero.
+  // The raf keeps lerping after lenis stops emitting so the tail is smooth.
+  useEffect(() => {
+    const root = document.documentElement;
+    let rafId = 0;
+    let smoothed = 0;
+    let target = 0;
+    const lenis = getLenis();
+    const onLenisScroll = ({ velocity }: { velocity: number }) => {
+      target = velocity;
+    };
+    const onWheel = (e: WheelEvent) => {
+      // Without lenis, fall back to deltaY as a velocity proxy
+      target = e.deltaY;
+    };
+    if (lenis) lenis.on("scroll", onLenisScroll);
+    else window.addEventListener("wheel", onWheel, { passive: true });
+
+    const tick = () => {
+      smoothed += (target - smoothed) * 0.18;
+      if (Math.abs(smoothed) < 0.01 && Math.abs(target) < 0.01) {
+        smoothed = 0;
+        target = 0;
+      }
+      // Decay target so non-lenis wheel pulses fade
+      target *= 0.9;
+      const scale = 1 + smoothed * 0.0008;
+      root.style.setProperty("--list-vel-scale", scale.toFixed(4));
+      rafId = requestAnimationFrame(tick);
+    };
+    rafId = requestAnimationFrame(tick);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      const l = getLenis();
+      if (l) l.off("scroll", onLenisScroll);
+      else window.removeEventListener("wheel", onWheel);
+      root.style.setProperty("--list-vel-scale", "1");
+    };
+  }, []);
+
   useLayoutEffect(() => {
-    const copyH = total * SECTION_HEIGHT;
-    const target = copyH * MIDDLE + initialActiveRef.current * SECTION_HEIGHT;
+    if (copyH === 0) return;
+    const target =
+      copyH * MIDDLE + (sectionTops[initialActiveRef.current] ?? 0);
     jumpTo(target);
-    const id = requestAnimationFrame(() => ScrollTrigger.refresh());
-    return () => cancelAnimationFrame(id);
-  }, [total]);
+  }, [total, copyH, sectionTops]);
 
   useEffect(() => {
     const onScroll = () => {
-      if (total === 0) return;
-      const copyH = total * SECTION_HEIGHT;
+      const { sectionTops: tops, copyH: cH } = geomRef.current;
+      if (total === 0 || cH === 0) return;
       const center = window.scrollY + window.innerHeight / 2;
-      const idx = Math.floor(center / SECTION_HEIGHT);
-      const wrapped = ((idx % total) + total) % total;
-      onActiveChange(wrapped);
+      const wrappedY = ((center % cH) + cH) % cH;
+      let idx = 0;
+      for (let i = tops.length - 1; i >= 0; i--) {
+        if (tops[i] <= wrappedY) {
+          idx = i;
+          break;
+        }
+      }
+      onActiveChange(idx);
 
       if (adjustingRef.current) return;
       const sy = window.scrollY;
-      if (sy < copyH * 0.5) {
+      if (sy < cH * 0.5) {
         adjustingRef.current = true;
-        jumpTo(sy + copyH);
+        jumpTo(sy + cH);
         requestAnimationFrame(() => {
           adjustingRef.current = false;
         });
-      } else if (sy > copyH * (COPIES - 0.5)) {
+      } else if (sy > cH * (COPIES - 0.5)) {
         adjustingRef.current = true;
-        jumpTo(sy - copyH);
+        jumpTo(sy - cH);
         requestAnimationFrame(() => {
           adjustingRef.current = false;
         });
@@ -202,20 +285,14 @@ export function ListView({ projects, activeIndex, onActiveChange }: Props) {
         ))}
       </div>
 
-      <ListCanvas
-        projects={projects}
-        aspects={aspects}
-        sectionHeight={SECTION_HEIGHT}
-      />
-
       {activeProject && (
         <div
-          className="pointer-events-none fixed left-0 right-0 top-1/2 z-20 -translate-y-1/2 px-[16px]"
+          className="pointer-events-none fixed left-0 right-0 top-1/2 z-20 hidden -translate-y-1/2 px-[16px] md:block"
           style={{ mixBlendMode: "difference" }}
         >
           <div className="grid grid-cols-12 gap-x-[10px] text-[14px] leading-none text-white">
             <span className="col-start-3 col-span-3 whitespace-nowrap">
-              {activeProject.category ?? "—"}
+              {activeProject.category ?? "-"}
             </span>
             <span className="col-start-9 col-span-2 whitespace-nowrap">
               {activeProject.image.role}

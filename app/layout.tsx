@@ -38,7 +38,7 @@ const circularStd = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Tirth Jivani — Selected Work",
+  title: "Tirth Jivani - Selected Work",
   description: "Selected projects, case studies and writing by Tirth Jivani.",
 };
 

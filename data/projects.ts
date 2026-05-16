@@ -7,6 +7,27 @@ export type ImageEntry = {
   year: string;
 };
 
+export type CaseStudyImage = {
+  src: string;
+  alt?: string;
+  // 12-column grid. Defaults: colStart auto-flow, colSpan 12, rowSpan 1.
+  colStart?: number;
+  colSpan?: number;
+  rowSpan?: number;
+  // width/height ratio used to size the cell (e.g. 16/9 = 1.78). Default 16/9.
+  aspect?: number;
+  video?: boolean;
+  // optional caption rendered below the image
+  caption?: string;
+};
+
+export type CaseStudySection =
+  | { kind: "body"; text: string }
+  | { kind: "intro"; label: string; heading: string }
+  | { kind: "images"; items: CaseStudyImage[]; gap?: number };
+
+export type CaseStudyLink = { title: string; href?: string };
+
 export type Project = {
   id: string;
   title: string;
@@ -16,7 +37,10 @@ export type Project = {
   impact?: string;
   video?: string;
   introduction?: string;
+  seoDescription?: string;
   timeline?: string;
+  caseStudies?: CaseStudyLink[];
+  sections?: CaseStudySection[];
   image: ImageEntry;
 };
 
@@ -33,7 +57,10 @@ type ProjectSeed = {
   src?: string;
   video?: string;
   introduction?: string;
+  seoDescription?: string;
   timeline?: string;
+  caseStudies?: CaseStudyLink[];
+  sections?: CaseStudySection[];
 };
 
 const make = (seed: ProjectSeed): Project => ({
@@ -45,13 +72,16 @@ const make = (seed: ProjectSeed): Project => ({
   impact: seed.impact,
   video: seed.video,
   introduction: seed.introduction,
+  seoDescription: seed.seoDescription,
   timeline: seed.timeline,
+  caseStudies: seed.caseStudies,
+  sections: seed.sections,
   image: {
     id: seed.slug,
     src: seed.src ?? `https://picsum.photos/seed/${seed.slug}/1920/1080`,
     client: seed.client,
     role: seed.role,
-    category: seed.category ?? "—",
+    category: seed.category ?? "-",
     year: seed.year,
   },
 });
@@ -92,38 +122,59 @@ const allProjects: Project[] = [
     title: "SellerApp",
     client: "SellerApp",
     role: "UX Designer II",
-    year: "2022 – 2024",
+    year: "2022 - 2024",
+    timeline: "5-6 months",
     category: "Product Redesign",
     liveLink: "https://sellerapp.com",
     src: "/projects/sellerapp.webp",
     caseStudy: true,
+    caseStudies: [
+      {
+        title: "SellerApp Dashboard",
+        href: "https://www.sellerapp.com/dashboard.html",
+      },
+      {
+        title: "SellerApp Website",
+        href: "https://www.sellerapp.com/website.html",
+      },
+    ],
     introduction:
-      "We rebuilt SellerApp as the unified seller workspace, pulling fragmented marketplace tools — ads, inventory, listings, analytics — into one decision surface. The redesign moved sellers from juggling dashboards to acting on a single source of truth, with workflows tuned for the daily rhythm of Amazon, not the data team's hierarchy.",
+      "SellerApp's product lived across a dozen tabs. I rebuilt it as one workspace covering ads, inventory, listings, and analytics, tuned to the seller's day rather than the data model. A fully responsive, automated design system carried that same logic into a refreshed marketing site and net-new growth assets.",
+    seoDescription:
+      "SellerApp dashboard and website redesign: a data-driven overhaul of the seller workspace with new flows, a responsive automated design system, and high-impact marketing assets.",
   }),
   make({
     slug: "sellerapp-qc",
     title: "SellerApp × QC",
     client: "SellerApp",
     role: "UX Designer II",
-    year: "2023 – 2024",
+    year: "2023 - 2024",
+    timeline: "2 months",
     category: "Product Redesign",
     liveLink: "https://www.sellerapp.com/quick-commerce.html",
     impact: "Partnered with ONDC & Google",
     src: "/projects/sellerapp-qc.webp",
     caseStudy: true,
     introduction:
-      "A bet on what India's commerce stack looks like next. We partnered with ONDC and Google to design SellerApp's Quick Commerce surface — onboarding small sellers onto open networks, normalising catalogs across buyer apps, and making the unfamiliar feel ordinary on day one.",
+      "India's commerce stack is rewiring itself around open networks. SellerApp × QC, designed with ONDC and Google, onboards small sellers in a few taps, normalises their catalogs across every buyer app, and makes a brand-new protocol feel ordinary on day one.",
+    seoDescription:
+      "Designing SellerApp's Quick Commerce surface with ONDC and Google: onboarding small sellers onto open networks and normalising catalogs across buyer apps.",
   }),
   make({
     slug: "sellerapp-enterprise",
     title: "SellerApp × Enterprise",
     client: "SellerApp",
     role: "UX Designer II",
-    year: "2023 – 2024",
+    year: "2023 - 2024",
+    timeline: "5 months",
     category: "Exploration",
     liveLink: "https://www.sellerapp.com/ecommerce-data-api.html",
     impact: "Presented to 50+ Enterprise Companies",
     caseStudy: true,
+    introduction:
+      "Enterprises don't buy a dashboard; they buy a data layer. I repositioned SellerApp's product as an API-first proposition for retailers and FMCG, a controlled exploration we walked into 50+ enterprise rooms with.",
+    seoDescription:
+      "Repositioning SellerApp as an API-first ecommerce data layer for enterprise retail and FMCG, an exploration presented to 50+ enterprise companies.",
   }),
   make({
     slug: "google",
@@ -155,13 +206,16 @@ const allProjects: Project[] = [
     client: "Outbox Labs",
     role: "Sr. Product Designer",
     year: "2026",
+    timeline: "7 months",
     category: "Product Redesign",
     liveLink: "https://reachinbox.ai",
     impact: "80%+ UX Improvement",
     src: "/projects/reachinbox.webp",
     caseStudy: true,
     introduction:
-      "ReachInbox needed to feel less like a tool and more like a workspace. We rebuilt the entire UX around what sequence operators actually do all day — drafting, reviewing, replying, triaging — and cut the time to get there by 80%. Every surface argues for the next action instead of asking the user to assemble one.",
+      "ReachInbox should feel less like a tool and more like a workspace. I rebuilt the UX around what sequence operators actually do all day: draft, review, reply, triage. The time to do it dropped by 80%+, and every surface argues for the next action instead of asking the user to assemble one.",
+    seoDescription:
+      "Rebuilding ReachInbox as a workspace for sequence operators: drafting, reviewing, replying and triaging in 80% less time, with every surface arguing for the next action.",
   }),
   make({
     slug: "zapmail",
@@ -169,13 +223,16 @@ const allProjects: Project[] = [
     client: "Outbox Labs",
     role: "Sr. Product Designer",
     year: "2026",
+    timeline: "3 months",
     category: "Product Redesign",
     liveLink: "https://zapmail.ai",
     impact: "4 → 25M+ ARR",
     src: "/projects/zapmail.webp",
     caseStudy: true,
     introduction:
-      "Zapmail's job is to make cold email infrastructure invisible. The redesign focused on the few moments that matter — domain setup, deliverability, and inbox warm-up — and made everything else recede. ARR moved from $4M to $25M+ on the back of that focus.",
+      "Cold email infrastructure is plumbing, so it should be invisible. Zapmail's redesign focused on the three moments that decide whether sending works at all: domain setup, deliverability, and inbox warm-up. ARR moved from $4M to $25M+ on the back of that focus.",
+    seoDescription:
+      "Redesigning Zapmail to make cold email infrastructure invisible, focused on domain setup, deliverability and warm-up. ARR scaled from $4M to $25M+.",
   }),
   make({
     slug: "mailwarmup",
@@ -228,13 +285,16 @@ const allProjects: Project[] = [
     client: "Outbox Labs",
     role: "Sr. Product Designer",
     year: "2025",
+    timeline: "2 months",
     category: "0 → 1 Product",
     liveLink: "https://threadjet.ai",
     impact: "Superhuman for LinkedIn Messaging",
     src: "/projects/threadjet.webp",
     caseStudy: true,
     introduction:
-      "ThreadJet treats LinkedIn like an inbox, not a feed. We designed the messaging surface a power user actually wants — keyboard-first, omni-search, AI-drafted replies — pitched as Superhuman for the platform that didn't have one. The shape of the product is the argument.",
+      "ThreadJet treats LinkedIn like an inbox, not a feed. We designed the messaging surface a power user actually wants: keyboard-first, omni-search, AI-drafted replies, pitched as Superhuman for the platform that didn't have one. The shape of the product is the argument.",
+    seoDescription:
+      "ThreadJet: an AI-powered, keyboard-first workspace that reimagines LinkedIn DMs around speed, shortcuts, focus and privacy, with context-aware replies and inbox-zero triage.",
   }),
   make({
     slug: "inboundiq",
@@ -242,13 +302,17 @@ const allProjects: Project[] = [
     client: "Outbox Labs",
     role: "Designer / Engineer",
     year: "2025",
+    timeline: "1 month",
     category: "0 → 1 Product",
     liveLink: "https://inboundiq-website.vercel.app/",
     impact: "100+ leads in 24hrs of MVP",
     src: "/projects/inboundiq.webp",
+    video: "/projects/inboundiq.mp4",
     caseStudy: true,
     introduction:
-      "InboundIQ ships intent without the warehouse. We designed and built the product end to end — sourcing signals, scoring, and outreach — into one surface lean teams can run from. 100+ leads landed in the first 24 hours of the MVP.",
+      "InboundIQ ships intent without the warehouse. I designed and built the whole thing end to end (sourcing signals, scoring, outreach) into one surface lean teams can actually run from. 100+ leads landed in the first 24 hours of the MVP.",
+    seoDescription:
+      "InboundIQ: an AI outbound engine that identifies high-intent buyers and runs hyper-personalised outreach, charging only for interested leads. 100+ leads in the first 24 hours of the MVP.",
   }),
   make({
     slug: "socialgigs",

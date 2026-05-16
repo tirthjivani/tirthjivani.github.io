@@ -18,6 +18,8 @@ import { ListView } from "./ListView";
 import { SurfCanvas } from "./SurfCanvas";
 import { getLenis } from "@/lib/lenis";
 import { EASE_IN_OUT } from "@/lib/gsap/eases";
+import { getPhotoItems } from "@/data/photos";
+import { useAvailablePhotos } from "@/lib/useAvailablePhotos";
 import type { Project } from "@/data/projects";
 
 type Props = {
@@ -110,6 +112,12 @@ export function PortfolioView({ projects }: Props) {
   const hoveredProject =
     hoveredIndex !== null ? projects[hoveredIndex] ?? null : null;
 
+  const availablePhotos = useAvailablePhotos();
+  const surfItems = useMemo(
+    () => [...projects, ...getPhotoItems(availablePhotos)],
+    [projects, availablePhotos]
+  );
+
   return (
     <>
       <Navbar view={view} />
@@ -122,7 +130,7 @@ export function PortfolioView({ projects }: Props) {
           />
         ) : view === "surf" ? (
           <SurfCanvas
-            projects={projects}
+            projects={surfItems}
             activeIndex={safeCurrent}
             onHoverProject={setHoveredIndex}
           />
