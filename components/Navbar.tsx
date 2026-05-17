@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import gsap from "gsap";
-import { EASE_IN_OUT } from "@/lib/gsap/eases";
+import { animate, type AnimationPlaybackControls } from "motion/react";
 import { CharReveal } from "./CharReveal";
+
+const EASE_IN_OUT: [number, number, number, number] = [0.42, 0, 0.58, 1];
 
 export type ViewMode = "surf" | "list" | "index";
 
@@ -13,47 +14,49 @@ const BIO =
 
 type Props = {
   view?: ViewMode;
+  introReady?: boolean;
 };
 
 const LOGO_LARGE = { fontSize: "64px", letterSpacing: "-3.84px" };
 const LOGO_SMALL = { fontSize: "14px", letterSpacing: "-0.42px" };
 
-export function Navbar({ view = "list" }: Props) {
+export function Navbar({ view = "list", introReady = true }: Props) {
   const isList = view === "list";
+  // Top-nav links (Selected Work / Archives / About) persist across every
+  // page/view once the intro finishes.
+  const reveal = introReady;
+  // BIO + social handles belong to the list view only; they hide when the
+  // user switches to Grid or Surf and reveal again on return to Vertical.
+  const revealBio = isList && introReady;
   const logoRef = useRef<HTMLAnchorElement>(null);
 
   useEffect(() => {
     const el = logoRef.current;
     if (!el) return;
+    let controls: AnimationPlaybackControls | null = null;
     const apply = () => {
       const isDesktop = window.matchMedia("(min-width: 768px)").matches;
       const target = isList && isDesktop ? LOGO_LARGE : LOGO_SMALL;
-      gsap.to(el, {
-        fontSize: target.fontSize,
-        letterSpacing: target.letterSpacing,
-        duration: 0.65,
-        ease: EASE_IN_OUT,
-        overwrite: "auto",
-      });
+      controls?.stop();
+      controls = animate(
+        el,
+        {
+          fontSize: target.fontSize,
+          letterSpacing: target.letterSpacing,
+        },
+        { duration: 0.65, ease: EASE_IN_OUT }
+      );
     };
     apply();
     const mq = window.matchMedia("(min-width: 768px)");
     mq.addEventListener("change", apply);
     return () => {
       mq.removeEventListener("change", apply);
-      gsap.killTweensOf(el);
+      controls?.stop();
     };
   }, [isList]);
 
-  const [copied, setCopied] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const timerRef = useRef<number | null>(null);
-
-  useEffect(() => {
-    return () => {
-      if (timerRef.current) window.clearTimeout(timerRef.current);
-    };
-  }, []);
 
   useEffect(() => {
     const prev = document.body.style.overflow;
@@ -63,17 +66,6 @@ export function Navbar({ view = "list" }: Props) {
       document.body.style.overflow = prev;
     };
   }, [menuOpen]);
-
-  const handleContact = async () => {
-    try {
-      await navigator.clipboard.writeText(EMAIL);
-    } catch {
-      // ignore - still flash "Copied!" so the affordance feels responsive
-    }
-    setCopied(true);
-    if (timerRef.current) window.clearTimeout(timerRef.current);
-    timerRef.current = window.setTimeout(() => setCopied(false), 1500);
-  };
 
   return (
     <>
@@ -85,28 +77,39 @@ export function Navbar({ view = "list" }: Props) {
         <a
           ref={logoRef}
           href="/"
-          className="col-start-1 col-span-4 inline-block font-bold leading-none whitespace-nowrap"
-          style={{ ...LOGO_SMALL, transformOrigin: "top left" }}
+          className="col-start-1 col-span-4 inline-block font-medium leading-none whitespace-nowrap"
+          style={{
+            ...(isList ? LOGO_LARGE : LOGO_SMALL),
+            transformOrigin: "top left",
+          }}
         >
-          TIRTH J.
+          <CharReveal visible delay={0.3}>TIRTH J.</CharReveal>
         </a>
 
         <div className="col-start-9 col-span-3 hidden max-w-[340px] flex-col gap-[32px] text-[14px] leading-none md:flex">
           <div className="flex gap-[10px]">
             <a href="/" className="text-white">
-              Selected Work
+              <CharReveal visible={reveal}>Selected Work</CharReveal>
             </a>
-            <span className="opacity-30">Archives</span>
-            <span className="opacity-30">About</span>
+            <span className="opacity-30">
+              <CharReveal visible={reveal} delay={0.05}>
+                Archives
+              </CharReveal>
+            </span>
+            <span className="opacity-30">
+              <CharReveal visible={reveal} delay={0.1}>
+                About
+              </CharReveal>
+            </span>
           </div>
 
           <p className="font-normal leading-[1.1]">
-            <CharReveal visible={isList}>{BIO}</CharReveal>
+            <CharReveal visible={revealBio}>{BIO}</CharReveal>
           </p>
 
           <div className="flex flex-col gap-[4px]">
             <div className="flex gap-[4px] whitespace-nowrap">
-              <CharReveal visible={isList} className="text-white/30">
+              <CharReveal visible={revealBio} className="text-white/30">
                 Email:
               </CharReveal>
               <a
@@ -115,11 +118,11 @@ export function Navbar({ view = "list" }: Props) {
                 rel="noopener noreferrer"
                 className="hover:underline"
               >
-                <CharReveal visible={isList}>{EMAIL}</CharReveal>
+                <CharReveal visible={revealBio}>{EMAIL}</CharReveal>
               </a>
             </div>
             <div className="flex flex-wrap gap-[4px] whitespace-nowrap">
-              <CharReveal visible={isList} className="text-white/30">
+              <CharReveal visible={revealBio} className="text-white/30">
                 Insta:
               </CharReveal>
               <a
@@ -128,7 +131,7 @@ export function Navbar({ view = "list" }: Props) {
                 rel="noopener noreferrer"
                 className="hover:underline"
               >
-                <CharReveal visible={isList}>@tirth.design</CharReveal>
+                <CharReveal visible={revealBio}>@tirth.design</CharReveal>
               </a>
               <a
                 href="https://instagram.com/tirth.photos"
@@ -136,11 +139,11 @@ export function Navbar({ view = "list" }: Props) {
                 rel="noopener noreferrer"
                 className="hover:underline"
               >
-                <CharReveal visible={isList}>@tirth.photos</CharReveal>
+                <CharReveal visible={revealBio}>@tirth.photos</CharReveal>
               </a>
             </div>
             <div className="flex gap-[4px] whitespace-nowrap">
-              <CharReveal visible={isList} className="text-white/30">
+              <CharReveal visible={revealBio} className="text-white/30">
                 Linkedin:
               </CharReveal>
               <a
@@ -149,20 +152,13 @@ export function Navbar({ view = "list" }: Props) {
                 rel="noopener noreferrer"
                 className="hover:underline"
               >
-                <CharReveal visible={isList}>/tirthjivani</CharReveal>
+                <CharReveal visible={revealBio}>/tirthjivani</CharReveal>
               </a>
             </div>
           </div>
         </div>
 
         <div className="col-start-12 col-span-1 flex justify-end">
-          <button
-            type="button"
-            onClick={handleContact}
-            className="hidden text-[14px] leading-none text-white/30 transition-opacity duration-150 hover:text-white md:inline-block"
-          >
-            {copied ? "Copied!" : "Contact"}
-          </button>
           <button
             type="button"
             onClick={() => setMenuOpen((o) => !o)}

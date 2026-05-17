@@ -8,7 +8,7 @@ import {
   useRef,
   useState,
 } from "react";
-import gsap from "gsap";
+import { animate } from "motion/react";
 import { Navbar, type ViewMode } from "./Navbar";
 import { ProjectsIndex } from "./ProjectsIndex";
 import { ProjectSidebar } from "./ProjectSidebar";
@@ -16,11 +16,13 @@ import { BottomBar } from "./BottomBar";
 import { BottomBlur } from "./BottomBlur";
 import { ListView } from "./ListView";
 import { SurfCanvas } from "./SurfCanvas";
+import { Preloader } from "./Preloader";
 import { getLenis } from "@/lib/lenis";
-import { EASE_IN_OUT } from "@/lib/gsap/eases";
 import { getPhotoItems } from "@/data/photos";
 import { useAvailablePhotos } from "@/lib/useAvailablePhotos";
 import type { Project } from "@/data/projects";
+
+const EASE_IN_OUT: [number, number, number, number] = [0.42, 0, 0.58, 1];
 
 type Props = {
   projects: Project[];
@@ -49,23 +51,23 @@ function SidebarPresence({
   useLayoutEffect(() => {
     if (!mounted || !ref.current) return;
     if (visible) {
-      const t = gsap.fromTo(
+      const controls = animate(
         ref.current,
-        { opacity: 0 },
-        { opacity: 1, duration: 0.4, ease: EASE_IN_OUT }
+        { opacity: [0, 1] },
+        { duration: 0.9, ease: EASE_IN_OUT, delay: 0.7 }
       );
       return () => {
-        t.kill();
+        controls.stop();
       };
     }
-    const t = gsap.to(ref.current, {
-      opacity: 0,
-      duration: 0.4,
-      ease: EASE_IN_OUT,
-      onComplete: () => setMounted(false),
-    });
+    const controls = animate(
+      ref.current,
+      { opacity: 0 },
+      { duration: 0.4, ease: EASE_IN_OUT }
+    );
+    controls.then(() => setMounted(false)).catch(() => {});
     return () => {
-      t.kill();
+      controls.stop();
     };
   }, [visible, mounted]);
 
@@ -82,6 +84,11 @@ export function PortfolioView({ projects }: Props) {
   const [view, setView] = useState<ViewMode>("list");
   const [activeIndex, setActiveIndex] = useState(0);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [preloading, setPreloading] = useState(true);
+
+  const finishPreload = useCallback(() => {
+    setPreloading(false);
+  }, []);
 
   const SECTION_PX = 360;
 
@@ -120,13 +127,17 @@ export function PortfolioView({ projects }: Props) {
 
   return (
     <>
-      <Navbar view={view} />
+      {preloading && <Preloader />}
+      <Navbar view={view} introReady={!preloading} />
       <main>
         {view === "list" ? (
           <ListView
             projects={projects}
             activeIndex={safeCurrent}
             onActiveChange={setActiveIndex}
+            introReady={!preloading}
+            intro={preloading}
+            onIntroDone={finishPreload}
           />
         ) : view === "surf" ? (
           <SurfCanvas
@@ -144,7 +155,7 @@ export function PortfolioView({ projects }: Props) {
         )}
       </main>
       <BottomBlur />
-      <SidebarPresence visible={view === "list"}>
+      <SidebarPresence visible={view === "list" && !preloading}>
         <ProjectSidebar
           projects={projects}
           activeIndex={safeCurrent}
@@ -160,6 +171,7 @@ export function PortfolioView({ projects }: Props) {
         total={total}
         hoveredProject={hoveredProject}
         hoveredIndex={hoveredIndex}
+        introReady={!preloading}
       />
     </>
   );

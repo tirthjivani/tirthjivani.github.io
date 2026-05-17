@@ -1,10 +1,13 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import gsap from "gsap";
+import { animate } from "motion/react";
 import type { ViewMode } from "./Navbar";
 import type { ImageEntry, Project } from "@/data/projects";
-import { EASE_OUT, EASE_IN_OUT } from "@/lib/gsap/eases";
+import { CharReveal } from "./CharReveal";
+
+const EASE_OUT: [number, number, number, number] = [0, 0, 0.58, 1];
+const EASE_IN_OUT: [number, number, number, number] = [0.42, 0, 0.58, 1];
 
 type Props = {
   view: ViewMode;
@@ -15,10 +18,11 @@ type Props = {
   total: number;
   hoveredProject?: Project | null;
   hoveredIndex?: number | null;
+  introReady?: boolean;
 };
 
-// Animated text swap that mirrors Framer's <AnimatePresence mode="wait" initial={false}>
-// with enter (y: 4 → 0, opacity 0 → 1) and exit (y: 0 → -4, opacity 1 → 0), 0.2s easeOut each.
+// Animated text swap — exit (y: 0 → -4, opacity 1 → 0), then enter
+// (y: 4 → 0, opacity 0 → 1). Mirrors Framer's AnimatePresence mode="wait".
 function SwapText({
   value,
   className,
@@ -47,63 +51,37 @@ function SwapText({
       pending.current = value;
       return;
     }
-    animating.current = true;
-    pending.current = null;
-    gsap.to(el, {
-      y: -4,
-      opacity: 0,
-      duration: 0.2,
-      ease: EASE_OUT,
-      onComplete: () => {
-        setDisplay(value);
-        gsap.fromTo(
-          el,
-          { y: 4, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.2,
-            ease: EASE_OUT,
-            onComplete: () => {
+
+    const playSwap = (next: string) => {
+      animating.current = true;
+      const exit = animate(
+        el,
+        { y: -4, opacity: 0 },
+        { duration: 0.2, ease: EASE_OUT }
+      );
+      exit
+        .then(() => {
+          setDisplay(next);
+          const enter = animate(
+            el,
+            { y: [4, 0], opacity: [0, 1] },
+            { duration: 0.2, ease: EASE_OUT }
+          );
+          enter
+            .then(() => {
               animating.current = false;
-              if (pending.current !== null && pending.current !== value) {
-                const next = pending.current;
+              if (pending.current !== null && pending.current !== next) {
+                const p = pending.current;
                 pending.current = null;
-                setDisplay((d) => {
-                  if (d === next) return d;
-                  // trigger another swap on next render via state change of `value`
-                  return d;
-                });
-                // re-run sequence for the latest pending value
-                animating.current = true;
-                gsap.to(el, {
-                  y: -4,
-                  opacity: 0,
-                  duration: 0.2,
-                  ease: EASE_OUT,
-                  onComplete: () => {
-                    setDisplay(next);
-                    gsap.fromTo(
-                      el,
-                      { y: 4, opacity: 0 },
-                      {
-                        y: 0,
-                        opacity: 1,
-                        duration: 0.2,
-                        ease: EASE_OUT,
-                        onComplete: () => {
-                          animating.current = false;
-                        },
-                      }
-                    );
-                  },
-                });
+                playSwap(p);
               }
-            },
-          }
-        );
-      },
-    });
+            })
+            .catch(() => {});
+        })
+        .catch(() => {});
+    };
+
+    playSwap(value);
   }, [value, display]);
 
   return (
@@ -127,7 +105,7 @@ function Pair({ label, value }: { label: string; value: string }) {
   );
 }
 
-// AnimatePresence-style fade-in / fade-out, mounted while exit plays.
+// Fade-in / fade-out presence, mounted while exit plays.
 function useFadePresence(visible: boolean, duration = 0.3) {
   const ref = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(visible);
@@ -139,23 +117,23 @@ function useFadePresence(visible: boolean, duration = 0.3) {
   useLayoutEffect(() => {
     if (!mounted || !ref.current) return;
     if (visible) {
-      const tween = gsap.fromTo(
+      const controls = animate(
         ref.current,
-        { opacity: 0 },
-        { opacity: 1, duration, ease: EASE_IN_OUT }
+        { opacity: [0, 1] },
+        { duration, ease: EASE_IN_OUT }
       );
       return () => {
-        tween.kill();
+        controls.stop();
       };
     }
-    const tween = gsap.to(ref.current, {
-      opacity: 0,
-      duration,
-      ease: EASE_IN_OUT,
-      onComplete: () => setMounted(false),
-    });
+    const controls = animate(
+      ref.current,
+      { opacity: 0 },
+      { duration, ease: EASE_IN_OUT }
+    );
+    controls.then(() => setMounted(false)).catch(() => {});
     return () => {
-      tween.kill();
+      controls.stop();
     };
   }, [visible, mounted, duration]);
 
@@ -166,18 +144,16 @@ export function BottomBar({
   view,
   onViewChange,
   hoveredProject,
+  introReady = true,
 }: Props) {
   const isGridHover = view === "index" && !!hoveredProject;
 
-  // List view now renders its own mid-vertical metadata + compass inside ListView.
-  // BottomBar's chrome only surfaces on Grid hover.
   const chromeProject = isGridHover ? hoveredProject : null;
   const chromeImage = isGridHover ? hoveredProject?.image : null;
 
   const visible = !!(chromeProject && chromeImage);
   const presence = useFadePresence(visible, 0.3);
 
-  // Inner title key: enter/exit on switching hover-mode vs list-mode title content.
   const titleKey = isGridHover
     ? `hover-${chromeProject?.id ?? ""}`
     : chromeProject?.id ?? "";
@@ -186,10 +162,20 @@ export function BottomBar({
       ? chromeProject.title
       : chromeProject.impact ?? ""
     : "";
-  const titleClass = isGridHover ? "text-[24px] leading-none" : "text-[14px] leading-[1.4]";
+  const titleClass = isGridHover
+    ? "text-[24px] leading-none"
+    : "text-[14px] leading-[1.4]";
 
   return (
-    <div className="pointer-events-none fixed bottom-[20px] left-0 right-0 z-30">
+    <div
+      className="pointer-events-none fixed bottom-[20px] left-0 right-0 z-30"
+      style={{
+        transform: introReady ? "translateY(0)" : "translateY(140%)",
+        opacity: introReady ? 1 : 0,
+        transition:
+          "transform 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.6s, opacity 0.8s ease-out 0.6s",
+      }}
+    >
       <div
         className="pointer-events-auto absolute bottom-0 left-[20px] flex gap-[10px] text-[14px] leading-none tracking-[-0.03em] text-white"
         style={{ mixBlendMode: "difference" }}
@@ -198,28 +184,40 @@ export function BottomBar({
           type="button"
           onClick={() => onViewChange("list")}
           className={`transition-colors duration-150 ease-in-out ${
-            view === "list" ? "text-white" : "text-white/30 hover:text-white/50 active:text-white/20"
+            view === "list"
+              ? "text-white"
+              : "text-white/30 hover:text-white/50 active:text-white/20"
           }`}
         >
-          Vertical
+          <CharReveal visible={introReady} delay={1.0}>
+            Vertical
+          </CharReveal>
         </button>
         <button
           type="button"
           onClick={() => onViewChange("index")}
           className={`hidden transition-colors duration-150 ease-in-out md:inline-block ${
-            view === "index" ? "text-white" : "text-white/30 hover:text-white/50 active:text-white/20"
+            view === "index"
+              ? "text-white"
+              : "text-white/30 hover:text-white/50 active:text-white/20"
           }`}
         >
-          Grid
+          <CharReveal visible={introReady} delay={1.1}>
+            Grid
+          </CharReveal>
         </button>
         <button
           type="button"
           onClick={() => onViewChange("surf")}
           className={`transition-colors duration-150 ease-in-out ${
-            view === "surf" ? "text-white" : "text-white/30 hover:text-white/50 active:text-white/20"
+            view === "surf"
+              ? "text-white"
+              : "text-white/30 hover:text-white/50 active:text-white/20"
           }`}
         >
-          Surf
+          <CharReveal visible={introReady} delay={1.2}>
+            Surf
+          </CharReveal>
         </button>
       </div>
 
@@ -228,7 +226,9 @@ export function BottomBar({
           className="pointer-events-none absolute bottom-0 right-[20px] text-[14px] leading-none tracking-[-0.03em] text-white/60"
           style={{ mixBlendMode: "difference" }}
         >
-          (Scroll or drag)
+          <CharReveal visible={introReady} delay={1.3}>
+            (Scroll or drag)
+          </CharReveal>
         </div>
       )}
 
@@ -236,7 +236,11 @@ export function BottomBar({
         {presence.mounted && chromeProject && chromeImage && (
           <div ref={presence.ref} className="contents" style={{ opacity: 0 }}>
             <div className="col-start-4 col-span-3 max-w-[260px]">
-              <ChromeTitle keyId={titleKey} text={titleText} className={titleClass} />
+              <ChromeTitle
+                keyId={titleKey}
+                text={titleText}
+                className={titleClass}
+              />
             </div>
 
             <div className="col-start-7 col-span-3 flex flex-col gap-[10px]">
@@ -291,33 +295,31 @@ function ChromeTitle({
     }
     const runSwap = (next: { key: string; text: string }) => {
       animating.current = true;
-      gsap.to(el, {
-        y: -4,
-        opacity: 0,
-        duration: 0.2,
-        ease: EASE_OUT,
-        onComplete: () => {
+      const exit = animate(
+        el,
+        { y: -4, opacity: 0 },
+        { duration: 0.2, ease: EASE_OUT }
+      );
+      exit
+        .then(() => {
           setDisplay(next);
-          gsap.fromTo(
+          const enter = animate(
             el,
-            { y: 4, opacity: 0 },
-            {
-              y: 0,
-              opacity: 1,
-              duration: 0.2,
-              ease: EASE_OUT,
-              onComplete: () => {
-                animating.current = false;
-                if (pending.current && pending.current.key !== next.key) {
-                  const p = pending.current;
-                  pending.current = null;
-                  runSwap(p);
-                }
-              },
-            }
+            { y: [4, 0], opacity: [0, 1] },
+            { duration: 0.2, ease: EASE_OUT }
           );
-        },
-      });
+          enter
+            .then(() => {
+              animating.current = false;
+              if (pending.current && pending.current.key !== next.key) {
+                const p = pending.current;
+                pending.current = null;
+                runSwap(p);
+              }
+            })
+            .catch(() => {});
+        })
+        .catch(() => {});
     };
     runSwap({ key: keyId, text });
   }, [keyId, text, display.key, display.text]);

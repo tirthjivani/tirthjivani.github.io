@@ -1,21 +1,20 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { EASE_IN_OUT } from "@/lib/gsap/eases";
+import { animate } from "motion/react";
 
 export function BottomBlur() {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!ref.current) return;
-    const tween = gsap.fromTo(
+    const controls = animate(
       ref.current,
-      { opacity: 0 },
-      { opacity: 1, duration: 0.3, ease: EASE_IN_OUT }
+      { opacity: [0, 1] },
+      { duration: 0.3, ease: [0.42, 0, 0.58, 1] }
     );
     return () => {
-      tween.kill();
+      controls.stop();
     };
   }, []);
 

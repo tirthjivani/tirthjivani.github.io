@@ -1,8 +1,7 @@
 "use client";
 
 import { useLayoutEffect, useRef, type ReactNode } from "react";
-import gsap from "gsap";
-import { EASE_OUT } from "@/lib/gsap/eases";
+import { animate, stagger, type AnimationPlaybackControls } from "motion/react";
 
 type Props = {
   children: string;
@@ -12,6 +11,8 @@ type Props = {
   enterStagger?: number;
   exitStagger?: number;
 };
+
+const EASE_OUT: [number, number, number, number] = [0, 0, 0.58, 1];
 
 /**
  * Row reveal/hide animation, text split by character.
@@ -28,36 +29,50 @@ export function CharReveal({
   exitStagger = 0.003,
 }: Props) {
   const ref = useRef<HTMLSpanElement>(null);
+  const firstRef = useRef(true);
+  const controlsRef = useRef<AnimationPlaybackControls | null>(null);
 
   useLayoutEffect(() => {
     const root = ref.current;
     if (!root) return;
-    const chars = root.querySelectorAll<HTMLElement>("[data-rc]");
+    const chars = Array.from(
+      root.querySelectorAll<HTMLElement>("[data-rc]")
+    );
     if (chars.length === 0) return;
-    gsap.killTweensOf(chars);
+    controlsRef.current?.stop();
+    const isFirst = firstRef.current;
+    firstRef.current = false;
     if (visible) {
-      gsap.fromTo(
+      controlsRef.current = animate(
         chars,
-        { y: 12, opacity: 0 },
+        { y: [12, 0], opacity: [0, 1] },
         {
-          y: 0,
-          opacity: 1,
           duration: 0.45,
           ease: EASE_OUT,
-          stagger: enterStagger,
-          delay,
+          delay: stagger(enterStagger, { startDelay: delay }),
         }
       );
+    } else if (isFirst) {
+      // Snap to hidden on initial mount so the text never flashes before the
+      // intro reveal triggers it.
+      for (const c of chars) {
+        c.style.transform = "translateY(12px)";
+        c.style.opacity = "0";
+      }
     } else {
-      gsap.to(chars, {
-        y: -10,
-        opacity: 0,
-        duration: 0.32,
-        ease: EASE_OUT,
-        stagger: exitStagger,
-        delay,
-      });
+      controlsRef.current = animate(
+        chars,
+        { y: [null, -10], opacity: [null, 0] },
+        {
+          duration: 0.32,
+          ease: EASE_OUT,
+          delay: stagger(exitStagger, { startDelay: delay }),
+        }
+      );
     }
+    return () => {
+      controlsRef.current?.stop();
+    };
   }, [visible, children, delay, enterStagger, exitStagger]);
 
   const words = children.split(" ");

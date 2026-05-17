@@ -3,10 +3,12 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
+import { animate, stagger } from "motion/react";
 import { getLenis } from "@/lib/lenis";
 import { getProjectAction } from "@/lib/projectAction";
+import { useImageAspects } from "@/lib/useImageAspects";
 import { Compass } from "./Compass";
-import { sizeForAspect } from "./three/list/BendingPlane";
+import { sizeForAspect } from "@/lib/sizeForAspect";
 import type { Project } from "@/data/projects";
 
 const COPIES = 3;
@@ -20,71 +22,59 @@ type Props = {
   projects: Project[];
   activeIndex: number;
   onActiveChange: (idx: number) => void;
+  introReady?: boolean;
+  intro?: boolean;
+  onIntroDone?: () => void;
 };
 
 function jumpTo(y: number) {
+  if (typeof window === "undefined") return;
+  // Force native scroll synchronously — lenis.scrollTo can defer to its next
+  // raf even with immediate:true, which is too late for downstream layout
+  // measurements in the same render commit.
+  window.scrollTo(0, y);
   const lenis = getLenis();
   if (lenis) lenis.scrollTo(y, { immediate: true });
-  else window.scrollTo({ top: y, behavior: "auto" });
-}
-
-function useImageAspects(projects: Project[]): Record<string, number> {
-  const [map, setMap] = useState<Record<string, number>>({});
-
-  useEffect(() => {
-    let cancelled = false;
-    projects.forEach((p) => {
-      if (p.video) {
-        const v = document.createElement("video");
-        v.src = p.video;
-        v.preload = "metadata";
-        v.muted = true;
-        const onMeta = () => {
-          if (!cancelled && v.videoWidth && v.videoHeight) {
-            setMap((prev) =>
-              prev[p.id]
-                ? prev
-                : { ...prev, [p.id]: v.videoWidth / v.videoHeight }
-            );
-          }
-        };
-        v.addEventListener("loadedmetadata", onMeta, { once: true });
-      } else {
-        const img = new window.Image();
-        if (p.image.src.startsWith("http")) img.crossOrigin = "anonymous";
-        img.src = p.image.src;
-        img.onload = () => {
-          if (!cancelled && img.naturalWidth && img.naturalHeight) {
-            setMap((prev) =>
-              prev[p.id]
-                ? prev
-                : { ...prev, [p.id]: img.naturalWidth / img.naturalHeight }
-            );
-          }
-        };
-      }
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, [projects]);
-
-  return map;
 }
 
 function ProjectSection({
   project,
   aspect,
+  idx,
+  copy,
+  isActive,
+  introActive,
   onClick,
   setCursor,
 }: {
   project: Project;
   aspect: number;
+  idx: number;
+  copy: number;
+  isActive: boolean;
+  introActive: boolean;
   onClick: () => void;
   setCursor: (c: Cursor) => void;
 }) {
   const action = getProjectAction(project);
   const { w, h } = sizeForAspect(aspect);
+
+  // While the intro timeline is running, Motion owns transform / scale /
+  // filter on this tile. Start at scale 0 so the SSR / pre-hydration frame
+  // doesn't flash the natural flow position before Motion can set the stack.
+  // Opacity stays at 1 throughout so the zoom-in scale effect is visible.
+  const introStyles = introActive
+    ? {
+        transform: "scale(0)",
+        filter: "grayscale(1)" as const,
+        willChange: "transform, filter" as const,
+      }
+    : {
+        transform: "scaleY(var(--list-vel-scale, 1))",
+        filter: isActive ? "grayscale(0)" : "grayscale(1)",
+        transition: "filter 0.45s ease-out",
+        willChange: "transform, filter" as const,
+      };
 
   return (
     <section
@@ -92,11 +82,13 @@ function ProjectSection({
       style={{ height: h, marginBottom: GAP }}
     >
       <div
+        data-tile
+        data-tile-copy={copy}
+        data-tile-index={idx}
         style={{
           width: w,
           height: h,
-          transform: "scaleY(var(--list-vel-scale, 1))",
-          willChange: "transform",
+          ...introStyles,
         }}
         className={`relative overflow-hidden bg-[#0b0b0b] ${
           action ? "cursor-pointer" : ""
@@ -136,12 +128,20 @@ function ProjectSection({
   );
 }
 
-export function ListView({ projects, activeIndex, onActiveChange }: Props) {
+export function ListView({
+  projects,
+  activeIndex,
+  onActiveChange,
+  introReady = true,
+  intro = false,
+  onIntroDone,
+}: Props) {
   const total = projects.length;
   const adjustingRef = useRef(false);
   const router = useRouter();
   const [cursor, setCursor] = useState<Cursor>(null);
   const [mounted, setMounted] = useState(false);
+  const [introActive, setIntroActive] = useState(intro);
   const initialActiveRef = useRef(activeIndex);
 
   const aspects = useImageAspects(projects);
@@ -213,6 +213,164 @@ export function ListView({ projects, activeIndex, onActiveChange }: Props) {
     jumpTo(target);
   }, [total, copyH, sectionTops]);
 
+  // Intro animation — tiles start at scale 0 stacked at the exact viewport
+  // center, then expand one after the other (stagger) so each new card
+  // renders on top of the previous one (z-index runs high → low from the
+  // active card down). Once the deck is built, every tile translates to
+  // its natural section position, then the active tile shifts to color.
+  // Opacity stays at 1 throughout so the pure scale-in is visible.
+  const introDoneRef = useRef(onIntroDone);
+  introDoneRef.current = onIntroDone;
+  const initialAspectsRef = useRef(aspects);
+  initialAspectsRef.current = aspects;
+
+  useLayoutEffect(() => {
+    if (!introActive) return;
+    const tiles = Array.from(
+      document.querySelectorAll<HTMLElement>(
+        `[data-tile][data-tile-copy="${MIDDLE}"]`
+      )
+    );
+    if (tiles.length === 0) {
+      setIntroActive(false);
+      introDoneRef.current?.();
+      return;
+    }
+
+    // Sizes / tops snapshot at intro start. Aspects are async — if they
+    // haven't loaded yet, all tiles share DEFAULT_ASPECT, which means they
+    // stack at the *exact* viewport center (identical h). As real aspects
+    // arrive, sections in flow reflow but the tiles' transforms keep them
+    // anchored at center until the spread phase moves them home.
+    const sizes = projects.map((p) =>
+      sizeForAspect(initialAspectsRef.current[p.id] ?? DEFAULT_ASPECT)
+    );
+    const tops: number[] = [];
+    let acc = 0;
+    sizes.forEach(({ h }) => {
+      tops.push(acc);
+      acc += h + GAP;
+    });
+    const localCopyH = acc;
+
+    const vh = window.innerHeight;
+    const sy = window.scrollY;
+
+    const tileOffsetY = (idx: number): number => {
+      const sz = sizes[idx];
+      if (!sz) return 0;
+      const docCenter = MIDDLE * localCopyH + (tops[idx] ?? 0) + sz.h / 2;
+      return vh / 2 - (docCenter - sy);
+    };
+
+    const active = initialActiveRef.current;
+    const activeTile = tiles.find(
+      (t) => parseInt(t.dataset.tileIndex ?? "-1", 10) === active
+    );
+    const n = tiles.length;
+
+    // Order the deck so the active card lands on top last. With stagger
+    // from "last", the LAST element of `tiles` animates first; we want
+    // the active card to animate last and to sit at the highest z-index
+    // so each successive card visibly stacks over the previous one.
+    // Sort: place active first, then the rest in their natural order —
+    // then `stagger({ from: "last" })` will animate them back→front with
+    // the active at the very end.
+    const ordered = [...tiles];
+    if (activeTile) {
+      ordered.splice(ordered.indexOf(activeTile), 1);
+      ordered.unshift(activeTile);
+    }
+
+    // Initial snap (duration:0 acts as a motion "set"). All tiles start
+    // stacked at the exact viewport center with scale 0, opacity 1. The
+    // z-index runs high → low from the active card down so each card
+    // that pops in renders above the previously-popped cards.
+    for (let i = 0; i < ordered.length; i++) {
+      const tile = ordered[i];
+      const idx = parseInt(tile.dataset.tileIndex ?? "0", 10);
+      tile.style.zIndex = String(n - i);
+      animate(
+        tile,
+        {
+          y: tileOffsetY(idx),
+          scale: 0,
+          opacity: 1,
+          filter: "grayscale(1)",
+        },
+        { duration: 0 }
+      );
+    }
+
+    // power2.out ≈ [0, 0, 0.58, 1]; power3.inOut ≈ [0.65, 0, 0.35, 1].
+    // Quart out for the expand: snappy start, gentle settle.
+    const EASE_OUT: [number, number, number, number] = [0, 0, 0.58, 1];
+    const EASE_OUT_QUART: [number, number, number, number] = [0.22, 1, 0.36, 1];
+    const EASE_IN_OUT3: [number, number, number, number] = [0.65, 0, 0.35, 1];
+
+    // Stagger window: 0.06s per tile so 22 projects ≈ 1.3s of staggered
+    // pop-ins. Each tile scales for 0.55s — short enough that you read
+    // each new card popping in over the previous one. Last (active)
+    // settles before the spread phase begins.
+    const STAGGER = 0.06;
+    const SCALE_DUR = 0.55;
+    const scaleEndsAt = 0.35 + STAGGER * Math.max(0, n - 1) + SCALE_DUR;
+    const spreadAt = scaleEndsAt + 0.15;
+    const colorAt = spreadAt + 0.9;
+
+    const controls = animate([
+      // Scale-in: each card pops from scale 0 → 1 one after the other.
+      // `from: "last"` makes the LAST entry of `ordered` start first;
+      // since we put the active card at index 0, the active card pops
+      // last and lands on top of the deck.
+      [
+        ordered,
+        { scale: 1 },
+        {
+          at: 0.35,
+          duration: SCALE_DUR,
+          delay: stagger(STAGGER, { from: "last" }),
+          ease: EASE_OUT_QUART,
+        },
+      ],
+      // Translate every tile from its center offset back to y:0 (its
+      // natural flow position). Tiles above the active move up, tiles
+      // below move down — the stack "opens" into the list.
+      [tiles, { y: 0 }, { at: spreadAt, duration: 1.4, ease: EASE_IN_OUT3 }],
+      // Active tile transitions to color (reveals other details).
+      ...(activeTile
+        ? [
+            [
+              activeTile,
+              { filter: "grayscale(0)" },
+              { at: colorAt, duration: 0.75, ease: EASE_OUT },
+            ] satisfies [HTMLElement, { filter: string }, { at: number; duration: number; ease: [number, number, number, number] }],
+          ]
+        : []),
+    ]);
+
+    controls
+      .then(() => {
+        // Clear motion-managed inline styles so ProjectSection's React-
+        // controlled transform (scaleY of --list-vel-scale) + filter
+        // (grayscale per isActive) take over.
+        for (const tile of tiles) {
+          tile.style.transform = "";
+          tile.style.opacity = "";
+          tile.style.filter = "";
+          tile.style.transformOrigin = "";
+          tile.style.zIndex = "";
+        }
+        setIntroActive(false);
+        introDoneRef.current?.();
+      })
+      .catch(() => {});
+
+    return () => {
+      controls.stop();
+    };
+  }, [introActive, projects]);
+
   useEffect(() => {
     const onScroll = () => {
       const { sectionTops: tops, copyH: cH } = geomRef.current;
@@ -263,9 +421,11 @@ export function ListView({ projects, activeIndex, onActiveChange }: Props) {
   const sections = useMemo(
     () =>
       Array.from({ length: COPIES }).flatMap((_, copy) =>
-        projects.map((project) => ({
+        projects.map((project, idx) => ({
           key: `${copy}-${project.id}`,
           project,
+          idx,
+          copy,
         }))
       ),
     [projects]
@@ -274,11 +434,15 @@ export function ListView({ projects, activeIndex, onActiveChange }: Props) {
   return (
     <>
       <div>
-        {sections.map(({ key, project }) => (
+        {sections.map(({ key, project, idx, copy }) => (
           <ProjectSection
             key={key}
             project={project}
             aspect={aspects[project.id] ?? DEFAULT_ASPECT}
+            idx={idx}
+            copy={copy}
+            isActive={idx === activeIndex}
+            introActive={introActive && copy === MIDDLE}
             onClick={() => handleClick(project)}
             setCursor={setCursor}
           />
@@ -288,7 +452,11 @@ export function ListView({ projects, activeIndex, onActiveChange }: Props) {
       {activeProject && (
         <div
           className="pointer-events-none fixed left-0 right-0 top-1/2 z-20 hidden -translate-y-1/2 px-[16px] md:block"
-          style={{ mixBlendMode: "difference" }}
+          style={{
+            mixBlendMode: "difference",
+            opacity: introReady ? 1 : 0,
+            transition: "opacity 0.7s ease-out 0.4s",
+          }}
         >
           <div className="grid grid-cols-12 gap-x-[10px] text-[14px] leading-none text-white">
             <span className="col-start-3 col-span-3 whitespace-nowrap">
@@ -306,7 +474,15 @@ export function ListView({ projects, activeIndex, onActiveChange }: Props) {
 
       <div
         className="pointer-events-none fixed right-[20px] bottom-[20px] z-30"
-        style={{ mixBlendMode: "difference" }}
+        style={{
+          mixBlendMode: "difference",
+          opacity: introReady ? 1 : 0,
+          transform: introReady
+            ? "translate(0, 0) scale(1)"
+            : "translate(20px, 20px) scale(0.7)",
+          transition:
+            "opacity 0.9s ease-out 1.4s, transform 1.1s cubic-bezier(0.22, 1, 0.36, 1) 1.4s",
+        }}
       >
         <Compass activeIndex={activeIndex} total={total} />
       </div>
