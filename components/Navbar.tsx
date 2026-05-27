@@ -3,10 +3,11 @@
 import { useEffect, useRef, useState } from "react";
 import { animate, type AnimationPlaybackControls } from "motion/react";
 import { CharReveal } from "./CharReveal";
+import { ThemeToggle } from "./ThemeToggle";
 
 const EASE_IN_OUT: [number, number, number, number] = [0.42, 0, 0.58, 1];
 
-export type ViewMode = "surf" | "list" | "index";
+export type ViewMode = "surf" | "list";
 
 const EMAIL = "tirthjivani17@gmail.com";
 const BIO =
@@ -81,12 +82,13 @@ export function Navbar({ view = "list", introReady = true }: Props) {
           style={{
             ...(isList ? LOGO_LARGE : LOGO_SMALL),
             transformOrigin: "top left",
+            fontFamily: "var(--font-geist-pixel-circle)",
           }}
         >
-          <CharReveal visible delay={0.3}>TIRTH J.</CharReveal>
+          <CharReveal visible={reveal} delay={0.3}>Tirth J.</CharReveal>
         </a>
 
-        <div className="col-start-9 col-span-3 hidden max-w-[340px] flex-col gap-[32px] text-[14px] leading-none md:flex">
+        <div className="col-start-10 col-span-2 hidden max-w-[340px] flex-col gap-[32px] text-[13px] leading-none md:flex">
           <div className="flex gap-[10px]">
             <a href="/" className="text-white">
               <CharReveal visible={reveal}>Selected Work</CharReveal>
@@ -158,13 +160,14 @@ export function Navbar({ view = "list", introReady = true }: Props) {
           </div>
         </div>
 
-        <div className="col-start-12 col-span-1 flex justify-end">
+        <div className="col-start-12 col-span-1 flex items-center justify-end gap-[12px]">
+          <ThemeToggle />
           <button
             type="button"
             onClick={() => setMenuOpen((o) => !o)}
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
-            className="relative z-[60] text-[14px] leading-none text-white transition-opacity duration-150 md:hidden"
+            className="relative z-[60] text-[13px] leading-none text-white transition-opacity duration-150 md:hidden"
           >
             {menuOpen ? "Close" : "Menu"}
           </button>
@@ -175,7 +178,8 @@ export function Navbar({ view = "list", introReady = true }: Props) {
     <div
       id="mobile-menu"
       aria-hidden={!menuOpen}
-      className={`fixed inset-0 z-40 flex flex-col gap-[40px] bg-black px-[20px] pb-[40px] pt-[60px] text-white transition-opacity duration-300 ease-out md:hidden ${
+      style={{ backgroundColor: "var(--bg)", color: "var(--fg)" }}
+      className={`fixed inset-0 z-40 flex flex-col gap-[40px] px-[20px] pb-[40px] pt-[60px] transition-opacity duration-300 ease-out md:hidden ${
         menuOpen
           ? "pointer-events-auto opacity-100"
           : "pointer-events-none opacity-0"

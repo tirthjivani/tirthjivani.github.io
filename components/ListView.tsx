@@ -3,7 +3,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
-import { animate, stagger } from "motion/react";
+import { animate, stagger, type AnimationSequence } from "motion/react";
 import { getLenis } from "@/lib/lenis";
 import { getProjectAction } from "@/lib/projectAction";
 import { useImageAspects } from "@/lib/useImageAspects";
@@ -13,8 +13,25 @@ import type { Project } from "@/data/projects";
 
 const COPIES = 3;
 const MIDDLE = 1;
-const GAP = 20;
+const GAP = 10;
 const DEFAULT_ASPECT = 1.6;
+
+// Intro timeline (seconds). Matches the /preloader study: each image zooms in
+// (scale + opacity 0 → 1, expo-out) at the centre one after another, the deck
+// then moves together (no stagger, equal time) into the vertical stack, and
+// finally scrolls one full loop until the default project is back at centre.
+const INTRO_EASE_OUT: [number, number, number, number] = [0.16, 1, 0.3, 1];
+const INTRO_EASE_IN_OUT3: [number, number, number, number] = [0.65, 0, 0.35, 1];
+const POP_START = 0.2;
+const POP_DUR = 0.45;
+const POP_STAGGER = 0.2;
+const SETTLE_AFTER_POP = 0.35;
+const CASCADE_DUR = 0.9;
+const SCROLL_LOOP_DUR = 1.8;
+
+// "wait" holds (hidden) until image aspects resolve, so the POP expands every
+// tile at its true final size instead of the uniform DEFAULT_ASPECT box.
+type IntroStage = "wait" | "pop" | "loop" | "done";
 
 type Cursor = { x: number; y: number; text: string } | null;
 
@@ -24,6 +41,10 @@ type Props = {
   onActiveChange: (idx: number) => void;
   introReady?: boolean;
   intro?: boolean;
+  // Fires the moment the upward translate begins — gives the parent a hook
+  // to reveal navbar / sidebar / bottombar text in parallel with the stack
+  // sliding to its resting position.
+  onIntroReveal?: () => void;
   onIntroDone?: () => void;
 };
 
@@ -37,6 +58,13 @@ function jumpTo(y: number) {
   if (lenis) lenis.scrollTo(y, { immediate: true });
 }
 
+function smoothScrollTo(y: number) {
+  if (typeof window === "undefined") return;
+  const lenis = getLenis();
+  if (lenis) lenis.scrollTo(y, { duration: 0.4 });
+  else window.scrollTo({ top: y, behavior: "smooth" });
+}
+
 function ProjectSection({
   project,
   aspect,
@@ -44,6 +72,8 @@ function ProjectSection({
   copy,
   isActive,
   introActive,
+  introColor,
+  playVideo,
   onClick,
   setCursor,
 }: {
@@ -53,25 +83,33 @@ function ProjectSection({
   copy: number;
   isActive: boolean;
   introActive: boolean;
+  introColor: boolean;
+  playVideo: boolean;
   onClick: () => void;
   setCursor: (c: Cursor) => void;
 }) {
   const action = getProjectAction(project);
   const { w, h } = sizeForAspect(aspect);
 
-  // While the intro timeline is running, Motion owns transform / scale /
-  // filter on this tile. Start at scale 0 so the SSR / pre-hydration frame
-  // doesn't flash the natural flow position before Motion can set the stack.
-  // Opacity stays at 1 throughout so the zoom-in scale effect is visible.
+  // While the POP/CASCADE beats run, Motion FULLY owns transform / scale /
+  // opacity / filter via inline styles it writes directly on the DOM node.
+  // React must not set any of those here: a mid-intro re-render (the parent
+  // flipping `textReady`, etc.) would otherwise overwrite Motion's
+  // translateY(...)·scale(...) with a bare value, dropping the centering
+  // offset and snapping each tile back to its section center. The pre-pop
+  // frame is hidden by the wrapper's `opacity:0` during the "wait" stage, and
+  // Motion's snap runs in a useLayoutEffect (before paint) once "pop" begins.
   const introStyles = introActive
     ? {
-        transform: "scale(0)",
-        filter: "grayscale(1)" as const,
         willChange: "transform, filter" as const,
       }
     : {
         transform: "scaleY(var(--list-vel-scale, 1))",
-        filter: isActive ? "grayscale(0)" : "grayscale(1)",
+        opacity: 1,
+        // Keep every tile in full colour through the whole intro (pop → stack →
+        // loop), like /preloader. Only once the intro is done does the list's
+        // grayscale-non-active treatment kick in.
+        filter: introColor || isActive ? "grayscale(0)" : "grayscale(1)",
         transition: "filter 0.45s ease-out",
         willChange: "transform, filter" as const,
       };
@@ -83,14 +121,16 @@ function ProjectSection({
     >
       <div
         data-tile
+        data-tile-active={isActive ? "true" : undefined}
         data-tile-copy={copy}
         data-tile-index={idx}
         style={{
           width: w,
           height: h,
+          backgroundColor: "var(--tile-bg)",
           ...introStyles,
         }}
-        className={`relative overflow-hidden bg-[#0b0b0b] ${
+        className={`relative overflow-hidden ${
           action ? "cursor-pointer" : ""
         }`}
         onClick={action ? onClick : undefined}
@@ -104,15 +144,27 @@ function ProjectSection({
         aria-label={project.title}
       >
         {project.video ? (
-          <video
-            src={project.video}
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="metadata"
-            className="absolute inset-0 h-full w-full object-cover"
-          />
+          playVideo ? (
+            <video
+              src={project.video}
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="metadata"
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+          ) : (
+            // Non-middle copies: load just enough to render first frame, no
+            // playback. Avoids 3× range-fetch storm on /outbox.mp4 etc.
+            <video
+              src={`${project.video}#t=0.001`}
+              muted
+              playsInline
+              preload="metadata"
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+          )
         ) : (
           <img
             src={project.image.src}
@@ -134,6 +186,7 @@ export function ListView({
   onActiveChange,
   introReady = true,
   intro = false,
+  onIntroReveal,
   onIntroDone,
 }: Props) {
   const total = projects.length;
@@ -141,10 +194,52 @@ export function ListView({
   const router = useRouter();
   const [cursor, setCursor] = useState<Cursor>(null);
   const [mounted, setMounted] = useState(false);
-  const [introActive, setIntroActive] = useState(intro);
+  const [introStage, setIntroStage] = useState<IntroStage>(
+    intro ? "wait" : "done"
+  );
+  // Jump to "done" if the parent ever turns the intro off — the useState
+  // initialiser only reads `intro` at first render.
+  useEffect(() => {
+    if (!intro) setIntroStage("done");
+  }, [intro]);
   const initialActiveRef = useRef(activeIndex);
+  const wrapperRef = useRef<HTMLDivElement>(null);
 
-  const aspects = useImageAspects(projects);
+  const liveAspects = useImageAspects(projects);
+  // Aspects load async (Image onload / video metadata). Commit only when ALL
+  // entries resolved so layout settles in one pass instead of reflowing
+  // per-image — that mid-load reflow was the source of the picture+text
+  // blinking. Until then, render with DEFAULT_ASPECT for every tile.
+  const [stableAspects, setStableAspects] = useState<Record<string, number>>(
+    {}
+  );
+  useEffect(() => {
+    if (projects.length === 0) return;
+    // Block commits only while the animated beats run (pop/loop): a reflow
+    // then would change copyH and re-scroll mid-animation, breaking the
+    // snapshotted deck geometry. During "wait" we WANT the commit — it gives
+    // tiles their real sizes before the POP, so each image expands at its true
+    // final size. "done" allows late-resolving aspects to land too.
+    if (introStage === "pop" || introStage === "loop") return;
+    const allResolved = projects.every((p) => liveAspects[p.id] != null);
+    if (allResolved) setStableAspects(liveAspects);
+  }, [liveAspects, projects, introStage]);
+  const aspects = stableAspects;
+
+  // "wait" → "pop": start the intro once every tile has its real size, so the
+  // POP expands tiles concentrically at the size they'll hold in the list.
+  // A fallback timer starts the pop anyway if some image never resolves.
+  useEffect(() => {
+    if (introStage !== "wait") return;
+    const allResolved =
+      projects.length > 0 && projects.every((p) => stableAspects[p.id] != null);
+    if (allResolved) {
+      setIntroStage("pop");
+      return;
+    }
+    const fallback = window.setTimeout(() => setIntroStage("pop"), 2500);
+    return () => window.clearTimeout(fallback);
+  }, [introStage, stableAspects, projects]);
 
   // Per-project image heights and their tops within one copy (height + 10px gap each).
   const { sectionTops, copyH } = useMemo(() => {
@@ -206,42 +301,97 @@ export function ListView({
     };
   }, []);
 
+  // Center a section in the viewport given the current geometry.
+  const centeredScroll = (idx: number): number => {
+    const top = sectionTops[idx] ?? 0;
+    const nextTop = idx + 1 < sectionTops.length ? sectionTops[idx + 1] : copyH;
+    const sectionH = nextTop - top - GAP;
+    return copyH * MIDDLE + top + sectionH / 2 - window.innerHeight / 2;
+  };
+  const centeredScrollRef = useRef(centeredScroll);
+  centeredScrollRef.current = centeredScroll;
+
+  // True once the user has actually scrolled — until then, any geometry change
+  // (async aspects committing) should keep the active project dead-centre, not
+  // drift. (This is what caused the reveal to land on the next project.)
+  const userScrolledRef = useRef(false);
+  useEffect(() => {
+    const onWheelOrTouch = () => {
+      userScrolledRef.current = true;
+    };
+    window.addEventListener("wheel", onWheelOrTouch, { passive: true });
+    window.addEventListener("touchmove", onWheelOrTouch, { passive: true });
+    return () => {
+      window.removeEventListener("wheel", onWheelOrTouch);
+      window.removeEventListener("touchmove", onWheelOrTouch);
+    };
+  }, []);
+
+  const didInitialJumpRef = useRef(false);
+  const prevCopyHRef = useRef(0);
   useLayoutEffect(() => {
     if (copyH === 0) return;
-    const target =
-      copyH * MIDDLE + (sectionTops[initialActiveRef.current] ?? 0);
-    jumpTo(target);
+    if (!didInitialJumpRef.current) {
+      // Center the active project's section (Figma frame 851:77 — active card
+      // sits at screen centre, not pinned to the top).
+      jumpTo(centeredScrollRef.current(initialActiveRef.current));
+      didInitialJumpRef.current = true;
+      prevCopyHRef.current = copyH;
+      return;
+    }
+    const prev = prevCopyHRef.current;
+    if (prev > 0 && prev !== copyH) {
+      if (userScrolledRef.current) {
+        // Preserve the user's relative position across the reflow.
+        jumpTo(window.scrollY * (copyH / prev));
+      } else {
+        // No interaction yet → re-center the active project exactly so the
+        // async aspect reflow doesn't shift the default off centre.
+        jumpTo(centeredScrollRef.current(initialActiveRef.current));
+      }
+    }
+    prevCopyHRef.current = copyH;
   }, [total, copyH, sectionTops]);
 
-  // Intro animation — tiles start at scale 0 stacked at the exact viewport
-  // center, then expand one after the other (stagger) so each new card
-  // renders on top of the previous one (z-index runs high → low from the
-  // active card down). Once the deck is built, every tile translates to
-  // its natural section position, then the active tile shifts to color.
-  // Opacity stays at 1 throughout so the pure scale-in is visible.
+  // Intro — three beats matching the Figma flow
+  // (file 8CWnIO8QF2IE5EPjivKR6R, section 851:72, frames 851:54 → 851:77).
+  //   1. POP: tiles snap stacked at viewport centre, scale 0 → 1, in project
+  //      order — tile[0] (the active/centre project) first at the BOTTOM of
+  //      the deck, then tile[1], tile[2] … expanding on top (frames 851:66 /
+  //      851:69).
+  //   2. CASCADE: deck unfolds to natural flow with the active card pinned at
+  //      centre and the rest sitting at their real `h[i] + GAP` gaps below
+  //      (frame 851:73). Cascade target is simply `y: 0` because the initial
+  //      scroll already centres the active section.
+  //   3. SCROLL-LOOP (separate effect): real scroll cycles the whole list once
+  //      (scrollY += copyH) and lands the active back at centre; chrome text
+  //      reveals over this window (frame 851:77).
   const introDoneRef = useRef(onIntroDone);
   introDoneRef.current = onIntroDone;
+  const introRevealRef = useRef(onIntroReveal);
+  introRevealRef.current = onIntroReveal;
   const initialAspectsRef = useRef(aspects);
   initialAspectsRef.current = aspects;
 
+  // Beats 1 + 2 — POP then CASCADE on the middle copy. On completion, hand off
+  // to the "loop" stage which runs the scroll cycle.
   useLayoutEffect(() => {
-    if (!introActive) return;
+    if (introStage !== "pop") return;
+
     const tiles = Array.from(
       document.querySelectorAll<HTMLElement>(
         `[data-tile][data-tile-copy="${MIDDLE}"]`
       )
     );
     if (tiles.length === 0) {
-      setIntroActive(false);
+      introRevealRef.current?.();
+      setIntroStage("done");
       introDoneRef.current?.();
       return;
     }
 
-    // Sizes / tops snapshot at intro start. Aspects are async — if they
-    // haven't loaded yet, all tiles share DEFAULT_ASPECT, which means they
-    // stack at the *exact* viewport center (identical h). As real aspects
-    // arrive, sections in flow reflow but the tiles' transforms keep them
-    // anchored at center until the spread phase moves them home.
+    // Sizes / tops snapshot at intro start. Real aspects are committed before
+    // we enter "pop" (the wait stage), so these are the tiles' true sizes.
     const sizes = projects.map((p) =>
       sizeForAspect(initialAspectsRef.current[p.id] ?? DEFAULT_ASPECT)
     );
@@ -254,106 +404,83 @@ export function ListView({
     const localCopyH = acc;
 
     const vh = window.innerHeight;
-    const sy = window.scrollY;
+    const active = initialActiveRef.current;
 
-    const tileOffsetY = (idx: number): number => {
+    // Re-center the scroll on the active section using THIS snapshot's geometry
+    // so the cascade's `y:0` lands the active exactly at viewport centre,
+    // regardless of any intermediate jumps during the wait stage.
+    const activeTop = tops[active] ?? 0;
+    const activeNextTop =
+      active + 1 < tops.length ? tops[active + 1] : localCopyH;
+    const activeSecH = activeNextTop - activeTop - GAP;
+    const sy = MIDDLE * localCopyH + activeTop + activeSecH / 2 - vh / 2;
+    jumpTo(sy);
+
+    // Delta to land tile[idx]'s centre at the viewport centre.
+    const tileCenterY = (idx: number): number => {
       const sz = sizes[idx];
       if (!sz) return 0;
       const docCenter = MIDDLE * localCopyH + (tops[idx] ?? 0) + sz.h / 2;
       return vh / 2 - (docCenter - sy);
     };
 
-    const active = initialActiveRef.current;
-    const activeTile = tiles.find(
-      (t) => parseInt(t.dataset.tileIndex ?? "-1", 10) === active
-    );
     const n = tiles.length;
 
-    // Order the deck so the active card lands on top last. With stagger
-    // from "last", the LAST element of `tiles` animates first; we want
-    // the active card to animate last and to sit at the highest z-index
-    // so each successive card visibly stacks over the previous one.
-    // Sort: place active first, then the rest in their natural order —
-    // then `stagger({ from: "last" })` will animate them back→front with
-    // the active at the very end.
-    const ordered = [...tiles];
-    if (activeTile) {
-      ordered.splice(ordered.indexOf(activeTile), 1);
-      ordered.unshift(activeTile);
-    }
-
-    // Initial snap (duration:0 acts as a motion "set"). All tiles start
-    // stacked at the exact viewport center with scale 0, opacity 1. The
-    // z-index runs high → low from the active card down so each card
-    // that pops in renders above the previously-popped cards.
-    for (let i = 0; i < ordered.length; i++) {
-      const tile = ordered[i];
+    // POP in natural project order: tile[0] at the bottom of the deck (lowest
+    // z-index, visible first), each later tile stacking on top. Snap every tile
+    // to scale 0 / opacity 0 at the viewport centre.
+    for (let i = 0; i < tiles.length; i++) {
+      const tile = tiles[i];
       const idx = parseInt(tile.dataset.tileIndex ?? "0", 10);
-      tile.style.zIndex = String(n - i);
+      tile.style.zIndex = String(idx + 1);
       animate(
         tile,
         {
-          y: tileOffsetY(idx),
+          y: tileCenterY(idx),
           scale: 0,
-          opacity: 1,
-          filter: "grayscale(1)",
+          opacity: 0,
+          filter: "grayscale(0)",
         },
         { duration: 0 }
       );
     }
 
-    // power2.out ≈ [0, 0, 0.58, 1]; power3.inOut ≈ [0.65, 0, 0.35, 1].
-    // Quart out for the expand: snappy start, gentle settle.
-    const EASE_OUT: [number, number, number, number] = [0, 0, 0.58, 1];
-    const EASE_OUT_QUART: [number, number, number, number] = [0.22, 1, 0.36, 1];
-    const EASE_IN_OUT3: [number, number, number, number] = [0.65, 0, 0.35, 1];
+    const segments: AnimationSequence = [];
 
-    // Stagger window: 0.06s per tile so 22 projects ≈ 1.3s of staggered
-    // pop-ins. Each tile scales for 0.55s — short enough that you read
-    // each new card popping in over the previous one. Last (active)
-    // settles before the spread phase begins.
-    const STAGGER = 0.06;
-    const SCALE_DUR = 0.55;
-    const scaleEndsAt = 0.35 + STAGGER * Math.max(0, n - 1) + SCALE_DUR;
-    const spreadAt = scaleEndsAt + 0.15;
-    const colorAt = spreadAt + 0.9;
-
-    const controls = animate([
-      // Scale-in: each card pops from scale 0 → 1 one after the other.
-      // `from: "last"` makes the LAST entry of `ordered` start first;
-      // since we put the active card at index 0, the active card pops
-      // last and lands on top of the deck.
-      [
-        ordered,
-        { scale: 1 },
-        {
-          at: 0.35,
-          duration: SCALE_DUR,
-          delay: stagger(STAGGER, { from: "last" }),
-          ease: EASE_OUT_QUART,
-        },
-      ],
-      // Translate every tile from its center offset back to y:0 (its
-      // natural flow position). Tiles above the active move up, tiles
-      // below move down — the stack "opens" into the list.
-      [tiles, { y: 0 }, { at: spreadAt, duration: 1.4, ease: EASE_IN_OUT3 }],
-      // Active tile transitions to color (reveals other details).
-      ...(activeTile
-        ? [
-            [
-              activeTile,
-              { filter: "grayscale(0)" },
-              { at: colorAt, duration: 0.75, ease: EASE_OUT },
-            ] satisfies [HTMLElement, { filter: string }, { at: number; duration: number; ease: [number, number, number, number] }],
-          ]
-        : []),
+    // Beat 1 — POP. Zoom in (scale + opacity 0 → 1, expo-out), tile[0] first.
+    segments.push([
+      tiles,
+      { scale: 1, opacity: 1 },
+      {
+        at: POP_START,
+        duration: POP_DUR,
+        delay: stagger(POP_STAGGER, { from: "first" }),
+        ease: INTRO_EASE_OUT,
+      },
     ]);
+
+    // Beat 2 — STACK to natural flow (y:0). The initial scroll already centres
+    // the active section, so y:0 lands the active (tile[0]) at centre with the
+    // rest below at their real gaps. All tiles move together — no stagger,
+    // equal time — so the whole deck slides down into the column at once.
+    const popEndsAt = POP_START + POP_STAGGER * Math.max(0, n - 1) + POP_DUR;
+    const cascadeStart = popEndsAt + SETTLE_AFTER_POP;
+    segments.push([
+      tiles,
+      { y: 0 },
+      {
+        at: cascadeStart,
+        duration: CASCADE_DUR,
+        ease: INTRO_EASE_IN_OUT3,
+      },
+    ]);
+
+    const controls = animate(segments);
 
     controls
       .then(() => {
-        // Clear motion-managed inline styles so ProjectSection's React-
-        // controlled transform (scaleY of --list-vel-scale) + filter
-        // (grayscale per isActive) take over.
+        // Clear Motion-managed inline styles so React's resting styles (per
+        // ProjectSection, once `introStage !== "pop"`) take over cleanly.
         for (const tile of tiles) {
           tile.style.transform = "";
           tile.style.opacity = "";
@@ -361,17 +488,89 @@ export function ListView({
           tile.style.transformOrigin = "";
           tile.style.zIndex = "";
         }
-        setIntroActive(false);
-        introDoneRef.current?.();
+        // Reveal chrome text and advance to the scroll-loop stage. The loop
+        // runs in its own effect (below) so it survives this stage change.
+        introRevealRef.current?.();
+        setIntroStage("loop");
       })
       .catch(() => {});
 
     return () => {
       controls.stop();
     };
-  }, [introActive, projects]);
+  }, [introStage, projects]);
+
+  // Beat 3 — SCROLL-LOOP. The deck is now the resting list (all 3 copies
+  // render normally because `introStage !== "pop"`). Translate the whole
+  // sections wrapper up by one copy height: every project cycles through the
+  // viewport once and — because the copies are identical — the active lands
+  // back at centre. We move the wrapper rather than window.scrollY so it works
+  // while the Preloader holds `body { overflow:hidden }`, fires no scroll
+  // events (no activeIndex churn / snap), and leaves the real scroll position
+  // untouched for lenis to resume from. Clearing the transform on completion
+  // is visually seamless since copy N and copy N+1 are pixel-identical.
+  useEffect(() => {
+    if (introStage !== "loop") return;
+    const wrapper = wrapperRef.current;
+    const { copyH: cH } = geomRef.current;
+    if (!wrapper || cH === 0) {
+      setIntroStage("done");
+      introDoneRef.current?.();
+      return;
+    }
+    const loop = animate(
+      wrapper,
+      { y: [0, -cH] },
+      {
+        duration: SCROLL_LOOP_DUR,
+        ease: INTRO_EASE_IN_OUT3,
+        onComplete: () => {
+          wrapper.style.transform = "";
+          setIntroStage("done");
+          introDoneRef.current?.();
+        },
+      }
+    );
+    return () => {
+      loop.stop();
+    };
+  }, [introStage]);
 
   useEffect(() => {
+    let snapTimer: number | null = null;
+    let lastVelocity = 0;
+    let snappedAt = -1; // wrappedY at which we last fired a snap; dedupe.
+    const clearSnap = () => {
+      if (snapTimer !== null) {
+        window.clearTimeout(snapTimer);
+        snapTimer = null;
+      }
+    };
+
+    const fireSnap = () => {
+      if (adjustingRef.current) return;
+      const { sectionTops: tops, copyH: cH } = geomRef.current;
+      if (cH === 0) return;
+      const center = window.scrollY + window.innerHeight / 2;
+      const wrappedY = ((center % cH) + cH) % cH;
+      let idx = 0;
+      for (let i = tops.length - 1; i >= 0; i--) {
+        if (tops[i] <= wrappedY) {
+          idx = i;
+          break;
+        }
+      }
+      const top = tops[idx];
+      const nextTop = idx < tops.length - 1 ? tops[idx + 1] : cH;
+      const sectionH = nextTop - top - GAP;
+      const sectionCenter = top + sectionH / 2;
+      const delta = sectionCenter - wrappedY;
+      if (Math.abs(delta) < 1) return;
+      if (Math.abs(snappedAt - sectionCenter) < 1) return;
+      snappedAt = sectionCenter;
+      smoothScrollTo(window.scrollY + delta);
+    };
+
     const onScroll = () => {
       const { sectionTops: tops, copyH: cH } = geomRef.current;
       if (total === 0 || cH === 0) return;
@@ -403,7 +602,34 @@ export function ListView({
       }
     };
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+
+    // Lenis emits a `scroll` event per frame with the current velocity. Use it
+    // to detect the moment the lerp tail flattens out — that's when the user
+    // has "stopped" scrolling. Fire a snap then; debounce in case velocity
+    // briefly dips through zero.
+    const lenis = getLenis();
+    const onLenisScroll = ({ velocity }: { velocity: number }) => {
+      const moving = Math.abs(velocity) > 0.05;
+      if (moving) {
+        // reset dedupe so the next stop can snap to a different section
+        snappedAt = -1;
+        clearSnap();
+        lastVelocity = velocity;
+        return;
+      }
+      if (Math.abs(lastVelocity) <= 0.05) return; // already stopped
+      lastVelocity = 0;
+      clearSnap();
+      snapTimer = window.setTimeout(fireSnap, 60);
+    };
+    if (lenis) lenis.on("scroll", onLenisScroll);
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      const l = getLenis();
+      if (l) l.off("scroll", onLenisScroll);
+      clearSnap();
+    };
   }, [total, onActiveChange]);
 
   const activeProject = projects[Math.min(activeIndex, total - 1)];
@@ -433,7 +659,10 @@ export function ListView({
 
   return (
     <>
-      <div>
+      <div
+        ref={wrapperRef}
+        style={{ opacity: introStage === "wait" ? 0 : 1 }}
+      >
         {sections.map(({ key, project, idx, copy }) => (
           <ProjectSection
             key={key}
@@ -442,7 +671,9 @@ export function ListView({
             idx={idx}
             copy={copy}
             isActive={idx === activeIndex}
-            introActive={introActive && copy === MIDDLE}
+            introActive={introStage === "pop" && copy === MIDDLE}
+            introColor={introStage !== "done"}
+            playVideo={copy === MIDDLE}
             onClick={() => handleClick(project)}
             setCursor={setCursor}
           />
@@ -458,11 +689,11 @@ export function ListView({
             transition: "opacity 0.7s ease-out 0.4s",
           }}
         >
-          <div className="grid grid-cols-12 gap-x-[10px] text-[14px] leading-none text-white">
+          <div className="grid grid-cols-12 gap-x-[10px] text-[13px] leading-none text-white">
             <span className="col-start-3 col-span-3 whitespace-nowrap">
               {activeProject.category ?? "-"}
             </span>
-            <span className="col-start-9 col-span-2 whitespace-nowrap">
+            <span className="col-start-10 col-span-2 whitespace-nowrap">
               {activeProject.image.role}
             </span>
             <span className="col-start-12 col-span-1 justify-self-end whitespace-nowrap">

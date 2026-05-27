@@ -12,6 +12,9 @@ export type SurfItem = {
   src: string;
   alt: string;
   video?: string;
+  // Natural width / natural height. When present the card frame is sized
+  // to this ratio so the media fills it edge-to-edge without letterboxing.
+  aspect?: number;
 };
 
 export interface CardMotion {
@@ -297,7 +300,18 @@ export function useSurfWave(
     ) {
       const vp = vpRef.current;
       if (vp && itemCount > 0) {
-        const slot = Math.floor((e.clientX + currentScroll.current) / vp.gap);
+        // Mirror the positioning math used in the animation loop:
+        //   screenX = wrapped(i) - (stripWidth - w)/2 + HORIZONTAL_NUDGE * w
+        // so the inverse mapping needs the same offsets — otherwise the click
+        // resolves to an off-by-one slot when the strip is wider than the
+        // viewport. Round (not floor) so we pick the nearest card center.
+        const slot = Math.round(
+          (e.clientX +
+            currentScroll.current +
+            (vp.stripWidth - vp.w) / 2 -
+            HORIZONTAL_NUDGE * vp.w) /
+            vp.gap
+        );
         const idx = ((slot % itemCount) + itemCount) % itemCount;
         onCardClickRef.current(idx);
       }

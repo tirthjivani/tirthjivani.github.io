@@ -49,15 +49,27 @@ export function SurfWave({
       <div className={s.stage} data-ready={ready}>
         {cards.map((card, i) => {
           const itemIdx = items.length > 0 ? i % items.length : 0;
+          // useSurfWave snapshots card.item once at pool init, so per-card
+          // updates (aspect arriving after mount) never reach it. Re-resolve
+          // from the live `items` prop each render instead.
+          const item = items.length > 0 ? items[itemIdx] : card.item;
+          // Per-card sizing: keep the row height constant and derive width
+          // from the item's natural aspect so the frame fits the media
+          // exactly (no letterbox, no crop). Fallback to the uniform layout
+          // width while aspects load.
+          const aspect = item.aspect ?? 0;
+          const cardW =
+            aspect > 0 ? layout.cardHeight * aspect : layout.cardWidth;
+          const cardH = layout.cardHeight;
           return (
             <motion.div
               key={card.key}
               className={s.card}
               style={{
-                width: layout.cardWidth,
-                height: layout.cardHeight,
-                marginLeft: -layout.cardWidth / 2,
-                marginTop: -layout.cardHeight / 2,
+                width: cardW,
+                height: cardH,
+                marginLeft: -cardW / 2,
+                marginTop: -cardH / 2,
                 transform: card.transform,
                 opacity: card.opacity,
               }}
@@ -65,10 +77,10 @@ export function SurfWave({
               onMouseLeave={() => onHoverCard?.(null)}
             >
               <div className={s.media}>
-                {card.item.video ? (
+                {item.video ? (
                   <video
                     className={s.vid}
-                    src={card.item.video}
+                    src={item.video}
                     autoPlay
                     loop
                     muted
@@ -78,8 +90,8 @@ export function SurfWave({
                 ) : (
                   <img
                     className={s.img}
-                    src={card.item.src}
-                    alt={card.item.alt}
+                    src={item.src}
+                    alt={item.alt}
                     draggable={false}
                     loading="eager"
                     decoding="async"

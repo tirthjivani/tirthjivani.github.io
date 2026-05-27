@@ -11,7 +11,7 @@ import type {
   Project,
 } from "@/data/projects";
 
-const PAGE_BG = "#000000";
+const PAGE_BG = "var(--bg)";
 
 function displaySite(url?: string) {
   if (!url) return "-";
@@ -60,26 +60,18 @@ function Reveal({
 
 function CaseStudyCover({ project }: { project: Project }) {
   return (
-    <section className="relative h-screen w-screen overflow-hidden bg-black">
-      {project.video ? (
-        <video
-          src={project.video}
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 h-full w-full object-cover"
-        />
-      ) : (
-        <Image
-          src={project.image.src}
-          alt={project.title}
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover"
-        />
-      )}
+    <section
+      className="relative h-screen w-screen overflow-hidden"
+      style={{ backgroundColor: "var(--bg)" }}
+    >
+      <Image
+        src={project.image.src}
+        alt={project.title}
+        fill
+        priority
+        sizes="100vw"
+        className="object-cover"
+      />
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 bottom-0 h-[240px]"
@@ -133,7 +125,7 @@ function DetailRow({
   delay?: number;
 }) {
   return (
-    <div className="flex items-center justify-between border-t border-white/10 py-[14px] text-[14px] leading-none">
+    <div className="flex items-center justify-between border-t border-white/10 py-[14px] text-[13px] leading-none">
       <Reveal delay={delay} className="text-white/40">{label}</Reveal>
       <Reveal delay={delay + 0.04} className="text-white">{value}</Reveal>
     </div>
@@ -145,7 +137,7 @@ function CaseStudyHero({ project }: { project: Project }) {
     <section className="relative px-[20px] py-[80px] md:px-[40px] md:py-[120px]">
       <div className="grid grid-cols-12 gap-x-[10px]">
         <div className="col-span-12 md:col-span-7">
-          <p className="text-[14px] leading-none text-white/60">
+          <p className="text-[13px] leading-none text-white/60">
             <Reveal>Introduction</Reveal>
           </p>
           <p className="mt-[60px] max-w-[720px] text-[24px] leading-[1.35] tracking-[-0.01em] text-white">
@@ -156,7 +148,7 @@ function CaseStudyHero({ project }: { project: Project }) {
         </div>
 
         <div className="col-span-12 md:col-span-3 md:col-start-10">
-          <p className="text-[14px] leading-none text-white/60">
+          <p className="text-[13px] leading-none text-white/60">
             <Reveal delay={0.16}>Details</Reveal>
           </p>
           <div className="mt-[60px]">
@@ -235,7 +227,7 @@ function CaseStudyDeckRow({
           {title}
         </span>
       </div>
-      <span className="text-[14px] leading-none text-white/40">{num}</span>
+      <span className="text-[13px] leading-none text-white/40">{num}</span>
     </div>
   );
 
@@ -259,7 +251,7 @@ function CaseStudiesList({ items }: { items: CaseStudyLink[] }) {
   return (
     <section className="relative px-[20px] pt-[40px] pb-[80px] md:px-[40px] md:pb-[120px]">
       <div className="grid grid-cols-12 gap-x-[10px]">
-        <p className="col-span-12 mb-[40px] text-[14px] leading-none text-white/60">
+        <p className="col-span-12 mb-[40px] text-[13px] leading-none text-white/60">
           <Reveal>{sectionTitle}</Reveal>
         </p>
         <div className="col-span-12">
@@ -281,7 +273,7 @@ function CaseStudyBody({ text }: { text: string }) {
   return (
     <section className="relative px-[20px] py-[40px] md:px-[40px] md:py-[60px]">
       <div className="grid grid-cols-12 gap-x-[10px]">
-        <p className="col-span-12 max-w-[920px] text-[20px] leading-[1.45] tracking-[-0.01em] text-white md:col-start-3 md:col-span-8">
+        <p className="col-span-12 text-[13px] leading-[1.5] tracking-[-0.01em] text-white md:col-start-1 md:col-span-12 md:max-w-[60%]">
           <Reveal>{text}</Reveal>
         </p>
       </div>
@@ -293,10 +285,10 @@ function CaseStudyIntro({ label, heading }: { label: string; heading: string }) 
   return (
     <section className="relative px-[20px] py-[40px] md:px-[40px] md:py-[60px]">
       <div className="grid grid-cols-12 gap-x-[10px]">
-        <p className="col-span-12 text-[14px] leading-none text-white/40 md:col-start-3 md:col-span-8">
+        <p className="col-span-12 text-[13px] leading-none text-white/40 md:col-start-1 md:col-span-12 md:max-w-[60%]">
           <Reveal>{label}</Reveal>
         </p>
-        <p className="col-span-12 mt-[40px] max-w-[1100px] text-[32px] leading-[1.25] tracking-[-0.02em] text-white md:col-start-3 md:col-span-9">
+        <p className="col-span-12 mt-[40px] text-[20px] leading-[1.3] tracking-[-0.02em] text-white md:col-start-1 md:col-span-12 md:max-w-[60%]">
           <Reveal delay={0.08}>{heading}</Reveal>
         </p>
       </div>
@@ -366,7 +358,7 @@ function CaseStudyImageCell({ image }: { image: CaseStudyImage }) {
         )}
       </div>
       {image.caption ? (
-        <p className="mt-[10px] text-[14px] leading-[1.4] text-white/40">
+        <p className="mt-[10px] text-[13px] leading-[1.4] text-white/40">
           {image.caption}
         </p>
       ) : null}
@@ -436,7 +428,7 @@ export function CaseStudy({ project }: { project: Project }) {
 
   return (
     <>
-      <Navbar view="index" />
+      <Navbar view="surf" />
       <main
         className="relative min-h-screen w-full text-white"
         style={{ background: PAGE_BG }}

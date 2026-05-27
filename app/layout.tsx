@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { GeistPixelCircle } from "geist/font/pixel";
 import { ClickSound } from "@/components/ClickSound";
 import { DevTools } from "@/components/DevTools";
 import { SmoothScroll } from "@/components/SmoothScroll";
@@ -50,10 +51,26 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${circularStd.variable} h-full antialiased`}
+      className={`${circularStd.variable} ${GeistPixelCircle.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
+      <head>
+        {/* Apply persisted theme before paint to avoid a dark→light flash. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='light'){document.documentElement.classList.add('light');}}catch(e){}})();`,
+          }}
+        />
+        {/* Own scroll restoration so a refresh always starts at the top and the
+            preloader runs from the default position (no browser scroll restore). */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{if('scrollRestoration'in history){history.scrollRestoration='manual';}window.scrollTo(0,0);}catch(e){}})();`,
+          }}
+        />
+      </head>
       <body
-        className="min-h-full flex flex-col bg-black text-white"
+        className="min-h-full flex flex-col"
         suppressHydrationWarning
       >
         <SmoothScroll />

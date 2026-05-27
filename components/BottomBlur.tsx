@@ -52,7 +52,7 @@ export function BottomBlur() {
         className="absolute inset-0"
         style={{
           background:
-            "linear-gradient(to top, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 100%)",
+            "linear-gradient(to top, var(--blur-fade) 0%, transparent 100%)",
         }}
       />
     </div>

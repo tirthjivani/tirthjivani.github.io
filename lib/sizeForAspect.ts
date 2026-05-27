@@ -1,21 +1,11 @@
-// Target on-screen area per image (px²) — calibrated so each card lands
-// visually the same size regardless of its aspect ratio. Max bounds keep
-// extreme aspects in check.
-export const LIST_IMG_TARGET_AREA = 280 * 280;
-export const LIST_IMG_MAX_WIDTH = 380;
-export const LIST_IMG_MAX_HEIGHT = 320;
+// Every project image is fitted inside one square box so its longest side is
+// LIST_IMG_BOX. This is the SAME sizing the intro preloader (IntroOverlay) uses,
+// so the overlay hands off to the live list with zero size jump.
+export const LIST_IMG_BOX = 240;
 
 export function sizeForAspect(aspect: number): { w: number; h: number } {
   const safe = Math.max(0.5, Math.min(3, aspect));
-  let h = Math.sqrt(LIST_IMG_TARGET_AREA / safe);
-  let w = safe * h;
-  if (w > LIST_IMG_MAX_WIDTH) {
-    w = LIST_IMG_MAX_WIDTH;
-    h = w / safe;
-  }
-  if (h > LIST_IMG_MAX_HEIGHT) {
-    h = LIST_IMG_MAX_HEIGHT;
-    w = h * safe;
-  }
-  return { w, h };
+  return safe >= 1
+    ? { w: LIST_IMG_BOX, h: LIST_IMG_BOX / safe }
+    : { w: LIST_IMG_BOX * safe, h: LIST_IMG_BOX };
 }

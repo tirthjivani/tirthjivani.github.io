@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { getProjectAction } from "@/lib/projectAction";
 import type { Project } from "@/data/projects";
 import { SurfWave, type SurfItem } from "./SurfWave";
+import { useImageAspects } from "@/lib/useImageAspects";
 
 type Props = {
   projects: Project[];
@@ -36,14 +37,16 @@ export function SurfCanvas({ projects, onHoverProject }: Props) {
     onHoverProject?.(hoverIdx);
   }, [hoverIdx, onHoverProject]);
 
+  const aspects = useImageAspects(projects);
   const items = useMemo<SurfItem[]>(
     () =>
       projects.map((p) => ({
         src: p.image.src,
         video: p.video,
         alt: p.title || "Project",
+        aspect: aspects[p.id],
       })),
-    [projects]
+    [projects, aspects]
   );
 
   const handleCardClick = (idx: number) => {
@@ -69,7 +72,8 @@ export function SurfCanvas({ projects, onHoverProject }: Props) {
 
   return (
     <div
-      className="pointer-events-auto fixed inset-0 z-10 bg-black"
+      className="pointer-events-auto fixed inset-0 z-10"
+      style={{ backgroundColor: "var(--bg)" }}
       onPointerMove={trackPointer}
       onPointerLeave={() => setCursor(null)}
     >

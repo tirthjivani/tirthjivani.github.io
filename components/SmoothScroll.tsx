@@ -7,9 +7,11 @@ import { setLenis } from "@/lib/lenis";
 export function SmoothScroll() {
   useEffect(() => {
     const lenis = new Lenis({
-      lerp: 0.07,
-      duration: 1.6,
-      // easeOutQuint — long, gentle tail so motion settles without a hard stop
+      // Smooth wheel through Lenis — gentle lerp, long easeOutQuint tail so
+      // motion never stops abruptly. The snap layer in ListView handles
+      // centring once the user lets go.
+      lerp: 0.085,
+      duration: 1.4,
       easing: (t) => 1 - Math.pow(1 - t, 5),
       wheelMultiplier: 0.9,
       touchMultiplier: 1.5,

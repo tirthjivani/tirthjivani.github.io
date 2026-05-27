@@ -4,22 +4,18 @@ import {
   useCallback,
   useEffect,
   useLayoutEffect,
-  useMemo,
   useRef,
   useState,
 } from "react";
 import { animate } from "motion/react";
 import { Navbar, type ViewMode } from "./Navbar";
-import { ProjectsIndex } from "./ProjectsIndex";
 import { ProjectSidebar } from "./ProjectSidebar";
 import { BottomBar } from "./BottomBar";
-import { BottomBlur } from "./BottomBlur";
 import { ListView } from "./ListView";
 import { SurfCanvas } from "./SurfCanvas";
 import { Preloader } from "./Preloader";
+import { IntroOverlay } from "./IntroOverlay";
 import { getLenis } from "@/lib/lenis";
-import { getPhotoItems } from "@/data/photos";
-import { useAvailablePhotos } from "@/lib/useAvailablePhotos";
 import type { Project } from "@/data/projects";
 
 const EASE_IN_OUT: [number, number, number, number] = [0.42, 0, 0.58, 1];
@@ -83,11 +79,22 @@ export function PortfolioView({ projects }: Props) {
   const total = projects.length;
   const [view, setView] = useState<ViewMode>("list");
   const [activeIndex, setActiveIndex] = useState(0);
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [, setHoveredIndex] = useState<number | null>(null);
+  // Two-stage intro: `preloading` blocks interaction + keeps Preloader mounted
+  // until the whole animation finishes; `textReady` flips earlier, the moment
+  // the stack starts scrolling up, so navbar / sidebar / bottombar text reveal
+  // alongside the upward translate instead of after it. The preloader plays on
+  // every load — no caching / skip.
   const [preloading, setPreloading] = useState(true);
+  const [textReady, setTextReady] = useState(false);
+
+  const revealText = useCallback(() => {
+    setTextReady(true);
+  }, []);
 
   const finishPreload = useCallback(() => {
     setPreloading(false);
+    setTextReady(true);
   }, []);
 
   const SECTION_PX = 360;
@@ -104,58 +111,43 @@ export function PortfolioView({ projects }: Props) {
   const handleViewChange = (next: ViewMode) => {
     if (next === view) return;
     // Each view positions itself to activeIndex on mount — keeps the user on
-    // the same project across List / Grid / Surf.
+    // the same project across List / Surf.
     setView(next);
   };
 
-  const handleSelectProject = (target: number) => {
-    setActiveIndex(target);
-    setView("list");
-  };
-
   const safeCurrent = Math.min(Math.max(activeIndex, 0), Math.max(0, total - 1));
-  const activeProject = projects[safeCurrent];
-  const activeImage = useMemo(() => activeProject?.image, [activeProject]);
-  const hoveredProject =
-    hoveredIndex !== null ? projects[hoveredIndex] ?? null : null;
-
-  const availablePhotos = useAvailablePhotos();
-  const surfItems = useMemo(
-    () => [...projects, ...getPhotoItems(availablePhotos)],
-    [projects, availablePhotos]
-  );
 
   return (
     <>
       {preloading && <Preloader />}
-      <Navbar view={view} introReady={!preloading} />
+      {preloading && view === "list" && (
+        <IntroOverlay
+          projects={projects}
+          onReveal={revealText}
+          onDone={finishPreload}
+        />
+      )}
+      <Navbar view={view} introReady={textReady} />
       <main>
         {view === "list" ? (
           <ListView
             projects={projects}
             activeIndex={safeCurrent}
             onActiveChange={setActiveIndex}
-            introReady={!preloading}
-            intro={preloading}
+            introReady={textReady}
+            intro={false}
+            onIntroReveal={revealText}
             onIntroDone={finishPreload}
           />
-        ) : view === "surf" ? (
-          <SurfCanvas
-            projects={surfItems}
-            activeIndex={safeCurrent}
-            onHoverProject={setHoveredIndex}
-          />
         ) : (
-          <ProjectsIndex
+          <SurfCanvas
             projects={projects}
             activeIndex={safeCurrent}
-            onSelectProject={handleSelectProject}
             onHoverProject={setHoveredIndex}
           />
         )}
       </main>
-      <BottomBlur />
-      <SidebarPresence visible={view === "list" && !preloading}>
+      <SidebarPresence visible={view === "list" && textReady}>
         <ProjectSidebar
           projects={projects}
           activeIndex={safeCurrent}
@@ -165,13 +157,7 @@ export function PortfolioView({ projects }: Props) {
       <BottomBar
         view={view}
         onViewChange={handleViewChange}
-        activeProject={activeProject}
-        activeImage={activeImage}
-        activeIndex={safeCurrent}
-        total={total}
-        hoveredProject={hoveredProject}
-        hoveredIndex={hoveredIndex}
-        introReady={!preloading}
+        introReady={textReady}
       />
     </>
   );

@@ -2,8 +2,8 @@
 
 import type { Project } from "@/data/projects";
 
-const ITEM_HEIGHT = 14;
-const ITEM_GAP = 8;
+const ITEM_HEIGHT = 13;
+const ITEM_GAP = 4;
 const STEP = ITEM_HEIGHT + ITEM_GAP;
 
 type Props = {
@@ -45,7 +45,7 @@ export function ProjectSidebar({ projects, activeIndex, onNavigate }: Props) {
                 left: 0,
                 transform: `translateY(${slot * STEP}px)`,
               }}
-              className={`pointer-events-auto whitespace-nowrap text-left text-[14px] leading-none tracking-[-0.03em] ${
+              className={`pointer-events-auto whitespace-nowrap text-left text-[13px] leading-none tracking-[-0.03em] ${
                 isActive ? "text-white" : "text-white/30 hover:text-white/60"
               }`}
             >

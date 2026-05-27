@@ -1,9 +1,72 @@
 @import "tailwindcss";
 
+:root {
+  --bg: #000000;
+  --fg: #ffffff;
+  --tile-bg: #0b0b0b;
+  --blur-fade: rgba(0, 0, 0, 0.55);
+}
+
+html.light {
+  --bg: #ffffff;
+  --fg: #000000;
+  --tile-bg: #ffffff;
+  --blur-fade: rgba(255, 255, 255, 0.55);
+}
+
+/* Light mode tile treatment: white backdrop + luminosity blend on the media
+   turns every project image into a desaturated greyscale-on-white card,
+   matching the editorial reference look. The active tile drops the blend so
+   the centred project pops back to full colour. */
+html.light [data-tile]:not([data-tile-active="true"]) img,
+html.light [data-tile]:not([data-tile-active="true"]) video {
+  mix-blend-mode: luminosity;
+}
+
+/* Theme-aware text utilities. Re-point the white-on-dark colors to the
+   foreground variable so any element using `text-white` / `text-white/NN`
+   automatically inverts in light mode. The selectors only fire when
+   `.light` is on <html>; dark mode keeps the original Tailwind values. */
+html.light .text-white {
+  color: var(--fg);
+}
+html.light .text-white\/30 {
+  color: color-mix(in srgb, var(--fg) 25%, transparent);
+}
+html.light .text-white\/40 {
+  color: color-mix(in srgb, var(--fg) 40%, transparent);
+}
+html.light .text-white\/50 {
+  color: color-mix(in srgb, var(--fg) 50%, transparent);
+}
+html.light .text-white\/60 {
+  color: color-mix(in srgb, var(--fg) 60%, transparent);
+}
+html.light .text-white\/80 {
+  color: color-mix(in srgb, var(--fg) 80%, transparent);
+}
+html.light .hover\:text-white\/50:hover {
+  color: color-mix(in srgb, var(--fg) 50%, transparent);
+}
+html.light .hover\:text-white\/60:hover {
+  color: color-mix(in srgb, var(--fg) 60%, transparent);
+}
+html.light .active\:text-white\/20:active {
+  color: color-mix(in srgb, var(--fg) 20%, transparent);
+}
+
+/* mix-blend-mode: difference assumes a black backdrop. In light mode the
+   backdrop is white and combined with overridden black text it would invert
+   back to white (invisible). Disable the blend in light mode so the explicit
+   foreground color shows through. */
+html.light [style*="mix-blend-mode"] {
+  mix-blend-mode: normal !important;
+}
+
 html,
 body {
-  background-color: #000000;
-  color: #ffffff;
+  background-color: var(--bg);
+  color: var(--fg);
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
@@ -21,12 +84,13 @@ body::-webkit-scrollbar,
 }
 
 body {
-  font-family: var(--font-circular), Arial, Helvetica, sans-serif;
+  font-family: var(--font-circular), sans-serif;
   font-weight: 400;
-  font-size: 14px;
-  line-height: 1;
+  font-size: 13px;
+  line-height: 13px;
 }
 
 @theme inline {
   --font-sans: var(--font-circular);
+  --font-pixel: var(--font-geist-pixel-circle);
 }
