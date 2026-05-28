@@ -31,7 +31,7 @@ export function ScrollFlipImage({
   aspect = 4 / 5,
   endTarget,
   startTarget,
-  parallax = 0.35,
+  parallax = 0.6,
 }: Props) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
