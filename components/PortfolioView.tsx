@@ -20,6 +20,29 @@ import type { Project } from "@/data/projects";
 
 const EASE_IN_OUT: [number, number, number, number] = [0.42, 0, 0.58, 1];
 
+// Plays the preloader only on a real fresh load (reload / hard refresh / first
+// visit). Internal nav (clicking "Selected Work" or the logo, even from a
+// different page like /about) skips it. We can't use a module-scoped flag
+// because /about and / live in different chunks — the module re-initialises on
+// cross-route nav. sessionStorage survives that, and we clear it on `reload`
+// via the Performance API so a real refresh still replays the intro.
+const INTRO_FLAG = "portfolio:introPlayed";
+function readIntroSeen(): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    const nav = performance.getEntriesByType(
+      "navigation"
+    )[0] as PerformanceNavigationTiming | undefined;
+    if (nav?.type === "reload") {
+      sessionStorage.removeItem(INTRO_FLAG);
+      return false;
+    }
+    return sessionStorage.getItem(INTRO_FLAG) === "1";
+  } catch {
+    return false;
+  }
+}
+
 type Props = {
   projects: Project[];
 };
@@ -85,14 +108,28 @@ export function PortfolioView({ projects }: Props) {
   // the stack starts scrolling up, so navbar / sidebar / bottombar text reveal
   // alongside the upward translate instead of after it. The preloader plays on
   // every load — no caching / skip.
+  // Initialise with `false` on the server so SSR matches everywhere; on the
+  // client we read sessionStorage in a layout effect (before paint).
   const [preloading, setPreloading] = useState(true);
   const [textReady, setTextReady] = useState(false);
+  const [introSeen, setIntroSeen] = useState(false);
+  useLayoutEffect(() => {
+    if (readIntroSeen()) {
+      setPreloading(false);
+      setTextReady(true);
+      setIntroSeen(true);
+    }
+  }, []);
 
   const revealText = useCallback(() => {
     setTextReady(true);
   }, []);
 
   const finishPreload = useCallback(() => {
+    try {
+      sessionStorage.setItem(INTRO_FLAG, "1");
+    } catch {}
+    setIntroSeen(true);
     setPreloading(false);
     setTextReady(true);
   }, []);
@@ -127,7 +164,7 @@ export function PortfolioView({ projects }: Props) {
           onDone={finishPreload}
         />
       )}
-      <Navbar view={view} introReady={textReady} />
+      <Navbar view={view} introReady={textReady} staticReveal={introSeen} />
       <main>
         {view === "list" ? (
           <ListView

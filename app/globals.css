@@ -1,5 +1,15 @@
 @import "tailwindcss";
 
+/* Pre-hydration: hide every CharReveal character. The SSR HTML renders the
+   chars at full opacity (they're plain spans), and CharReveal only snaps them
+   to hidden in a layout effect after JS hydrates — leaving a one-frame flash
+   of the navbar / bio / nav links on first paint. This rule defers that flash:
+   inline `opacity`/`transform` written by Motion overrides the rule, so it
+   only bites the pre-JS frame. */
+[data-rc] {
+  opacity: 0;
+}
+
 :root {
   --bg: #000000;
   --fg: #ffffff;

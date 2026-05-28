@@ -16,6 +16,10 @@ export function ClickSound() {
       if (!target) return;
       const interactive = target.closest("a, button, [role='button']");
       if (!interactive) return;
+      // Respect the mute toggle (SoundToggle writes localStorage "sound").
+      try {
+        if (localStorage.getItem("sound") === "off") return;
+      } catch {}
       const a = audioRef.current;
       if (!a) return;
       a.currentTime = 0;

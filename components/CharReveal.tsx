@@ -10,6 +10,9 @@ type Props = {
   delay?: number;
   enterStagger?: number;
   exitStagger?: number;
+  /** Skip the entrance/exit animation — snap straight to the target state.
+      Used so the navbar doesn't re-reveal on page transitions. */
+  instant?: boolean;
 };
 
 const EASE_OUT: [number, number, number, number] = [0, 0, 0.58, 1];
@@ -25,8 +28,9 @@ export function CharReveal({
   visible,
   className,
   delay = 0,
-  enterStagger = 0.004,
-  exitStagger = 0.003,
+  enterStagger = 0.015,
+  exitStagger = 0.01,
+  instant = false,
 }: Props) {
   const ref = useRef<HTMLSpanElement>(null);
   const firstRef = useRef(true);
@@ -42,6 +46,14 @@ export function CharReveal({
     controlsRef.current?.stop();
     const isFirst = firstRef.current;
     firstRef.current = false;
+    if (instant) {
+      // Snap to the target state with no animation (page-transition mounts).
+      for (const c of chars) {
+        c.style.transform = visible ? "translateY(0)" : "translateY(12px)";
+        c.style.opacity = visible ? "1" : "0";
+      }
+      return;
+    }
     if (visible) {
       controlsRef.current = animate(
         chars,
@@ -73,7 +85,7 @@ export function CharReveal({
     return () => {
       controlsRef.current?.stop();
     };
-  }, [visible, children, delay, enterStagger, exitStagger]);
+  }, [visible, children, delay, enterStagger, exitStagger, instant]);
 
   const words = children.split(" ");
   const out: ReactNode[] = [];

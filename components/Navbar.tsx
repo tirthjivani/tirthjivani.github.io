@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { animate, type AnimationPlaybackControls } from "motion/react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { CharReveal } from "./CharReveal";
 import { ThemeToggle } from "./ThemeToggle";
-
-const EASE_IN_OUT: [number, number, number, number] = [0.42, 0, 0.58, 1];
+import { SoundToggle } from "./SoundToggle";
 
 export type ViewMode = "surf" | "list";
 
@@ -16,44 +16,66 @@ const BIO =
 type Props = {
   view?: ViewMode;
   introReady?: boolean;
+  showBio?: boolean;
+  /** Render nav text instantly (no char-reveal) — used on page transitions so
+      the navbar / logo don't re-animate when navigating between pages. */
+  staticReveal?: boolean;
 };
 
 const LOGO_LARGE = { fontSize: "64px", letterSpacing: "-3.84px" };
 const LOGO_SMALL = { fontSize: "14px", letterSpacing: "-0.42px" };
 
-export function Navbar({ view = "list", introReady = true }: Props) {
+export function Navbar({
+  view = "list",
+  introReady = true,
+  showBio = true,
+  staticReveal = false,
+}: Props) {
   const isList = view === "list";
   // Top-nav links (Selected Work / Archives / About) persist across every
   // page/view once the intro finishes.
   const reveal = introReady;
   // BIO + social handles belong to the list view only; they hide when the
   // user switches to Grid or Surf and reveal again on return to Vertical.
-  const revealBio = isList && introReady;
+  // `showBio={false}` suppresses them entirely (e.g. on the About page).
+  const revealBio = isList && introReady && showBio;
   const logoRef = useRef<HTMLAnchorElement>(null);
 
+  // Nav links behave like the Vertical/Surf toggle: the current page is full
+  // white, the rest dimmed.
+  const pathname = usePathname();
+  const navLinkCls = (active: boolean) =>
+    `transition-colors duration-150 ease-in-out ${
+      active
+        ? "text-white"
+        : "text-white/30 hover:text-white/50 active:text-white/20"
+    }`;
+
+  // Logo sizing: large at the top, shrinking toward the small size as the page
+  // scrolls down (and back to large when it touches the top). Only the list
+  // view on desktop gets the large→small range; elsewhere it stays small.
   useEffect(() => {
     const el = logoRef.current;
     if (!el) return;
-    let controls: AnimationPlaybackControls | null = null;
-    const apply = () => {
-      const isDesktop = window.matchMedia("(min-width: 768px)").matches;
-      const target = isList && isDesktop ? LOGO_LARGE : LOGO_SMALL;
-      controls?.stop();
-      controls = animate(
-        el,
-        {
-          fontSize: target.fontSize,
-          letterSpacing: target.letterSpacing,
-        },
-        { duration: 0.65, ease: EASE_IN_OUT }
-      );
-    };
-    apply();
     const mq = window.matchMedia("(min-width: 768px)");
-    mq.addEventListener("change", apply);
+    const SHRINK_DIST = 220; // px of scroll to go from large → small
+    const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+    const update = () => {
+      const big = isList && mq.matches;
+      const p = big
+        ? Math.min(1, Math.max(0, window.scrollY / SHRINK_DIST))
+        : 1;
+      const fs = lerp(64, 14, p);
+      const ls = lerp(-3.84, -0.42, p);
+      el.style.fontSize = `${fs}px`;
+      el.style.letterSpacing = `${ls}px`;
+    };
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    mq.addEventListener("change", update);
     return () => {
-      mq.removeEventListener("change", apply);
-      controls?.stop();
+      window.removeEventListener("scroll", update);
+      mq.removeEventListener("change", update);
     };
   }, [isList]);
 
@@ -75,7 +97,7 @@ export function Navbar({ view = "list", introReady = true }: Props) {
       style={{ mixBlendMode: "difference" }}
     >
       <div className="grid grid-cols-12 items-start gap-x-[10px] px-[16px] pt-[16px] text-white">
-        <a
+        <Link
           ref={logoRef}
           href="/"
           className="col-start-1 col-span-4 inline-block font-medium leading-none whitespace-nowrap"
@@ -85,82 +107,91 @@ export function Navbar({ view = "list", introReady = true }: Props) {
             fontFamily: "var(--font-geist-pixel-circle)",
           }}
         >
-          <CharReveal visible={reveal} delay={0.3}>Tirth J.</CharReveal>
-        </a>
+          <CharReveal visible={reveal} delay={0.3} instant={staticReveal}>
+            Tirth J.
+          </CharReveal>
+        </Link>
 
         <div className="col-start-10 col-span-2 hidden max-w-[340px] flex-col gap-[32px] text-[13px] leading-none md:flex">
           <div className="flex gap-[10px]">
-            <a href="/" className="text-white">
-              <CharReveal visible={reveal}>Selected Work</CharReveal>
-            </a>
-            <span className="opacity-30">
-              <CharReveal visible={reveal} delay={0.05}>
+            <Link href="/" className={navLinkCls(pathname === "/")}>
+              <CharReveal visible={reveal} instant={staticReveal}>
+                Selected Work
+              </CharReveal>
+            </Link>
+            <span className="text-white/30">
+              <CharReveal visible={reveal} delay={0.05} instant={staticReveal}>
                 Archives
               </CharReveal>
             </span>
-            <span className="opacity-30">
-              <CharReveal visible={reveal} delay={0.1}>
+            <Link href="/about" className={navLinkCls(pathname === "/about")}>
+              <CharReveal visible={reveal} delay={0.1} instant={staticReveal}>
                 About
               </CharReveal>
-            </span>
+            </Link>
           </div>
 
-          <p className="font-normal leading-[1.1]">
-            <CharReveal visible={revealBio}>{BIO}</CharReveal>
-          </p>
+          {showBio && (
+            <>
+              <p className="font-normal leading-[1.1]">
+                <CharReveal visible={revealBio}>{BIO}</CharReveal>
+              </p>
 
-          <div className="flex flex-col gap-[4px]">
-            <div className="flex gap-[4px] whitespace-nowrap">
-              <CharReveal visible={revealBio} className="text-white/30">
-                Email:
-              </CharReveal>
-              <a
-                href={`mailto:${EMAIL}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:underline"
-              >
-                <CharReveal visible={revealBio}>{EMAIL}</CharReveal>
-              </a>
-            </div>
-            <div className="flex flex-wrap gap-[4px] whitespace-nowrap">
-              <CharReveal visible={revealBio} className="text-white/30">
-                Insta:
-              </CharReveal>
-              <a
-                href="https://instagram.com/tirth.design"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:underline"
-              >
-                <CharReveal visible={revealBio}>@tirth.design</CharReveal>
-              </a>
-              <a
-                href="https://instagram.com/tirth.photos"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:underline"
-              >
-                <CharReveal visible={revealBio}>@tirth.photos</CharReveal>
-              </a>
-            </div>
-            <div className="flex gap-[4px] whitespace-nowrap">
-              <CharReveal visible={revealBio} className="text-white/30">
-                Linkedin:
-              </CharReveal>
-              <a
-                href="https://linkedin.com/in/tirthjivani"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:underline"
-              >
-                <CharReveal visible={revealBio}>/tirthjivani</CharReveal>
-              </a>
-            </div>
-          </div>
+              <div className="flex flex-col gap-[4px]">
+                <div className="flex gap-[4px] whitespace-nowrap">
+                  <CharReveal visible={revealBio} className="text-white/30">
+                    Email:
+                  </CharReveal>
+                  <a
+                    href={`mailto:${EMAIL}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:underline"
+                  >
+                    <CharReveal visible={revealBio}>{EMAIL}</CharReveal>
+                  </a>
+                </div>
+                <div className="flex flex-wrap gap-[4px] whitespace-nowrap">
+                  <CharReveal visible={revealBio} className="text-white/30">
+                    Insta:
+                  </CharReveal>
+                  <a
+                    href="https://instagram.com/tirth.design"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:underline"
+                  >
+                    <CharReveal visible={revealBio}>@tirth.design</CharReveal>
+                  </a>
+                  <a
+                    href="https://instagram.com/tirth.photos"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:underline"
+                  >
+                    <CharReveal visible={revealBio}>@tirth.photos</CharReveal>
+                  </a>
+                </div>
+                <div className="flex gap-[4px] whitespace-nowrap">
+                  <CharReveal visible={revealBio} className="text-white/30">
+                    Linkedin:
+                  </CharReveal>
+                  <a
+                    href="https://linkedin.com/in/tirthjivani"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:underline"
+                  >
+                    <CharReveal visible={revealBio}>/tirthjivani</CharReveal>
+                  </a>
+                </div>
+              </div>
+            </>
+          )}
         </div>
 
         <div className="col-start-12 col-span-1 flex items-center justify-end gap-[12px]">
+          <SoundToggle />
           <ThemeToggle />
           <button
             type="button"
@@ -179,23 +210,38 @@ export function Navbar({ view = "list", introReady = true }: Props) {
       id="mobile-menu"
       aria-hidden={!menuOpen}
       style={{ backgroundColor: "var(--bg)", color: "var(--fg)" }}
-      className={`fixed inset-0 z-40 flex flex-col gap-[40px] px-[20px] pb-[40px] pt-[60px] transition-opacity duration-300 ease-out md:hidden ${
+      className={`fixed inset-0 z-40 flex flex-col gap-[40px] px-[20px] pb-[40px] transition-opacity duration-300 ease-out md:hidden ${
         menuOpen
           ? "pointer-events-auto opacity-100"
           : "pointer-events-none opacity-0"
       }`}
     >
-        <nav className="flex flex-col gap-[20px] text-[28px] leading-none tracking-[-0.03em]">
-          <a href="/" onClick={() => setMenuOpen(false)}>
+        {/* Nav block sits ~25% from the top of the viewport. */}
+        <nav
+          className="flex flex-col gap-[20px] text-[28px] leading-none tracking-[-0.03em]"
+          style={{ marginTop: "25vh" }}
+        >
+          <Link
+            href="/"
+            onClick={() => setMenuOpen(false)}
+            className={navLinkCls(pathname === "/")}
+          >
             Selected Work
-          </a>
+          </Link>
           <span className="text-white/30">Archives</span>
-          <span className="text-white/30">About</span>
+          <Link
+            href="/about"
+            onClick={() => setMenuOpen(false)}
+            className={navLinkCls(pathname === "/about")}
+          >
+            About
+          </Link>
         </nav>
 
-        <p className="text-[16px] leading-[1.35] text-white/80">{BIO}</p>
+        <div className="mt-auto flex flex-col gap-[20px]">
+          <p className="text-[16px] leading-[1.35] text-white/80">{BIO}</p>
 
-        <div className="mt-auto flex flex-col gap-[12px] text-[15px] leading-none">
+          <div className="flex flex-col gap-[12px] text-[15px] leading-none">
           <div className="flex gap-[6px]">
             <span className="text-white/30">Email:</span>
             <a
@@ -232,6 +278,7 @@ export function Navbar({ view = "list", introReady = true }: Props) {
             >
               /tirthjivani
             </a>
+          </div>
           </div>
         </div>
       </div>
