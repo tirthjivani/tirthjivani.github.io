@@ -58,6 +58,42 @@ function jumpTo(y: number) {
   if (lenis) lenis.scrollTo(y, { immediate: true });
 }
 
+// Translate the scroll position by `delta` while preserving any in-flight
+// lenis momentum. lenis.scrollTo(y, { immediate: true }) internally calls
+// `reset()`, which zeroes velocity and stops the smooth animation — that's
+// exactly what made the list feel like it "stuck" at the project under
+// the wrap boundary (every cycle the wheel inertia got cancelled, so the
+// list couldn't carry past that section without a fresh user input).
+// Shifting both targetScroll and animatedScroll by the same delta moves the
+// frame of reference instead of resetting the animation, so the lerp keeps
+// going seamlessly across the copy boundary.
+function shiftScroll(delta: number) {
+  if (typeof window === "undefined" || delta === 0) return;
+  const newY = window.scrollY + delta;
+  const lenis = getLenis() as unknown as {
+    animatedScroll: number;
+    targetScroll: number;
+    animate?: { value: number; from: number; to: number };
+    preventNextNativeScrollEvent?: () => void;
+  } | null;
+  if (lenis) {
+    lenis.animatedScroll += delta;
+    lenis.targetScroll += delta;
+    // CRITICAL: lenis's internal Animate.value is the source of truth for the
+    // raf lerp — onUpdate writes `animatedScroll = value` every frame, so
+    // shifting only animatedScroll/targetScroll gets wiped on the next raf.
+    // Shifting value/from/to by the same delta translates the in-flight
+    // animation without changing its remaining distance, preserving momentum.
+    if (lenis.animate) {
+      lenis.animate.value += delta;
+      lenis.animate.from += delta;
+      lenis.animate.to += delta;
+    }
+    lenis.preventNextNativeScrollEvent?.();
+  }
+  window.scrollTo(0, newY);
+}
+
 function smoothScrollTo(y: number) {
   if (typeof window === "undefined") return;
   const lenis = getLenis();
@@ -301,12 +337,20 @@ export function ListView({
     };
   }, []);
 
-  // Center a section in the viewport given the current geometry.
+  // Center a section in the viewport given the current geometry. Always lands
+  // the result inside the MIDDLE copy's safe zone [cH, 2cH) so the wrap check
+  // never fires immediately on first paint (otherwise the first scroll event
+  // would yank the page by ±cH before lenis could lerp anywhere).
   const centeredScroll = (idx: number): number => {
     const top = sectionTops[idx] ?? 0;
     const nextTop = idx + 1 < sectionTops.length ? sectionTops[idx + 1] : copyH;
     const sectionH = nextTop - top - GAP;
-    return copyH * MIDDLE + top + sectionH / 2 - window.innerHeight / 2;
+    let sy = copyH * MIDDLE + top + sectionH / 2 - window.innerHeight / 2;
+    if (copyH > 0) {
+      while (sy < copyH) sy += copyH;
+      while (sy >= copyH * 2) sy -= copyH;
+    }
+    return sy;
   };
   const centeredScrollRef = useRef(centeredScroll);
   centeredScrollRef.current = centeredScroll;
@@ -587,15 +631,23 @@ export function ListView({
 
       if (adjustingRef.current) return;
       const sy = window.scrollY;
-      if (sy < cH * 0.5) {
+      // Wrap at the copy boundaries: the moment scroll leaves the MIDDLE
+      // copy ([cH, 2cH)) we translate the frame of reference back by ±cH.
+      // Because copy K and copy K+1 are pixel-identical, the wrap is
+      // visually a no-op. Earlier thresholds (0.5cH / 2.5cH) let the user
+      // drift deep into the outer copies, and on shorter viewports the
+      // upper threshold could exceed the document's scrollable max — which
+      // meant the wrap never fired and the list dead-ended at whichever
+      // project happened to land at the body bottom.
+      if (sy < cH) {
         adjustingRef.current = true;
-        jumpTo(sy + cH);
+        shiftScroll(cH);
         requestAnimationFrame(() => {
           adjustingRef.current = false;
         });
-      } else if (sy > cH * (COPIES - 0.5)) {
+      } else if (sy >= cH * 2) {
         adjustingRef.current = true;
-        jumpTo(sy - cH);
+        shiftScroll(-cH);
         requestAnimationFrame(() => {
           adjustingRef.current = false;
         });
@@ -690,13 +742,13 @@ export function ListView({
           }}
         >
           <div className="grid grid-cols-12 gap-x-[10px] text-[13px] leading-none text-white">
-            <span className="col-start-3 col-span-3 whitespace-nowrap">
+            <span className="col-start-2 col-span-3 whitespace-nowrap">
               {activeProject.category ?? "-"}
             </span>
-            <span className="col-start-10 col-span-2 whitespace-nowrap">
+            <span className="col-start-9 col-span-2 whitespace-nowrap">
               {activeProject.image.role}
             </span>
-            <span className="col-start-12 col-span-1 justify-self-end whitespace-nowrap">
+            <span className="col-start-11 col-span-1 justify-self-end whitespace-nowrap">
               {activeProject.image.year}
             </span>
           </div>

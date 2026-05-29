@@ -6,18 +6,27 @@ import { animate, motion } from "motion/react";
 const EASE_OUT: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 export function ThemeToggle() {
-  // Read initial state from the html class — the inline script in layout.tsx
-  // already applied the persisted theme before hydration, so this matches
-  // whatever the user last picked.
-  const [isDark, setIsDark] = useState(() => {
-    if (typeof document === "undefined") return true;
-    return !document.documentElement.classList.contains("light");
-  });
+  // Initial value is locked to `true` (dark) on BOTH server and first client
+  // render, even when the persisted theme is light — reading the html class
+  // in the useState initializer would diverge from SSR and throw a hydration
+  // mismatch warning. A useEffect right after mount reads the actual theme
+  // and updates state. The visible icon flash is hidden because the
+  // pre-hydration script in layout.tsx has already set the html background
+  // to the correct theme color, and the toggle icon uses `mix-blend-mode:
+  // difference` so it inverts to stay visible against either bg.
+  const [isDark, setIsDark] = useState(true);
+  const [hydrated, setHydrated] = useState(false);
   const [hover, setHover] = useState(false);
   const btnRef = useRef<HTMLButtonElement>(null);
   const animatingRef = useRef(false);
 
   useEffect(() => {
+    setIsDark(!document.documentElement.classList.contains("light"));
+    setHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (!hydrated) return;
     const root = document.documentElement;
     if (isDark) root.classList.remove("light");
     else root.classList.add("light");
@@ -26,7 +35,7 @@ export function ThemeToggle() {
     } catch {
       // Storage may be blocked (private mode, quota); fall through silently.
     }
-  }, [isDark]);
+  }, [isDark, hydrated]);
 
   // Truth table: light + !hover = circle, light + hover = moon,
   // dark + !hover = moon, dark + hover = circle → moon = (isDark !== hover).

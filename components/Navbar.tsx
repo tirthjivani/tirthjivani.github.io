@@ -51,24 +51,31 @@ export function Navbar({
         : "text-white/30 hover:text-white/50 active:text-white/20"
     }`;
 
-  // Logo sizing: large at the top, shrinking toward the small size as the page
-  // scrolls down (and back to large when it touches the top). Only the list
-  // view on desktop gets the large→small range; elsewhere it stays small.
+  // Logo sizing rules (desktop only — mobile stays small everywhere):
+  //  - `/` (list view) keeps the large 64px logo regardless of scroll.
+  //  - `/about` starts at 64px and lerps down to 14px over SHRINK_DIST so the
+  //    giant footer signature can come into focus as you scroll.
+  //  - `/archives` and everything else (e.g. surf view) stay small.
   useEffect(() => {
     const el = logoRef.current;
     if (!el) return;
     const mq = window.matchMedia("(min-width: 768px)");
-    const SHRINK_DIST = 220; // px of scroll to go from large → small
+    const SHRINK_DIST = 220;
     const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
     const update = () => {
-      const big = isList && mq.matches;
-      const p = big
+      const allowBig = pathname === "/" || pathname === "/about";
+      const big = isList && allowBig && mq.matches;
+      if (!big) {
+        el.style.fontSize = "14px";
+        el.style.letterSpacing = "-0.42px";
+        return;
+      }
+      const shrink = pathname === "/about";
+      const p = shrink
         ? Math.min(1, Math.max(0, window.scrollY / SHRINK_DIST))
-        : 1;
-      const fs = lerp(64, 14, p);
-      const ls = lerp(-3.84, -0.42, p);
-      el.style.fontSize = `${fs}px`;
-      el.style.letterSpacing = `${ls}px`;
+        : 0;
+      el.style.fontSize = `${lerp(64, 14, p)}px`;
+      el.style.letterSpacing = `${lerp(-3.84, -0.42, p)}px`;
     };
     update();
     window.addEventListener("scroll", update, { passive: true });
@@ -77,7 +84,7 @@ export function Navbar({
       window.removeEventListener("scroll", update);
       mq.removeEventListener("change", update);
     };
-  }, [isList]);
+  }, [isList, pathname]);
 
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -102,7 +109,9 @@ export function Navbar({
           href="/"
           className="col-start-1 col-span-4 inline-block font-medium leading-none whitespace-nowrap"
           style={{
-            ...(isList ? LOGO_LARGE : LOGO_SMALL),
+            ...(isList && (pathname === "/" || pathname === "/about")
+              ? LOGO_LARGE
+              : LOGO_SMALL),
             transformOrigin: "top left",
             fontFamily: "var(--font-geist-pixel-circle)",
           }}
@@ -112,18 +121,21 @@ export function Navbar({
           </CharReveal>
         </Link>
 
-        <div className="col-start-10 col-span-2 hidden max-w-[340px] flex-col gap-[32px] text-[13px] leading-none md:flex">
+        <div className="col-start-9 col-span-2 hidden max-w-[340px] flex-col gap-[32px] text-[13px] leading-none md:flex">
           <div className="flex gap-[10px]">
             <Link href="/" className={navLinkCls(pathname === "/")}>
               <CharReveal visible={reveal} instant={staticReveal}>
                 Selected Work
               </CharReveal>
             </Link>
-            <span className="text-white/30">
+            <Link
+              href="/archives"
+              className={navLinkCls(pathname === "/archives")}
+            >
               <CharReveal visible={reveal} delay={0.05} instant={staticReveal}>
                 Archives
               </CharReveal>
-            </span>
+            </Link>
             <Link href="/about" className={navLinkCls(pathname === "/about")}>
               <CharReveal visible={reveal} delay={0.1} instant={staticReveal}>
                 About
@@ -228,7 +240,13 @@ export function Navbar({
           >
             Selected Work
           </Link>
-          <span className="text-white/30">Archives</span>
+          <Link
+            href="/archives"
+            onClick={() => setMenuOpen(false)}
+            className={navLinkCls(pathname === "/archives")}
+          >
+            Archives
+          </Link>
           <Link
             href="/about"
             onClick={() => setMenuOpen(false)}

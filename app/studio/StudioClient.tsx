@@ -3,6 +3,10 @@
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
+type ArchiveItem = { src: string; alt?: string };
+type ArchivesFile = { items: ArchiveItem[] };
+type StudioTab = "projects" | "archives";
+
 type CaseStudyLink = { title: string; href?: string };
 
 type CaseStudyImage = {
@@ -69,7 +73,9 @@ function slugify(s: string): string {
 
 export function StudioClient() {
   const [data, setData] = useState<SeedsFile | null>(null);
+  const [archives, setArchives] = useState<ArchivesFile | null>(null);
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
+  const [tab, setTab] = useState<StudioTab>("projects");
   const [saveState, setSaveState] = useState<SaveState>("idle");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -77,14 +83,20 @@ export function StudioClient() {
 
   useEffect(() => {
     let alive = true;
-    fetch("/api/studio/projects")
-      .then(async (r) => {
-        if (!r.ok) throw new Error(`load failed (${r.status})`);
+    Promise.all([
+      fetch("/api/studio/projects").then(async (r) => {
+        if (!r.ok) throw new Error(`projects load failed (${r.status})`);
         return (await r.json()) as SeedsFile;
-      })
-      .then((seeds) => {
+      }),
+      fetch("/api/studio/archives").then(async (r) => {
+        if (!r.ok) throw new Error(`archives load failed (${r.status})`);
+        return (await r.json()) as ArchivesFile;
+      }),
+    ])
+      .then(([seeds, archivesFile]) => {
         if (!alive) return;
         setData(seeds);
+        setArchives(archivesFile);
         setSelectedSlug(seeds.projects[0]?.slug ?? null);
       })
       .catch((e: unknown) => {
@@ -96,43 +108,59 @@ export function StudioClient() {
     };
   }, []);
 
-  const persist = useCallback(async (next: SeedsFile) => {
-    setSaveState("saving");
-    setErrorMsg(null);
-    try {
-      const r = await fetch("/api/studio/projects", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(next),
-      });
-      if (!r.ok) {
-        const j = (await r.json().catch(() => null)) as
-          | { error?: string }
-          | null;
-        throw new Error(j?.error ?? `save failed (${r.status})`);
+  const persistTo = useCallback(
+    async (url: string, payload: unknown) => {
+      setSaveState("saving");
+      setErrorMsg(null);
+      try {
+        const r = await fetch(url, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        if (!r.ok) {
+          const j = (await r.json().catch(() => null)) as
+            | { error?: string }
+            | null;
+          throw new Error(j?.error ?? `save failed (${r.status})`);
+        }
+        setSaveState("saved");
+        if (saveTimer.current) clearTimeout(saveTimer.current);
+        saveTimer.current = setTimeout(() => setSaveState("idle"), 1500);
+      } catch (e: unknown) {
+        setSaveState("error");
+        setErrorMsg(e instanceof Error ? e.message : "save failed");
       }
-      setSaveState("saved");
-      if (saveTimer.current) clearTimeout(saveTimer.current);
-      saveTimer.current = setTimeout(() => setSaveState("idle"), 1500);
-    } catch (e: unknown) {
-      setSaveState("error");
-      setErrorMsg(e instanceof Error ? e.message : "save failed");
-    }
-  }, []);
+    },
+    []
+  );
 
-  // Debounced auto-save: whenever data changes, schedule a save 600ms
-  // later. The first run (initial load) is skipped via the ref flag so
-  // we don't write back the file we just read.
-  const skipNextSave = useRef(true);
+  // Debounced auto-save for projects + archives. Each datasource has its
+  // own skip-on-first-load guard so we don't echo back the file we just
+  // read from disk.
+  const skipNextProjectsSave = useRef(true);
   useEffect(() => {
     if (!data) return;
-    if (skipNextSave.current) {
-      skipNextSave.current = false;
+    if (skipNextProjectsSave.current) {
+      skipNextProjectsSave.current = false;
       return;
     }
-    const t = setTimeout(() => void persist(data), 600);
+    const t = setTimeout(() => void persistTo("/api/studio/projects", data), 600);
     return () => clearTimeout(t);
-  }, [data, persist]);
+  }, [data, persistTo]);
+  const skipNextArchivesSave = useRef(true);
+  useEffect(() => {
+    if (!archives) return;
+    if (skipNextArchivesSave.current) {
+      skipNextArchivesSave.current = false;
+      return;
+    }
+    const t = setTimeout(
+      () => void persistTo("/api/studio/archives", archives),
+      600
+    );
+    return () => clearTimeout(t);
+  }, [archives, persistTo]);
 
   const updateProject = useCallback(
     (slug: string, patch: Partial<ProjectSeed>) => {
@@ -227,7 +255,7 @@ export function StudioClient() {
 
   if (loadError) {
     return (
-      <div className="flex min-h-screen items-center justify-center px-[20px] text-center">
+      <div className="flex min-h-screen items-center justify-center bg-[color:var(--bg)] px-[20px] text-center text-[color:var(--fg)]">
         <div className="flex flex-col gap-[12px]">
           <div className="text-[20px]">Studio unavailable</div>
           <div className="text-[13px] text-white/60">{loadError}</div>
@@ -236,28 +264,34 @@ export function StudioClient() {
     );
   }
 
-  if (!data) {
+  if (!data || !archives) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center bg-[color:var(--bg)] text-[color:var(--fg)]">
         <div className="text-[13px] text-white/60">Loading studio…</div>
       </div>
     );
   }
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden bg-black text-white">
-      <header className="shrink-0 grid grid-cols-12 items-center gap-x-[10px] border-b border-white/10 bg-black px-[16px] py-[14px]">
+    <div className="flex h-screen flex-col overflow-hidden bg-[color:var(--bg)] text-[color:var(--fg)]">
+      <header className="shrink-0 grid grid-cols-12 items-center gap-x-[10px] border-b border-white/10 bg-[color:var(--bg)] px-[20px] py-[14px]">
         <Link
           href="/"
           className="col-span-3 text-[13px] leading-none tracking-[-0.02em] hover:underline"
         >
           TIRTH J. / STUDIO
         </Link>
-        <div className="col-span-6 hidden text-center text-[12px] leading-none text-white/40 md:block">
-          localhost · dev only · noindex
+        <div className="col-span-6 flex items-center justify-center gap-[4px]">
+          <TabButton active={tab === "projects"} onClick={() => setTab("projects")}>
+            Projects ({data.projects.length})
+          </TabButton>
+          <TabButton active={tab === "archives"} onClick={() => setTab("archives")}>
+            Archives ({archives.items.length})
+          </TabButton>
         </div>
-        <div className="col-span-3 flex items-center justify-end gap-[12px] text-[12px] leading-none">
+        <div className="col-span-3 flex items-center justify-end gap-[14px] text-[12px] leading-none">
           <SaveIndicator state={saveState} error={errorMsg} />
+          <StudioThemeToggle />
           <Link
             href="/"
             target="_blank"
@@ -269,45 +303,108 @@ export function StudioClient() {
         </div>
       </header>
 
-      <div className="flex min-h-0 flex-1 flex-col md:flex-row">
-        <aside
-          data-lenis-prevent
-          className="max-h-[35vh] shrink-0 overflow-y-auto border-b border-white/10 md:max-h-none md:w-[300px] md:border-b-0 md:border-r"
-        >
-          <div className="px-[16px] py-[20px]">
-            <ProjectList
-              projects={data.projects}
-              hidden={data.hidden}
-              selectedSlug={selectedSlug}
-              onSelect={setSelectedSlug}
-              onAdd={addProject}
-              onToggleHidden={toggleHidden}
-              onDelete={deleteProject}
+      {tab === "projects" ? (
+        <div className="flex min-h-0 flex-1 flex-col md:flex-row">
+          <aside
+            data-lenis-prevent
+            className="max-h-[35vh] shrink-0 overflow-y-auto border-b border-white/10 md:max-h-none md:w-[320px] md:border-b-0 md:border-r"
+          >
+            <div className="p-[24px]">
+              <ProjectList
+                projects={data.projects}
+                hidden={data.hidden}
+                selectedSlug={selectedSlug}
+                onSelect={setSelectedSlug}
+                onAdd={addProject}
+                onToggleHidden={toggleHidden}
+                onDelete={deleteProject}
+              />
+            </div>
+          </aside>
+          <section
+            data-lenis-prevent
+            className="min-h-0 flex-1 overflow-y-auto"
+          >
+            <div className="p-[24px] pb-[80px]">
+              {selected ? (
+                <ProjectEditor
+                  project={selected}
+                  hidden={data.hidden.includes(selected.slug)}
+                  onChange={(patch) => updateProject(selected.slug, patch)}
+                  onRenameSlug={(s) => renameSlug(selected.slug, s)}
+                  onToggleHidden={() => toggleHidden(selected.slug)}
+                />
+              ) : (
+                <div className="text-[13px] text-white/40">
+                  No project selected. Add one from the left.
+                </div>
+              )}
+            </div>
+          </section>
+        </div>
+      ) : (
+        <section data-lenis-prevent className="min-h-0 flex-1 overflow-y-auto">
+          <div className="p-[24px] pb-[80px]">
+            <ArchivesEditor
+              items={archives.items}
+              onChange={(items) => setArchives({ items })}
             />
           </div>
-        </aside>
-        <section
-          data-lenis-prevent
-          className="min-h-0 flex-1 overflow-y-auto"
-        >
-          <div className="px-[16px] py-[20px] pb-[80px]">
-            {selected ? (
-              <ProjectEditor
-                project={selected}
-                hidden={data.hidden.includes(selected.slug)}
-                onChange={(patch) => updateProject(selected.slug, patch)}
-                onRenameSlug={(s) => renameSlug(selected.slug, s)}
-                onToggleHidden={() => toggleHidden(selected.slug)}
-              />
-            ) : (
-              <div className="text-[13px] text-white/40">
-                No project selected. Add one from the left.
-              </div>
-            )}
-          </div>
         </section>
-      </div>
+      )}
     </div>
+  );
+}
+
+function TabButton({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`px-[14px] py-[8px] text-[12px] leading-none transition-colors ${
+        active
+          ? "bg-[color:var(--fg)] text-[color:var(--bg)]"
+          : "text-white/50 hover:text-white"
+      }`}
+    >
+      {children}
+    </button>
+  );
+}
+
+function StudioThemeToggle() {
+  const [isDark, setIsDark] = useState(true);
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => {
+    setIsDark(!document.documentElement.classList.contains("light"));
+    setHydrated(true);
+  }, []);
+  useEffect(() => {
+    if (!hydrated) return;
+    const root = document.documentElement;
+    if (isDark) root.classList.remove("light");
+    else root.classList.add("light");
+    try {
+      localStorage.setItem("theme", isDark ? "dark" : "light");
+    } catch {}
+  }, [isDark, hydrated]);
+  return (
+    <button
+      type="button"
+      onClick={() => setIsDark((v) => !v)}
+      aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+      className="border border-white/20 px-[8px] py-[4px] text-[11px] leading-none hover:border-white hover:text-white"
+    >
+      {isDark ? "Light" : "Dark"}
+    </button>
   );
 }
 
@@ -318,16 +415,38 @@ function SaveIndicator({
   state: SaveState;
   error: string | null;
 }) {
+  const base = "inline-flex items-center gap-[6px]";
+  const dot = "inline-block h-[6px] w-[6px] rounded-full";
   if (state === "saving") {
-    return <span className="text-white/40">Saving…</span>;
+    return (
+      <span className={`${base} text-amber-300`}>
+        <span className={`${dot} bg-amber-300 animate-pulse`} />
+        Saving…
+      </span>
+    );
   }
   if (state === "saved") {
-    return <span className="text-white/60">Saved</span>;
+    return (
+      <span className={`${base} text-emerald-400`}>
+        <span className={`${dot} bg-emerald-400`} />
+        Saved
+      </span>
+    );
   }
   if (state === "error") {
-    return <span className="text-red-300">Error: {error}</span>;
+    return (
+      <span className={`${base} text-red-400`}>
+        <span className={`${dot} bg-red-400`} />
+        Error: {error}
+      </span>
+    );
   }
-  return <span className="text-white/30">Idle</span>;
+  return (
+    <span className={`${base} text-white/40`}>
+      <span className={`${dot} bg-white/30`} />
+      Idle
+    </span>
+  );
 }
 
 function ProjectList({
@@ -1466,3 +1585,307 @@ function PreviewCard({
     </div>
   );
 }
+
+function ArchivesEditor({
+  items,
+  onChange,
+}: {
+  items: ArchiveItem[];
+  onChange: (items: ArchiveItem[]) => void;
+}) {
+  // `itemsRef` keeps the latest array in scope so the bulk-upload loop can
+  // call `onChange(itemsRef.current.concat(newItem))` after each file —
+  // closing over `items` directly would lose every append except the last.
+  const itemsRef = useRef(items);
+  itemsRef.current = items;
+  const remove = (i: number) => {
+    if (!confirm("Remove this archive image?")) return;
+    onChange(items.filter((_, idx) => idx !== i));
+  };
+  const add = () => {
+    onChange([{ src: "", alt: "" }, ...items]);
+  };
+  const reorder = (from: number, to: number) => {
+    if (from === to || from < 0 || to < 0) return;
+    const next = items.slice();
+    const [moved] = next.splice(from, 1);
+    next.splice(to, 0, moved);
+    onChange(next);
+  };
+  const updateAlt = (i: number, alt: string) => {
+    onChange(items.map((it, idx) => (idx === i ? { ...it, alt } : it)));
+  };
+  return (
+    <div className="flex flex-col gap-[20px]">
+      <div className="flex items-center justify-between gap-[12px]">
+        <h2 className="text-[20px] leading-none tracking-[-0.02em]">
+          Archives
+        </h2>
+        <div className="flex items-center gap-[8px]">
+          <BulkArchiveUpload
+            onUploaded={(src) => {
+              onChange([...itemsRef.current, { src, alt: "" }]);
+            }}
+          />
+          <button
+            type="button"
+            onClick={add}
+            className="border border-white/20 px-[12px] py-[8px] text-[12px] leading-none hover:border-white hover:text-white"
+          >
+            + Add empty
+          </button>
+        </div>
+      </div>
+      <div className="text-[12px] text-white/40">
+        Auto-saved. Drag tiles in the preview to reorder. Bulk upload sends
+        files through the Squoosh → WebP pipeline one at a time.
+      </div>
+
+      <div className="grid grid-cols-1 gap-[24px] md:grid-cols-10">
+        {/* Live masonry preview — mirrors the /archives page. Tiles are
+            HTML5-draggable; dropping one onto another reorders the array. */}
+        <div className="md:col-span-7">
+          <SectionLabel>Preview (drag to rearrange)</SectionLabel>
+          {items.length === 0 ? (
+            <div className="border border-dashed border-white/15 p-[40px] text-center text-[13px] text-white/40">
+              Empty. Bulk-upload or "+ Add empty" to start.
+            </div>
+          ) : (
+            <MasonryPreview items={items} onReorder={reorder} />
+          )}
+        </div>
+
+        {/* Right column: uploaded-images library, stacked vertically. */}
+        <div data-lenis-prevent className="md:col-span-3">
+          <SectionLabel>Uploaded ({items.length})</SectionLabel>
+          <div className="flex flex-col gap-[10px]">
+            {items.map((item, i) => (
+              <div
+                key={i}
+                className="flex flex-col gap-[8px] border border-white/10 p-[10px]"
+              >
+                <FileUpload
+                  slug="archive"
+                  tag={`slot-${i + 1}-${item.src ? "filled" : "empty"}`}
+                  currentPath={item.src}
+                  accept="image/*"
+                  onUploaded={(p) =>
+                    onChange(
+                      itemsRef.current.map((it, idx) =>
+                        idx === i ? { ...it, src: p } : it
+                      )
+                    )
+                  }
+                  onClear={() =>
+                    onChange(
+                      itemsRef.current.map((it, idx) =>
+                        idx === i ? { ...it, src: "" } : it
+                      )
+                    )
+                  }
+                  size="sm"
+                />
+                <Input
+                  value={item.alt ?? ""}
+                  onChange={(v) => updateAlt(i, v)}
+                  placeholder="Alt text"
+                />
+                <button
+                  type="button"
+                  onClick={() => remove(i)}
+                  className="self-start text-[10px] leading-none text-white/40 hover:text-red-300"
+                >
+                  Delete
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="mb-[10px] text-[10px] uppercase tracking-[0.1em] text-white/40">
+      {children}
+    </div>
+  );
+}
+
+// CSS multi-column masonry preview that exactly mirrors /archives/page.tsx.
+// HTML5 drag-and-drop reorders tiles: each item is `draggable`, stores its
+// index in `dataTransfer`, and the drop target swaps it in via `onReorder`.
+function MasonryPreview({
+  items,
+  onReorder,
+}: {
+  items: ArchiveItem[];
+  onReorder: (from: number, to: number) => void;
+}) {
+  const [draggingIdx, setDraggingIdx] = useState<number | null>(null);
+  const [overIdx, setOverIdx] = useState<number | null>(null);
+  return (
+    <div
+      className="[column-gap:10px] columns-2 lg:columns-3"
+      style={{ columnFill: "balance" }}
+    >
+      {items.map((item, i) => {
+        const isDragging = draggingIdx === i;
+        const isOver = overIdx === i && draggingIdx !== null && draggingIdx !== i;
+        return (
+          <div
+            key={i}
+            draggable
+            onDragStart={(e) => {
+              setDraggingIdx(i);
+              e.dataTransfer.effectAllowed = "move";
+              e.dataTransfer.setData("text/plain", String(i));
+            }}
+            onDragEnd={() => {
+              setDraggingIdx(null);
+              setOverIdx(null);
+            }}
+            onDragOver={(e) => {
+              e.preventDefault();
+              e.dataTransfer.dropEffect = "move";
+              if (overIdx !== i) setOverIdx(i);
+            }}
+            onDragLeave={() => {
+              if (overIdx === i) setOverIdx(null);
+            }}
+            onDrop={(e) => {
+              e.preventDefault();
+              const from = Number(e.dataTransfer.getData("text/plain"));
+              setOverIdx(null);
+              setDraggingIdx(null);
+              if (!Number.isNaN(from) && from !== i) onReorder(from, i);
+            }}
+            className={`relative mb-[10px] inline-block w-full cursor-grab overflow-hidden border-2 transition-colors active:cursor-grabbing ${
+              isOver
+                ? "border-emerald-400"
+                : isDragging
+                  ? "border-amber-300 opacity-50"
+                  : "border-transparent"
+            }`}
+            style={{ breakInside: "avoid" }}
+          >
+            {item.src ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={item.src}
+                alt={item.alt ?? ""}
+                draggable={false}
+                className="block h-auto w-full object-cover"
+              />
+            ) : (
+              <div className="flex h-[140px] w-full items-center justify-center bg-white/5 text-[11px] text-white/40">
+                no source
+              </div>
+            )}
+            <span className="absolute left-[6px] top-[6px] rounded bg-black/60 px-[6px] py-[2px] text-[10px] leading-none text-white">
+              #{i + 1}
+            </span>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function BulkArchiveUpload({
+  onUploaded,
+}: {
+  onUploaded: (src: string) => void;
+}) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [progress, setProgress] = useState<{ done: number; total: number } | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  // Sequential uploader: walks the picked files, posts each to the existing
+  // /api/studio/upload endpoint (which runs the file through Squoosh →
+  // WebP), waits BETWEEN_MS before starting the next so the worker pool
+  // gets a beat to clean up before re-engaging. Each successful upload
+  // append-fires `onUploaded(path)` so the archives list grows live in the
+  // editor and auto-save streams the new entries to disk one by one.
+  const handleFiles = async (files: FileList) => {
+    const list = Array.from(files);
+    if (list.length === 0) return;
+    setError(null);
+    setProgress({ done: 0, total: list.length });
+    const BETWEEN_MS = 250;
+    for (let i = 0; i < list.length; i++) {
+      const file = list[i];
+      try {
+        const form = new FormData();
+        form.append("file", file);
+        form.append("slug", "archive");
+        // Stamp each upload with the current epoch + index so concurrent
+        // bulk runs (e.g. two browser tabs) don't clobber each other.
+        form.append("tag", `${Date.now()}-${i + 1}`);
+        const r = await fetch("/api/studio/upload", {
+          method: "POST",
+          body: form,
+        });
+        if (!r.ok) {
+          const j = (await r.json().catch(() => null)) as
+            | { error?: string }
+            | null;
+          throw new Error(j?.error ?? `upload failed (${r.status})`);
+        }
+        const j = (await r.json()) as { path: string };
+        onUploaded(j.path);
+      } catch (e: unknown) {
+        setError(e instanceof Error ? e.message : `failed on ${file.name}`);
+        break;
+      }
+      setProgress({ done: i + 1, total: list.length });
+      if (i < list.length - 1) {
+        await new Promise((res) => setTimeout(res, BETWEEN_MS));
+      }
+    }
+    // Clear the picker so re-selecting the same files re-fires `onChange`.
+    if (inputRef.current) inputRef.current.value = "";
+    setTimeout(() => setProgress(null), 1500);
+  };
+
+  const busy = progress !== null && progress.done < progress.total;
+
+  return (
+    <div className="flex items-center gap-[10px] text-[12px] leading-none">
+      <button
+        type="button"
+        onClick={() => inputRef.current?.click()}
+        disabled={busy}
+        className="border border-white/20 px-[12px] py-[8px] hover:border-white hover:text-white disabled:opacity-50 disabled:hover:border-white/20 disabled:hover:text-white/60"
+      >
+        {busy ? "Uploading…" : "Bulk upload"}
+      </button>
+      <input
+        ref={inputRef}
+        type="file"
+        multiple
+        accept="image/*"
+        className="hidden"
+        onChange={(e) => {
+          if (e.target.files) handleFiles(e.target.files);
+        }}
+      />
+      {progress && (
+        <span
+          className={
+            progress.done >= progress.total
+              ? "text-emerald-400"
+              : "text-amber-300"
+          }
+        >
+          {progress.done}/{progress.total}
+          {progress.done >= progress.total ? " done" : " uploading…"}
+        </span>
+      )}
+      {error && <span className="text-red-400">Error: {error}</span>}
+    </div>
+  );
+}
+

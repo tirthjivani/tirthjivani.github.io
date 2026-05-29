@@ -22,20 +22,24 @@ const EASE_IN_OUT: [number, number, number, number] = [0.42, 0, 0.58, 1];
 
 // Plays the preloader only on a real fresh load (reload / hard refresh / first
 // visit). Internal nav (clicking "Selected Work" or the logo, even from a
-// different page like /about) skips it. We can't use a module-scoped flag
-// because /about and / live in different chunks — the module re-initialises on
-// cross-route nav. sessionStorage survives that, and we clear it on `reload`
-// via the Performance API so a real refresh still replays the intro.
+// different page like /about) skips it. sessionStorage survives cross-route
+// SPA navs; a separate INIT flag ensures the `reload` clear-out runs exactly
+// once per page-load, not on every PortfolioView remount — otherwise revisiting
+// / from /about would re-clear INTRO_FLAG (because nav.type stays "reload"
+// for the lifetime of the document) and replay the intro every time.
 const INTRO_FLAG = "portfolio:introPlayed";
+const INIT_FLAG = "portfolio:introInitialized";
 function readIntroSeen(): boolean {
   if (typeof window === "undefined") return false;
   try {
-    const nav = performance.getEntriesByType(
-      "navigation"
-    )[0] as PerformanceNavigationTiming | undefined;
-    if (nav?.type === "reload") {
-      sessionStorage.removeItem(INTRO_FLAG);
-      return false;
+    if (sessionStorage.getItem(INIT_FLAG) !== "1") {
+      const nav = performance.getEntriesByType(
+        "navigation"
+      )[0] as PerformanceNavigationTiming | undefined;
+      if (nav?.type === "reload") {
+        sessionStorage.removeItem(INTRO_FLAG);
+      }
+      sessionStorage.setItem(INIT_FLAG, "1");
     }
     return sessionStorage.getItem(INTRO_FLAG) === "1";
   } catch {
