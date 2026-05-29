@@ -1,7 +1,11 @@
 {
   "items": [
     {
-      "src": "/projects/archive-slot-1-empty.webp",
+      "src": "/projects/archive-1780044319555-2.webp",
+      "alt": ""
+    },
+    {
+      "src": "/projects/archive-1780038119970-1.webp",
       "alt": ""
     },
     {
@@ -9,7 +13,31 @@
       "alt": ""
     },
     {
-      "src": "/archives/sample.png",
+      "src": "/projects/archive-1780038120974-3.webp",
+      "alt": ""
+    },
+    {
+      "src": "/projects/archive-1780044214025-2.webp",
+      "alt": ""
+    },
+    {
+      "src": "/projects/archive-slot-7-empty.webp",
+      "alt": ""
+    },
+    {
+      "src": "/projects/archive-slot-6-filled.webp",
+      "alt": ""
+    },
+    {
+      "src": "/projects/archive-1780044213269-1.webp",
+      "alt": ""
+    },
+    {
+      "src": "/projects/archive-slot-1-empty.webp",
+      "alt": ""
+    },
+    {
+      "src": "/projects/archive-1780044318987-1.webp",
       "alt": ""
     }
   ]
