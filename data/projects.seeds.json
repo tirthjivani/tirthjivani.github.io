@@ -9,6 +9,18 @@
   ],
   "projects": [
     {
+      "slug": "the-summer-design",
+      "title": "The Summer Design",
+      "client": "The Summer Design",
+      "role": "Sr. Product Designer",
+      "year": "2026",
+      "caseStudy": false,
+      "category": "Website & Branding",
+      "timeline": "2 Months",
+      "liveLink": "thesummerdesign.com",
+      "src": "/projects/the-summer-design.webp"
+    },
+    {
       "slug": "zappedin",
       "title": "ZappedIn",
       "client": "Outbox Labs",

@@ -742,13 +742,13 @@ export function ListView({
           }}
         >
           <div className="grid grid-cols-12 gap-x-[10px] text-[13px] leading-none text-white">
-            <span className="col-start-2 col-span-3 whitespace-nowrap">
+            <span className="col-start-3 col-span-3 whitespace-nowrap">
               {activeProject.category ?? "-"}
             </span>
             <span className="col-start-9 col-span-2 whitespace-nowrap">
               {activeProject.image.role}
             </span>
-            <span className="col-start-11 col-span-1 justify-self-end whitespace-nowrap">
+            <span className="col-start-12 col-span-1 justify-self-end whitespace-nowrap">
               {activeProject.image.year}
             </span>
           </div>

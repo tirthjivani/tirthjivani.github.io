@@ -2,7 +2,7 @@
 
 import { useLayoutEffect } from "react";
 import { Navbar } from "@/components/Navbar";
-import { archives as ARCHIVES } from "@/data/archives";
+import { archives as ARCHIVES, altFromPath } from "@/data/archives";
 import { getLenis } from "@/lib/lenis";
 
 export default function ArchivesPage() {
@@ -32,7 +32,7 @@ export default function ArchivesPage() {
             >
               <img
                 src={item.src}
-                alt={item.alt ?? ""}
+                alt={item.alt?.trim() || altFromPath(item.src)}
                 draggable={false}
                 loading="lazy"
                 decoding="async"
