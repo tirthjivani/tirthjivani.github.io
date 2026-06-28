@@ -4,8 +4,7 @@
     "humoniq",
     "socialgigs",
     "inreach",
-    "sellerapp-enterprise",
-    "zappedin"
+    "sellerapp-enterprise"
   ],
   "projects": [
     {
@@ -24,10 +23,13 @@
       "slug": "zappedin",
       "title": "ZappedIn",
       "client": "Outbox Labs",
-      "role": "Art Direction",
-      "year": "2025",
-      "caseStudy": false,
-      "category": "Website"
+      "role": "0 -> 1 Product",
+      "year": "2026",
+      "caseStudy": true,
+      "category": "Website",
+      "src": "/projects/zappedin.webp",
+      "timeline": "1 month",
+      "impact": "One of the upcoming product"
     },
     {
       "slug": "yaad-app",
@@ -69,7 +71,7 @@
           "href": "https://www.sellerapp.com/website.html"
         }
       ],
-      "introduction": "SellerApp's product lived across a dozen tabs. I rebuilt it as one workspace covering ads, inventory, listings, and analytics, tuned to the seller's day rather than the data model. A fully responsive, automated design system carried that same logic into a refreshed marketing site and net-new growth assets.",
+      "introduction": "SellerApp's product lived across a dozen tabs. I rebuilt it as a single workspace that covers ads, inventory, listings, and analytics, tuned to the seller's day rather than the data model. A fully responsive, automated design system carried that same logic into a refreshed marketing site and net-new growth assets.",
       "seoDescription": "SellerApp dashboard and website redesign: a data-driven overhaul of the seller workspace with new flows, a responsive automated design system, and high-impact marketing assets."
     },
     {
