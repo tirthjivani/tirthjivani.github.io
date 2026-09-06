@@ -40,6 +40,9 @@ html.light [data-tile]:not([data-tile-active="true"]) video {
 html.light .text-white {
   color: var(--fg);
 }
+html.light .text-white\/20 {
+  color: color-mix(in srgb, var(--fg) 20%, transparent);
+}
 html.light .text-white\/30 {
   color: color-mix(in srgb, var(--fg) 25%, transparent);
 }

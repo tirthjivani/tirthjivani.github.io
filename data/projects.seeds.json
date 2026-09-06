@@ -17,7 +17,9 @@
       "category": "Website & Branding",
       "timeline": "2 Months",
       "liveLink": "thesummerdesign.com",
-      "src": "/projects/the-summer-design.webp"
+      "src": "/projects/the-summer-design.webp",
+      "width": 2400,
+      "height": 1742
     },
     {
       "slug": "zappedin",
@@ -29,7 +31,9 @@
       "category": "Website",
       "src": "/projects/zappedin.webp",
       "timeline": "1 month",
-      "impact": "One of the upcoming product"
+      "impact": "One of the upcoming product",
+      "width": 2266,
+      "height": 1406
     },
     {
       "slug": "yaad-app",
@@ -72,7 +76,9 @@
         }
       ],
       "introduction": "SellerApp's product lived across a dozen tabs. I rebuilt it as a single workspace that covers ads, inventory, listings, and analytics, tuned to the seller's day rather than the data model. A fully responsive, automated design system carried that same logic into a refreshed marketing site and net-new growth assets.",
-      "seoDescription": "SellerApp dashboard and website redesign: a data-driven overhaul of the seller workspace with new flows, a responsive automated design system, and high-impact marketing assets."
+      "seoDescription": "SellerApp dashboard and website redesign: a data-driven overhaul of the seller workspace with new flows, a responsive automated design system, and high-impact marketing assets.",
+      "width": 2090,
+      "height": 2044
     },
     {
       "slug": "sellerapp-qc",
@@ -87,7 +93,9 @@
       "impact": "Partnered with ONDC & Google",
       "src": "/projects/sellerapp-qc.webp",
       "introduction": "India's commerce stack is rewiring itself around open networks. SellerApp × QC, designed with ONDC and Google, onboards small sellers in a few taps, normalises their catalogs across every buyer app, and makes a brand-new protocol feel ordinary on day one.",
-      "seoDescription": "Designing SellerApp's Quick Commerce surface with ONDC and Google: onboarding small sellers onto open networks and normalising catalogs across buyer apps."
+      "seoDescription": "Designing SellerApp's Quick Commerce surface with ONDC and Google: onboarding small sellers onto open networks and normalising catalogs across buyer apps.",
+      "width": 2880,
+      "height": 1800
     },
     {
       "slug": "sellerapp-enterprise",
@@ -113,7 +121,9 @@
       "category": "UX Flow",
       "liveLink": "https://opencommerce.withgoogle.com/",
       "impact": "Featured in Google I/O",
-      "src": "/projects/google.webp"
+      "src": "/projects/google.webp",
+      "width": 2880,
+      "height": 1800
     },
     {
       "slug": "outbox-labs",
@@ -125,7 +135,9 @@
       "category": "Website",
       "liveLink": "https://outbox.vc",
       "impact": "0 → 30M+ ARR",
-      "video": "/projects/outbox.mp4"
+      "video": "/projects/outbox.mp4",
+      "width": 1280,
+      "height": 720
     },
     {
       "slug": "reachinbox",
@@ -140,7 +152,9 @@
       "impact": "80%+ UX Improvement",
       "src": "/projects/reachinbox.webp",
       "introduction": "ReachInbox should feel less like a tool and more like a workspace. I rebuilt the UX around what sequence operators actually do all day: draft, review, reply, triage. The time to do it dropped by 80%+, and every surface argues for the next action instead of asking the user to assemble one.",
-      "seoDescription": "Rebuilding ReachInbox as a workspace for sequence operators: drafting, reviewing, replying and triaging in 80% less time, with every surface arguing for the next action."
+      "seoDescription": "Rebuilding ReachInbox as a workspace for sequence operators: drafting, reviewing, replying and triaging in 80% less time, with every surface arguing for the next action.",
+      "width": 2880,
+      "height": 1800
     },
     {
       "slug": "zapmail",
@@ -155,7 +169,9 @@
       "impact": "4 → 25M+ ARR",
       "src": "/projects/zapmail.webp",
       "introduction": "Cold email infrastructure is plumbing, so it should be invisible. Zapmail's redesign focused on the three moments that decide whether sending works at all: domain setup, deliverability, and inbox warm-up. ARR moved from $4M to $25M+ on the back of that focus.",
-      "seoDescription": "Redesigning Zapmail to make cold email infrastructure invisible, focused on domain setup, deliverability and warm-up. ARR scaled from $4M to $25M+."
+      "seoDescription": "Redesigning Zapmail to make cold email infrastructure invisible, focused on domain setup, deliverability and warm-up. ARR scaled from $4M to $25M+.",
+      "width": 2880,
+      "height": 1800
     },
     {
       "slug": "mailwarmup",
@@ -166,7 +182,9 @@
       "caseStudy": false,
       "category": "0 → 1 Product",
       "liveLink": "https://mailwarmup.ai",
-      "src": "/projects/mailwarmup.webp"
+      "src": "/projects/mailwarmup.webp",
+      "width": 2880,
+      "height": 1800
     },
     {
       "slug": "visitoriq",
@@ -177,7 +195,9 @@
       "caseStudy": false,
       "category": "0 → 1 Product",
       "liveLink": "https://visitoriq.co",
-      "src": "/projects/visitoriq.webp"
+      "src": "/projects/visitoriq.webp",
+      "width": 2880,
+      "height": 1800
     },
     {
       "slug": "coldstats",
@@ -189,7 +209,9 @@
       "category": "0 → 1 Product",
       "liveLink": "https://coldstats.ai",
       "impact": "Partnered with outboundleads.com",
-      "src": "/projects/coldstats.webp"
+      "src": "/projects/coldstats.webp",
+      "width": 2880,
+      "height": 1800
     },
     {
       "slug": "referralstack",
@@ -200,7 +222,9 @@
       "caseStudy": false,
       "category": "0 → 1 Product",
       "liveLink": "https://referralstack.ai",
-      "src": "/projects/referralstack.webp"
+      "src": "/projects/referralstack.webp",
+      "width": 2880,
+      "height": 1800
     },
     {
       "slug": "threadjet",
@@ -215,7 +239,9 @@
       "impact": "Superhuman for LinkedIn Messaging",
       "src": "/projects/threadjet.webp",
       "introduction": "ThreadJet treats LinkedIn like an inbox, not a feed. We designed the messaging surface a power user actually wants: keyboard-first, omni-search, AI-drafted replies, pitched as Superhuman for the platform that didn't have one. The shape of the product is the argument.",
-      "seoDescription": "ThreadJet: an AI-powered, keyboard-first workspace that reimagines LinkedIn DMs around speed, shortcuts, focus and privacy, with context-aware replies and inbox-zero triage."
+      "seoDescription": "ThreadJet: an AI-powered, keyboard-first workspace that reimagines LinkedIn DMs around speed, shortcuts, focus and privacy, with context-aware replies and inbox-zero triage.",
+      "width": 2880,
+      "height": 1800
     },
     {
       "slug": "inboundiq",
@@ -260,7 +286,9 @@
           "kind": "body",
           "text": "In 2026, Outbox Labs introduced a new way of generating leads: instead of paying for email infrastructure, warmup tools, or generic sequences, teams simply paid for qualified leads. This flipped the traditional outbound model and tied pricing directly to outcomes.\n\nBecause this model was unfamiliar, design was critical to the rollout. The interface had to explain a new mental model while feeling as simple as a typical outbound tool. We used clear messaging, focused hierarchy, and guided flows from setup to first lead to build trust in the model and help users immediately understand what they were paying for."
         }
-      ]
+      ],
+      "width": 1280,
+      "height": 1026
     },
     {
       "slug": "socialgigs",
@@ -289,7 +317,9 @@
       "caseStudy": false,
       "category": "Website & Art Direction",
       "liveLink": "https://shutterhalf.com",
-      "src": "/projects/shutterhalf.webp"
+      "src": "/projects/shutterhalf.webp",
+      "width": 2250,
+      "height": 2400
     },
     {
       "slug": "golden",
@@ -301,7 +331,9 @@
       "category": "Website & Art Direction",
       "liveLink": "https://golden-website-three.vercel.app/",
       "src": "/projects/golden.webp",
-      "impact": "Rebranded the company from scratch"
+      "impact": "Rebranded the company from scratch",
+      "width": 2288,
+      "height": 2400
     },
     {
       "slug": "salesmonk",
@@ -312,8 +344,10 @@
       "caseStudy": false,
       "category": "Website & Art Direction",
       "liveLink": "https://salesmonk.ai",
-      "video": "/projects/salesmonk.mov",
-      "timeline": "1 month"
+      "video": "/projects/salesmonk.mp4",
+      "timeline": "1 month",
+      "width": 854,
+      "height": 1280
     }
   ]
 }

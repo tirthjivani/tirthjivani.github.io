@@ -37,6 +37,10 @@ type ProjectSeed = {
   role: string;
   year: string;
   caseStudy: boolean;
+  /** Intrinsic size of the rendered media, baked so the site can lay out
+      without measuring over the network. See lib/useImageAspects.ts. */
+  width?: number;
+  height?: number;
   category?: string;
   liveLink?: string;
   impact?: string;
@@ -754,8 +758,12 @@ function ProjectEditor({
           slug={project.slug}
           currentPath={project.src}
           accept="image/*"
-          onUploaded={(p) => onChange({ src: p })}
-          onClear={() => onChange({ src: undefined })}
+          onUploaded={(p, m) =>
+            onChange({ src: p, width: m?.width, height: m?.height })
+          }
+          onClear={() =>
+            onChange({ src: undefined, width: undefined, height: undefined })
+          }
         />
       </Field>
 
@@ -765,7 +773,9 @@ function ProjectEditor({
           slug={project.slug}
           currentPath={project.video}
           accept="video/*"
-          onUploaded={(p) => onChange({ video: p })}
+          onUploaded={(p, m) =>
+            onChange({ video: p, width: m?.width, height: m?.height })
+          }
           onClear={() => onChange({ video: undefined })}
         />
       </Field>
@@ -950,7 +960,7 @@ function FileUpload({
   tag?: string;
   currentPath?: string;
   accept: string;
-  onUploaded: (path: string) => void;
+  onUploaded: (path: string, meta?: { width?: number; height?: number }) => void;
   onClear: () => void;
   size?: "lg" | "sm";
 }) {
@@ -985,11 +995,15 @@ function FileUpload({
           | null;
         throw new Error(j?.error ?? `upload failed (${r.status})`);
       }
-      const j = (await r.json()) as { path: string };
+      const j = (await r.json()) as {
+        path: string;
+        width?: number;
+        height?: number;
+      };
       // Persist the clean path. Next.js' next/image blocks query strings
       // on local images by default, so the saved value must not include
       // a ?t=… cache-buster.
-      onUploaded(j.path);
+      onUploaded(j.path, { width: j.width, height: j.height });
       setBust(Date.now());
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "upload failed");

@@ -22,9 +22,6 @@ type Props = {
   staticReveal?: boolean;
 };
 
-const LOGO_LARGE = { fontSize: "64px", letterSpacing: "-3.84px" };
-const LOGO_SMALL = { fontSize: "14px", letterSpacing: "-0.42px" };
-
 export function Navbar({
   view = "list",
   introReady = true,
@@ -56,24 +53,34 @@ export function Navbar({
   //  - `/about` starts at 64px and lerps down to 14px over SHRINK_DIST so the
   //    giant footer signature can come into focus as you scroll.
   //  - `/archives` and everything else (e.g. surf view) stay small.
+  //
+  // Only the /about lerp needs JS; the rest is the responsive class on the
+  // element. That matters because this effect writes el.style directly — when
+  // React ALSO owned fontSize via the style prop, any unrelated re-render
+  // (opening the mobile menu, a route change) snapped the logo back to 64px
+  // until the next scroll event repainted it.
   useEffect(() => {
     const el = logoRef.current;
     if (!el) return;
+    const shrinks = isList && pathname === "/about";
+    const clear = () => {
+      el.style.fontSize = "";
+      el.style.letterSpacing = "";
+    };
+    if (!shrinks) {
+      clear();
+      return;
+    }
     const mq = window.matchMedia("(min-width: 768px)");
     const SHRINK_DIST = 220;
     const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
     const update = () => {
-      const allowBig = pathname === "/" || pathname === "/about";
-      const big = isList && allowBig && mq.matches;
-      if (!big) {
-        el.style.fontSize = "14px";
-        el.style.letterSpacing = "-0.42px";
+      if (!mq.matches) {
+        // Hand sizing back to the class at mobile widths.
+        clear();
         return;
       }
-      const shrink = pathname === "/about";
-      const p = shrink
-        ? Math.min(1, Math.max(0, window.scrollY / SHRINK_DIST))
-        : 0;
+      const p = Math.min(1, Math.max(0, window.scrollY / SHRINK_DIST));
       el.style.fontSize = `${lerp(64, 14, p)}px`;
       el.style.letterSpacing = `${lerp(-3.84, -0.42, p)}px`;
     };
@@ -83,15 +90,24 @@ export function Navbar({
     return () => {
       window.removeEventListener("scroll", update);
       mq.removeEventListener("change", update);
+      clear();
     };
   }, [isList, pathname]);
 
   const [menuOpen, setMenuOpen] = useState(false);
 
+  // Lock the body only while the menu is actually open, and only touch the
+  // style in that window.
+  //
+  // This used to capture `prev` on every mount and re-apply it on unmount. The
+  // Navbar mounts while the Preloader is holding `overflow: hidden`, so `prev`
+  // was captured as "hidden" and then written back every time the Navbar
+  // unmounted — leaving the body permanently locked from the first route
+  // change onward.
   useEffect(() => {
+    if (!menuOpen) return;
     const prev = document.body.style.overflow;
-    if (menuOpen) document.body.style.overflow = "hidden";
-    else document.body.style.overflow = prev;
+    document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = prev;
     };
@@ -107,11 +123,12 @@ export function Navbar({
         <Link
           ref={logoRef}
           href="/"
-          className="col-start-1 col-span-4 inline-block font-medium leading-none whitespace-nowrap"
+          className={`col-start-1 col-span-4 inline-block font-medium leading-none whitespace-nowrap ${
+            isList && (pathname === "/" || pathname === "/about")
+              ? "text-[14px] tracking-[-0.42px] md:text-[64px] md:tracking-[-3.84px]"
+              : "text-[14px] tracking-[-0.42px]"
+          }`}
           style={{
-            ...(isList && (pathname === "/" || pathname === "/about")
-              ? LOGO_LARGE
-              : LOGO_SMALL),
             transformOrigin: "top left",
             fontFamily: "var(--font-geist-pixel-circle)",
           }}

@@ -108,7 +108,10 @@ function CaseStudyCover({ project }: { project: Project }) {
           }}
         />
       </div>
-      <h1 className="absolute bottom-[20px] left-[20px] text-[28px] leading-none tracking-[-0.03em] text-white md:left-[40px] md:text-[40px]">
+      <h1
+        className="absolute bottom-[20px] left-[20px] text-[28px] leading-none tracking-[-0.03em] md:left-[40px] md:text-[40px]"
+        style={{ color: "#fff" }}
+      >
         <Reveal immediate delay={0.1}>{project.title}</Reveal>
       </h1>
     </section>
@@ -125,7 +128,7 @@ function DetailRow({
   delay?: number;
 }) {
   return (
-    <div className="flex items-center justify-between border-t border-white/10 py-[14px] text-[13px] leading-none">
+    <div className="flex items-center justify-between border-t border-current/10 py-[14px] text-[13px] leading-none">
       <Reveal delay={delay} className="text-white/40">{label}</Reveal>
       <Reveal delay={delay + 0.04} className="text-white">{value}</Reveal>
     </div>
@@ -215,7 +218,7 @@ function CaseStudyDeckRow({
 }) {
   const num = String(index).padStart(2, "0");
   const content = (
-    <div className="flex items-center justify-between border-t border-white/10 py-[24px] transition-colors duration-200 ease-out group-hover:border-white">
+    <div className="flex items-center justify-between border-t border-current/10 py-[24px] transition-colors duration-200 ease-out group-hover:border-current">
       <div className="relative">
         <span
           aria-hidden
@@ -330,7 +333,7 @@ function CaseStudyImageCell({ image }: { image: CaseStudyImage }) {
     <div style={{ gridColumn, gridRow }}>
       <div
         ref={ref}
-        className="relative overflow-hidden bg-white/[0.04]"
+        className="relative overflow-hidden bg-current/[0.04]"
         style={{
           aspectRatio: `${aspect}`,
           opacity: visible ? 1 : 0,

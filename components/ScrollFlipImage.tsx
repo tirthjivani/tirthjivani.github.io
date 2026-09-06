@@ -136,6 +136,11 @@ export function ScrollFlipImage({
             alt=""
             aria-hidden
             draggable={false}
+            // Only the first frame is on the critical path — the rest are
+            // revealed by scroll, so they queue behind everything else.
+            loading={i === 0 ? "eager" : "lazy"}
+            fetchPriority={i === 0 ? "high" : "low"}
+            decoding="async"
             className="absolute inset-0 h-full w-full object-cover grayscale"
             style={{ opacity: i === active ? 1 : 0 }}
           />

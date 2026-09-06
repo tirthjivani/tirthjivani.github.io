@@ -15,7 +15,6 @@ import { ListView } from "./ListView";
 import { SurfCanvas } from "./SurfCanvas";
 import { Preloader } from "./Preloader";
 import { IntroOverlay } from "./IntroOverlay";
-import { getLenis } from "@/lib/lenis";
 import type { Project } from "@/data/projects";
 
 const EASE_IN_OUT: [number, number, number, number] = [0.42, 0, 0.58, 1];
@@ -50,12 +49,6 @@ function readIntroSeen(): boolean {
 type Props = {
   projects: Project[];
 };
-
-function smoothScrollTo(y: number) {
-  const lenis = getLenis();
-  if (lenis) lenis.scrollTo(y);
-  else window.scrollTo({ top: y, behavior: "smooth" });
-}
 
 function SidebarPresence({
   visible,
@@ -106,7 +99,6 @@ export function PortfolioView({ projects }: Props) {
   const total = projects.length;
   const [view, setView] = useState<ViewMode>("list");
   const [activeIndex, setActiveIndex] = useState(0);
-  const [, setHoveredIndex] = useState<number | null>(null);
   // Two-stage intro: `preloading` blocks interaction + keeps Preloader mounted
   // until the whole animation finishes; `textReady` flips earlier, the moment
   // the stack starts scrolling up, so navbar / sidebar / bottombar text reveal
@@ -138,16 +130,12 @@ export function PortfolioView({ projects }: Props) {
     setTextReady(true);
   }, []);
 
-  const SECTION_PX = 360;
-
-  const navigateTo = useCallback(
-    (target: number) => {
-      const copyH = total * SECTION_PX;
-      const curCopy = Math.floor(window.scrollY / copyH);
-      smoothScrollTo(curCopy * copyH + target * SECTION_PX);
-    },
-    [total]
-  );
+  // ListView owns the list's real (variable-height) geometry and registers a
+  // scroll-to-project function here; the sidebar just calls it.
+  const scrollToIndexRef = useRef<((index: number) => void) | null>(null);
+  const navigateTo = useCallback((target: number) => {
+    scrollToIndexRef.current?.(target);
+  }, []);
 
   const handleViewChange = (next: ViewMode) => {
     if (next === view) return;
@@ -179,13 +167,10 @@ export function PortfolioView({ projects }: Props) {
             intro={false}
             onIntroReveal={revealText}
             onIntroDone={finishPreload}
+            scrollToIndexRef={scrollToIndexRef}
           />
         ) : (
-          <SurfCanvas
-            projects={projects}
-            activeIndex={safeCurrent}
-            onHoverProject={setHoveredIndex}
-          />
+          <SurfCanvas projects={projects} activeIndex={safeCurrent} />
         )}
       </main>
       <SidebarPresence visible={view === "list" && textReady}>

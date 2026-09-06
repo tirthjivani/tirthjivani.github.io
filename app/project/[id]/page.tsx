@@ -17,13 +17,32 @@ export async function generateMetadata({
   const { id } = await params;
   const project = projects.find((p) => p.id === id);
   if (!project) return { title: "Not found" };
+  // The root layout's title template appends " - Tirth Jivani", so the title
+  // here is just the project name.
+  const description =
+    project.seoDescription ??
+    project.introduction ??
+    project.impact ??
+    project.title;
   return {
-    title: `${project.title} - Tirth Jivani`,
-    description:
-      project.seoDescription ??
-      project.introduction ??
-      project.impact ??
-      project.title,
+    title: project.title,
+    description,
+    alternates: { canonical: `/project/${project.id}` },
+    openGraph: {
+      type: "article",
+      title: `${project.title} - Tirth Jivani`,
+      description,
+      url: `/project/${project.id}`,
+      // Local project shots are absolutised against metadataBase; the picsum
+      // placeholders are already absolute.
+      images: [{ url: project.image.src }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${project.title} - Tirth Jivani`,
+      description,
+      images: [project.image.src],
+    },
   };
 }
 

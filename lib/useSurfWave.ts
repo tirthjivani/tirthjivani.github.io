@@ -27,6 +27,10 @@ export interface CardMotion {
 export interface SurfWaveLayout {
   readonly cardWidth: number;
   readonly cardHeight: number;
+  // How many of the MAX_SLOTS pool entries the current viewport actually uses.
+  // Slots at or beyond this index are parked at opacity 0 and never move, so
+  // the renderer skips their media entirely.
+  readonly slotCount: number;
 }
 
 export interface SurfaceBindings {
@@ -138,7 +142,8 @@ function measureViewport(slotPoolSize: number): Viewport {
 export function useSurfWave(
   items: readonly SurfItem[],
   reducedMotion: boolean,
-  onCardClick?: (itemIndex: number) => void
+  onCardClick?: (itemIndex: number) => void,
+  initialIndex = 0
 ): UseSurfWaveResult {
   const itemCount = items.length;
   const onCardClickRef = useRef(onCardClick);
@@ -165,6 +170,7 @@ export function useSurfWave(
   const [layout, setLayout] = useState<SurfWaveLayout>({
     cardWidth: 0,
     cardHeight: 0,
+    slotCount: 0,
   });
   const [ready, setReady] = useState(false);
 
@@ -186,6 +192,7 @@ export function useSurfWave(
   const dragMoved = useRef(0);
 
   const arrowAnimRef = useRef<{ stop: () => void } | null>(null);
+  const didInitialScroll = useRef(false);
 
   useEffect(() => {
     function applyMeasure() {
@@ -195,10 +202,25 @@ export function useSurfWave(
       const cardWidth = vp.gap * CARD_W_GAP_MULT;
       const cardHeight = cardWidth / CARD_ASPECT;
       setLayout((prev) =>
-        prev.cardWidth === cardWidth && prev.cardHeight === cardHeight
+        prev.cardWidth === cardWidth &&
+        prev.cardHeight === cardHeight &&
+        prev.slotCount === vp.slotCount
           ? prev
-          : { cardWidth, cardHeight }
+          : { cardWidth, cardHeight, slotCount: vp.slotCount }
       );
+
+      // Land the incoming project at the centre of the stage on first measure.
+      // Slot i renders item (i % itemCount) and sits at
+      //   screenX = wrapped(i) - (stripWidth - w) / 2
+      // so centring slot i (screenX = w/2) means wrapped(i) = stripWidth/2,
+      // i.e. scroll = i * gap - stripWidth / 2.
+      if (!didInitialScroll.current) {
+        didInitialScroll.current = true;
+        const start = initialIndex * vp.gap - vp.stripWidth / 2;
+        targetScroll.current = start;
+        currentScroll.current = start;
+        prevScroll.current = start;
+      }
       setReady(true);
     }
 
@@ -214,6 +236,8 @@ export function useSurfWave(
       window.removeEventListener("resize", onResize);
       if (resizeRaf) cancelAnimationFrame(resizeRaf);
     };
+    // Mount-only: `initialIndex` is consumed once, on the first measure.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

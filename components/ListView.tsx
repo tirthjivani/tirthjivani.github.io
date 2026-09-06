@@ -9,6 +9,7 @@ import { getProjectAction } from "@/lib/projectAction";
 import { useImageAspects } from "@/lib/useImageAspects";
 import { Compass } from "./Compass";
 import { sizeForAspect } from "@/lib/sizeForAspect";
+import { posterFor } from "@/lib/posterFor";
 import type { Project } from "@/data/projects";
 
 const COPIES = 3;
@@ -46,6 +47,9 @@ type Props = {
   // sliding to its resting position.
   onIntroReveal?: () => void;
   onIntroDone?: () => void;
+  /** Filled in with a "scroll to project N" function so the sidebar can drive
+      the list without duplicating (and mis-guessing) its geometry. */
+  scrollToIndexRef?: React.MutableRefObject<((index: number) => void) | null>;
 };
 
 function jumpTo(y: number) {
@@ -126,6 +130,7 @@ function ProjectSection({
 }) {
   const action = getProjectAction(project);
   const { w, h } = sizeForAspect(aspect);
+  const isMiddleCopy = copy === MIDDLE;
 
   // While the POP/CASCADE beats run, Motion FULLY owns transform / scale /
   // opacity / filter via inline styles it writes directly on the DOM node.
@@ -170,6 +175,23 @@ function ProjectSection({
           action ? "cursor-pointer" : ""
         }`}
         onClick={action ? onClick : undefined}
+        // The tile is a real destination, so give it a keyboard path too.
+        // Only the middle copy participates: the outer two are pixel dupes for
+        // the infinite-scroll illusion, and exposing them would announce and
+        // tab through every project three times.
+        role={action && isMiddleCopy ? "link" : undefined}
+        tabIndex={action && isMiddleCopy ? 0 : undefined}
+        aria-hidden={isMiddleCopy ? undefined : true}
+        onKeyDown={
+          action && isMiddleCopy
+            ? (e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  onClick();
+                }
+              }
+            : undefined
+        }
         onMouseEnter={(e) =>
           action && setCursor({ x: e.clientX, y: e.clientY, text: action.text })
         }
@@ -183,6 +205,7 @@ function ProjectSection({
           playVideo ? (
             <video
               src={project.video}
+              poster={posterFor(project.video)}
               autoPlay
               loop
               muted
@@ -191,13 +214,16 @@ function ProjectSection({
               className="absolute inset-0 h-full w-full object-cover"
             />
           ) : (
-            // Non-middle copies: load just enough to render first frame, no
-            // playback. Avoids 3× range-fetch storm on /outbox.mp4 etc.
-            <video
-              src={`${project.video}#t=0.001`}
-              muted
-              playsInline
-              preload="metadata"
+            // Non-middle copies only ever showed a frozen first frame, so use
+            // the poster still directly: no second and third video decoder, no
+            // range fetch against the mp4, and it paints immediately.
+            <img
+              src={posterFor(project.video)}
+              alt=""
+              aria-hidden
+              loading="lazy"
+              decoding="async"
+              draggable={false}
               className="absolute inset-0 h-full w-full object-cover"
             />
           )
@@ -224,6 +250,7 @@ export function ListView({
   intro = false,
   onIntroReveal,
   onIntroDone,
+  scrollToIndexRef,
 }: Props) {
   const total = projects.length;
   const adjustingRef = useRef(false);
@@ -580,6 +607,34 @@ export function ListView({
     };
   }, [introStage]);
 
+  // Scroll so project `idx` lands at the centre, taking the shorter way round
+  // the loop. Reads live geometry from geomRef, so it always agrees with the
+  // heights the list actually rendered — the sidebar used to assume a flat
+  // 360px per project, which is roughly double the real average, so every
+  // click overshot and left the wrap + snap to drag the page somewhere else
+  // entirely.
+  useEffect(() => {
+    if (!scrollToIndexRef) return;
+    scrollToIndexRef.current = (idx: number) => {
+      const { sectionTops: tops, copyH: cH } = geomRef.current;
+      if (cH === 0 || tops.length === 0) return;
+      const top = tops[idx] ?? 0;
+      const nextTop = idx + 1 < tops.length ? tops[idx + 1] : cH;
+      const sectionCenter = top + (nextTop - top - GAP) / 2;
+      const viewCenter = window.scrollY + window.innerHeight / 2;
+      const wrapped = ((viewCenter % cH) + cH) % cH;
+      let delta = sectionCenter - wrapped;
+      // Every project exists once per copy, so travel to the nearest instance.
+      if (delta > cH / 2) delta -= cH;
+      else if (delta < -cH / 2) delta += cH;
+      smoothScrollTo(window.scrollY + delta);
+    };
+    const ref = scrollToIndexRef;
+    return () => {
+      ref.current = null;
+    };
+  }, [scrollToIndexRef]);
+
   useEffect(() => {
     let snapTimer: number | null = null;
     let lastVelocity = 0;
@@ -774,8 +829,14 @@ export function ListView({
         cursor &&
         createPortal(
           <div
-            className="pointer-events-none fixed z-50 rounded-full bg-white px-[8px] py-[4px] text-[12px] leading-none tracking-[-0.02em] text-black"
-            style={{ left: cursor.x + 18, top: cursor.y + 18 }}
+            className="pointer-events-none fixed z-50 rounded-full px-[8px] py-[4px] text-[12px] leading-none tracking-[-0.02em]"
+            style={{
+              left: cursor.x + 18,
+              top: cursor.y + 18,
+              // Inverted against the page so the pill reads in both themes.
+              backgroundColor: "var(--fg)",
+              color: "var(--bg)",
+            }}
           >
             {cursor.text}
           </div>,

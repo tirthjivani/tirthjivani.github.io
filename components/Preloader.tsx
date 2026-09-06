@@ -3,10 +3,6 @@
 import { useEffect } from "react";
 import { getLenis } from "@/lib/lenis";
 
-type Props = {
-  onDone?: () => void;
-};
-
 /**
  * A passive overlay that blocks interaction during the intro animation.
  * The actual tile animation runs inside ListView (so the same image
@@ -14,7 +10,7 @@ type Props = {
  * fires onDone when ListView's intro completes; this component just owns
  * the click-blocker + scroll lock for the duration.
  */
-export function Preloader({ onDone: _onDone }: Props) {
+export function Preloader() {
   useEffect(() => {
     const lenis = getLenis();
     lenis?.stop();

@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useMemo, useRef } from "react";
 import { animate, stagger, type AnimationSequence } from "motion/react";
 import { useImageAspects } from "@/lib/useImageAspects";
 import type { Project } from "@/data/projects";
@@ -37,7 +37,10 @@ export function PreloaderStep({ projects }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   // Only real project images — drop entries that fall back to a picsum
   // placeholder (video-only projects with no local webp).
-  const imageProjects = projects.filter((p) => p.image.src.startsWith("/"));
+  const imageProjects = useMemo(
+    () => projects.filter((p) => p.image.src.startsWith("/")),
+    [projects]
+  );
   const aspects = useImageAspects(imageProjects);
   const ranRef = useRef(false);
 

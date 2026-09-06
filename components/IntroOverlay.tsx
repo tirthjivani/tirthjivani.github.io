@@ -53,16 +53,47 @@ export function IntroOverlay({ projects, onReveal, onDone }: Props) {
   const onDoneRef = useRef(onDone);
   onDoneRef.current = onDone;
 
-  // Run once everything that's going to resolve has resolved — or after a
-  // short fallback so a stubborn image never hangs the intro on black.
-  const allResolved =
-    items.length > 0 && items.every((p) => aspects[p.id] != null);
+  // Start as soon as the FIRST tile can be drawn, not when all ~15 images have
+  // finished downloading. The pop is staggered POP_STAGGER apart, so tile i
+  // isn't needed on screen until POP_START + i * POP_STAGGER — by then the
+  // rest have streamed in behind it. Waiting for the whole set meant a cold
+  // load sat on a blank screen for as long as the slowest image took.
+  //
+  // Sizes come from the baked seed dimensions (see useImageAspects), so layout
+  // needs no network at all; this gate is purely about having pixels to show.
+  const sized = items.length > 0 && aspects[items[0].id] != null;
+  const [firstDecoded, setFirstDecoded] = useState(false);
   const [fallback, setFallback] = useState(false);
+  const firstSrc = items[0]?.image.src;
+
+  useEffect(() => {
+    if (!firstSrc) return;
+    let cancelled = false;
+    const img = new window.Image();
+    img.fetchPriority = "high";
+    const done = () => {
+      if (!cancelled) setFirstDecoded(true);
+    };
+    img.onload = done;
+    // A broken lead image must not hold the intro hostage.
+    img.onerror = done;
+    img.src = firstSrc;
+    if (img.complete) done();
+    return () => {
+      cancelled = true;
+      img.onload = null;
+      img.onerror = null;
+    };
+  }, [firstSrc]);
+
+  // Hard cap, so a stalled network still gets an intro rather than a black
+  // screen.
   useEffect(() => {
     const t = window.setTimeout(() => setFallback(true), 1200);
     return () => window.clearTimeout(t);
   }, []);
-  const ready = items.length > 0 && (allResolved || fallback);
+
+  const ready = sized && (firstDecoded || fallback);
 
   useLayoutEffect(() => {
     if (!ready) return;
@@ -180,6 +211,10 @@ export function IntroOverlay({ projects, onReveal, onDone }: Props) {
             alt={project.title}
             decoding="async"
             draggable={false}
+            // Copy A pops first and is all the user can see; copy B only
+            // matters once the loop beat starts, seconds later. (Both copies
+            // share one request per URL.)
+            fetchPriority={copy === "a" && idx < 4 ? "high" : "low"}
             className="absolute inset-0 h-full w-full object-cover"
           />
         </div>

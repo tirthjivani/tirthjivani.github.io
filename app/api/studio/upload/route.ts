@@ -45,39 +45,18 @@ async function compressToWebp(input: Buffer): Promise<Buffer> {
 async function compressVideo(
   input: Buffer,
   inExt: string
-): Promise<Buffer> {
+): Promise<{ video: Buffer; poster: Buffer; width: number; height: number }> {
   if (!ffmpegPath) {
     throw new Error("ffmpeg binary not available");
   }
   const id = crypto.randomBytes(8).toString("hex");
   const inPath = path.join(os.tmpdir(), `studio-in-${id}${inExt}`);
   const outPath = path.join(os.tmpdir(), `studio-out-${id}.mp4`);
+  const posterPath = path.join(os.tmpdir(), `studio-poster-${id}.jpg`);
   await fs.writeFile(inPath, input);
-  try {
-    await new Promise<void>((resolve, reject) => {
-      const proc = spawn(ffmpegPath as string, [
-        "-y",
-        "-i",
-        inPath,
-        "-c:v",
-        "libx264",
-        "-crf",
-        "28",
-        "-preset",
-        "medium",
-        // `+faststart` moves the mp4 moov atom to the front so the file
-        // starts playing before it's fully downloaded — important for
-        // streaming the saved file from /public.
-        "-movflags",
-        "+faststart",
-        "-pix_fmt",
-        "yuv420p",
-        "-c:a",
-        "aac",
-        "-b:a",
-        "128k",
-        outPath,
-      ]);
+  const run = (args: string[]) =>
+    new Promise<void>((resolve, reject) => {
+      const proc = spawn(ffmpegPath as string, args);
       let stderr = "";
       proc.stderr.on("data", (chunk) => {
         stderr += chunk.toString();
@@ -88,10 +67,67 @@ async function compressVideo(
         else reject(new Error(`ffmpeg exit ${code}: ${stderr.slice(-400)}`));
       });
     });
-    return await fs.readFile(outPath);
+  try {
+    await run([
+      "-y",
+      "-i",
+      inPath,
+      // Nothing displays these wider than ~600 CSS px, so cap the long edge at
+      // 1280 (retina headroom) instead of shipping the source resolution.
+      "-vf",
+      "scale='min(1280,iw)':'min(1280,ih)':force_original_aspect_ratio=decrease:force_divisible_by=2",
+      "-c:v",
+      "libx264",
+      "-crf",
+      "30",
+      "-preset",
+      "medium",
+      // `+faststart` moves the mp4 moov atom to the front so the file
+      // starts playing before it's fully downloaded — important for
+      // streaming the saved file from /public.
+      "-movflags",
+      "+faststart",
+      "-pix_fmt",
+      "yuv420p",
+      // Every player in this UI is muted and looping; the audio track is dead
+      // weight on the wire.
+      "-an",
+      outPath,
+    ]);
+    // First frame, saved next to the clip as `{name}-poster.webp` (see
+    // lib/posterFor.ts). The UI uses it as the <video poster> and in place of
+    // the clip wherever only a frozen frame is needed, so a tile paints
+    // without pulling a single video byte.
+    await run([
+      "-y",
+      "-i",
+      outPath,
+      "-frames:v",
+      "1",
+      "-q:v",
+      "3",
+      posterPath,
+    ]);
+    // The poster is a frame of the ENCODED video, so its size is the video's
+    // intrinsic size — which is what the seeds bake as width/height.
+    const posterRaw = await fs.readFile(posterPath);
+    const meta = await sharp(posterRaw).metadata();
+    return {
+      video: await fs.readFile(outPath),
+      poster: await sharp(posterRaw)
+        .resize({ width: 1280, height: 1280, fit: "inside", withoutEnlargement: true })
+        .webp({ quality: 72 })
+        .toBuffer(),
+      width: meta.width ?? 0,
+      height: meta.height ?? 0,
+    };
   } finally {
     // Always clean up temp files, even on error.
-    await Promise.allSettled([fs.unlink(inPath), fs.unlink(outPath)]);
+    await Promise.allSettled([
+      fs.unlink(inPath),
+      fs.unlink(outPath),
+      fs.unlink(posterPath),
+    ]);
   }
 }
 
@@ -131,10 +167,18 @@ export async function POST(req: Request) {
   // Images get rewritten to .webp via Squoosh. Videos pass through unchanged.
   let outBuf: Buffer;
   let outExt: string;
+  let posterBuf: Buffer | null = null;
+  // Reported back so the studio can bake them into the seed — the list and the
+  // intro use baked sizes to lay out without waiting on the network.
+  let outWidth = 0;
+  let outHeight = 0;
   if (detected.kind === "image") {
     try {
       outBuf = await compressToWebp(inputBuf);
       outExt = ".webp";
+      const meta = await sharp(outBuf).metadata();
+      outWidth = meta.width ?? 0;
+      outHeight = meta.height ?? 0;
     } catch (e) {
       return NextResponse.json(
         {
@@ -148,7 +192,11 @@ export async function POST(req: Request) {
     }
   } else {
     try {
-      outBuf = await compressVideo(inputBuf, detected.ext);
+      const encoded = await compressVideo(inputBuf, detected.ext);
+      outBuf = encoded.video;
+      posterBuf = encoded.poster;
+      outWidth = encoded.width;
+      outHeight = encoded.height;
       outExt = ".mp4";
     } catch (e) {
       return NextResponse.json(
@@ -167,8 +215,16 @@ export async function POST(req: Request) {
   const filename = tag ? `${slug}-${tag}${outExt}` : `${slug}${outExt}`;
   const fullPath = path.join(PROJECTS_DIR, filename);
   await fs.writeFile(fullPath, outBuf);
+  if (posterBuf) {
+    await fs.writeFile(
+      path.join(PROJECTS_DIR, filename.replace(/\.mp4$/, "-poster.webp")),
+      posterBuf
+    );
+  }
   return NextResponse.json({
     path: `/projects/${filename}`,
     kind: detected.kind,
+    width: outWidth,
+    height: outHeight,
   });
 }

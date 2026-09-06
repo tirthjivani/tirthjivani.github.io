@@ -4,177 +4,201 @@
 
 - **Next.js 16.2.6** App Router (TypeScript, Turbopack)
 - **React 19.2.4**, **Tailwind CSS v4** (`@tailwindcss/postcss`)
-- **motion v12** (formerly Framer Motion) — `import { motion, AnimatePresence } from "motion/react"`
-- **next/font/local** for Circular Std (5 weights in `app/fonts/`)
-- `agentation` (dev only) loaded via `components/DevTools.tsx` for in-page feedback
+- **motion v12** — `import { animate, stagger, motion } from "motion/react"`. Most
+  animation here is imperative `animate(element, …)` rather than `<motion.div>`.
+- **lenis** for smooth scroll; one instance created in `SmoothScroll`, shared
+  through the `lib/lenis.ts` module singleton.
+- **next/font/local** for Circular Std (5 weights) and Geist Pixel Circle (the
+  logo), all vendored in `app/fonts/`. Both are declared `preload: false` —
+  see the IntroOverlay notes below for why.
+- `agentation` (dev only) via `components/DevTools.tsx`.
 
-CLAUDE.md / AGENTS.md flag: **this Next.js version differs from training data**. Always consult `node_modules/next/dist/docs/01-app/...` before adding features that touch routing, rendering modes, or config.
+CLAUDE.md / AGENTS.md flag: **this Next.js version differs from training data**.
+Consult `node_modules/next/dist/docs/01-app/…` before touching routing,
+rendering modes, or config.
 
-## Layout overview
+## Routes
 
-Single-page portfolio at `/`. Two views toggled from the BottomBar:
-
-- **List** (default) — full-bleed slideshow, one project per viewport.
-- **Grids** — 3-column grid of all projects.
-
-Chrome stays fixed across both views:
-- `Navbar.tsx` — top bar (brand / Work·Photos·Archive·Info / Instagram·Linkedin·The X).
-- `BottomBar.tsx` — view toggle on the left; project impact / Role / Category / Client / Year and `Compass` on the right (right-side fades out in Grids).
-- `BottomBlur.tsx` — progressive backdrop-blur stack + dark gradient at the bottom edge; renders in **both** views.
-- `ProjectSidebar.tsx` — list view only; centered project list on the left.
+| Route | Rendering | Notes |
+| --- | --- | --- |
+| `/` | static | The portfolio. `PortfolioView` toggles List ↔ Surf. |
+| `/about` | static | Client page; metadata lives in `app/about/layout.tsx`. |
+| `/archives` | static | Client page; metadata in `app/archives/layout.tsx`. |
+| `/project/[id]` | SSG | One page per project with `caseStudy: true`. |
+| `/studio` | dynamic | **Dev + localhost only** (`lib/studioGuard.ts`), else 404. |
+| `/preloader` | dynamic | Intro design study. Same dev-only guard. |
+| `/robots.txt`, `/sitemap.xml` | static | Generated from `app/robots.ts` / `app/sitemap.ts`. |
 
 ## Component map
 
 ```
-app/page.tsx                    server, renders <PortfolioView projects={projects} />
+app/page.tsx                 server, renders <PortfolioView projects={projects} />
 
-components/PortfolioView.tsx    client orchestrator (state, event handlers, body lock)
-  ├── Navbar
-  ├── Slideshow (list) | ProjectsCanvas (grid)
-  ├── ProjectSidebar  (list only, AnimatePresence-wrapped)
-  ├── BottomBar
-  └── BottomBlur
+components/PortfolioView.tsx client orchestrator (view mode, activeIndex, intro gating)
+  ├── Preloader              interaction blocker + scroll lock during the intro
+  ├── IntroOverlay           the intro animation itself (pop → stack → loop)
+  ├── Navbar                 fixed top chrome, mix-blend-mode: difference
+  ├── ListView | SurfCanvas  the two views
+  ├── ProjectSidebar         list view only, cyclic slot math
+  └── BottomBar              Vertical / Surf toggle
 ```
 
 ### `PortfolioView.tsx`
 
-Owns:
-- `view: "list" | "grid"`
-- `current: number` (active project index)
-- `direction: "next" | "prev"` (for slide transitions)
-- Listeners (only when `view === "list"`):
-  - **wheel** (passive: false, preventDefault) — accumulated 10px tolerance, then step
-  - **touchstart/move/end** — 30px threshold
-  - **keydown** — ArrowUp/Down, PageUp/Down, Space
-- `document.body.style.overflow = "hidden"` in list view, restored on grid switch
-- `NAV_COOLDOWN = 1700ms` throttles back-to-back nav (matches slide animation duration)
+Owns `view`, `activeIndex`, and the three-flag intro state (`preloading`,
+`textReady`, `introSeen`). The intro plays on a real page load and is skipped on
+internal SPA navs — see `readIntroSeen()`, which uses two sessionStorage flags
+because `performance.navigation.type` stays `"reload"` for the whole document
+lifetime.
 
-### `Slideshow.tsx`
+### `ListView.tsx`
 
-GSAP-style fullscreen scrolling slideshow ported to Framer Motion. Three nested `motion.div`s per slide:
-- **outer** — `y: 0 ↔ ±100%` (slide enters from below / exits up, or inverse for prev)
-- **inner** — counter-translate (`y: ∓100% → 0`) so the image stays visually anchored while the outer "window" sweeps
-- **img wrapper** — `scaleY 2 → 1` with directional `transformOrigin` (top for next, bottom for prev) — the stretch effect
-- **innermost** — `motion.div layoutId={project.image.id}` wrapping the `<Image>` or `<video>` (for outbox-labs). This is what bridges to the grid view via shared-layout transition.
+The vertical infinite list. Three identical copies of the project set stacked
+vertically (`COPIES = 3`); scroll is kept inside the middle copy's range
+`[copyH, 2·copyH)` and translated by ±`copyH` at the boundaries. `shiftScroll()`
+does that by shifting lenis's internal `animate.value/from/to` alongside
+`animatedScroll`/`targetScroll`, which preserves in-flight momentum — a plain
+`lenis.scrollTo(…, { immediate: true })` calls `reset()` and kills the lerp,
+which used to make the list feel stuck at the wrap boundary.
 
-Constants:
-- `DURATION = 1.6`
-- `EASE = [0.65, 0, 0.35, 1]` (≈ `power3.inOut`)
+Other behaviour:
+- Tiles are sized by `lib/sizeForAspect.ts` — every image is fitted into a
+  240px box on its longest side, so the list is a ragged column, not a grid.
+- Snap-to-centre fires when lenis velocity flattens out (60ms debounce).
+- ListView registers a `scrollToIndexRef` callback so the sidebar can jump to a
+  project using the list's **real** geometry, taking the shorter way round the
+  loop. (PortfolioView used to compute this itself from a hardcoded 360px per
+  section — roughly double the real average — so every sidebar click overshot
+  and the wrap + snap dragged the page onto some other project entirely.)
+- Non-active tiles are `grayscale(1)`; light mode swaps that for a
+  `mix-blend-mode: luminosity` treatment (see `globals.css`).
+- A `--list-vel-scale` CSS variable, driven from scroll velocity, gives tiles a
+  subtle stretch while moving.
+- Only the middle copy is in the a11y tree and keyboard-focusable; the outer
+  two are `aria-hidden` pixel duplicates.
 
-### `ProjectsCanvas.tsx`
+**Note:** the `intro` prop is always `false` — `IntroOverlay` runs the intro
+now. The `introStage` `"pop"`/`"loop"` machinery inside `ListView` is therefore
+unreachable, kept only because it is the more faithful port of the original
+Figma flow. Delete it, or delete `IntroOverlay` and switch back, but there's no
+reason to keep paying for both.
 
-Grid view. 12-col layout, 3 cards per row:
-- col-start cycling `[1, 5, 9]` × `col-span-3`
-- empty cols 4 / 8 / 12 act as the inter-card gaps
-- `pt-[100px] pb-[250px] px-[20px] gap-y-[40px]`
-- Each card's image wrapper carries `layoutId={project.image.id}` — matching the slideshow's inner motion.div, so the active project's media flies between the two layouts.
-- Other cards stagger in (`opacity 0→1`, `y 24→0`, delay = 0.15 + i × 0.04s) so the grid feels like it splits into place.
+### `SurfCanvas.tsx` / `SurfWave.tsx` / `lib/useSurfWave.ts`
 
-### `ProjectSidebar.tsx`
+3D "wave" carousel. `useSurfWave` owns a fixed pool of `MAX_SLOTS = 48`
+motion-value pairs; a given viewport only positions `layout.slotCount` of them
+(roughly `perView + 4`) and parks the rest at opacity 0. Slot `i` always renders
+item `i % items.length`, which is what makes the click → index inverse mapping
+work. Drag / wheel / arrow keys all write `targetScroll`; a raf loop lerps
+`currentScroll` toward it and recomputes every card's transform.
 
-Per-item motion stack with cyclic slot math.
+`initialIndex` centres the project the user was on in the list, so switching
+views keeps their place.
 
-```
-slot = ((i - active + half + N) % N) - half   // range [-half, +half]
-y    = slot × STEP                            // STEP = 22px
-```
+### `IntroOverlay.tsx`
 
-- All N projects rendered absolutely positioned with `y` driven by `motion.button animate`.
-- Active stays at center, the rest fan ±half slots.
-- **Wrap detection**: `|new_slot - prev_slot| > half` → that one item gets `transition: { duration: 0 }` (instant teleport from one edge to the other). Other items glide 500ms with `[0.4, 0, 0.2, 1]`.
-- `prevSlotsRef` is a `useRef<Record<string, number>>` updated in `useEffect`.
+Full-screen intro over the live list: **pop** (each image scales 0→1 at centre,
+staggered) → **stack** (deck slides into a vertical column) → **loop** (column
+scrolls one full cycle) → cross-fade out. Only projects with a local image
+participate (`src.startsWith("/")`).
 
-### `BottomBar.tsx`
+It starts as soon as the **first** image has decoded, not when all of them
+have. The pop is staggered `POP_STAGGER` apart, so tile *i* isn't needed until
+`POP_START + i * POP_STAGGER` and the rest stream in behind it. Waiting for the
+whole set is what used to leave a cold load on a blank screen for ~13s.
 
-12-col grid pinned at `bottom-20`:
-- col 1-3: List / Grids / Index (Index is faded, no view yet)
-- col 4-6: project impact (`max-w-[160px] leading-[1.4]`)
-- col 7-9: Role / Category rows
-- col 10-11: Client / Year rows
-- col 12: Compass
+Two related things keep the opening seconds clear for images:
+- `app/page.tsx` emits `<link rel="preload" as="image">` for the lead tile.
+- **Fonts are declared `preload: false`** in `app/layout.tsx`. All text on this
+  site is hidden until the intro finishes, so preloading ten font files ahead
+  of the images was exactly backwards. Do not "fix" this by re-enabling it.
+  Note `geist/font/pixel` declares five pixel variants at module scope, so
+  importing it registers all five — the one that's used is vendored into
+  `app/fonts/` instead.
 
-Right side (cols 4-12) is wrapped in `AnimatePresence`; it fades out in Grids view.
+### `Navbar.tsx`
 
-### `BottomBlur.tsx`
+Fixed, `mix-blend-mode: difference` so it inverts against whatever is behind it.
+Light mode disables the blend (see `globals.css`) since difference-on-white
+would erase it.
 
-Renders unconditionally (both views). Three stacked `backdrop-blur` layers with mask-image gradients:
-- `backdrop-blur-[2px]`, mask: 55%→100% transparent
-- `backdrop-blur-[8px]`, mask: 25%→70% transparent
-- `backdrop-blur-[18px]`, mask: 0%→40% transparent
+Logo sizing is a **responsive class**, not JS — the effect only handles the
+`/about` scroll-shrink lerp and clears its inline overrides everywhere else. Do
+not move `fontSize` back into the React `style` prop: the effect writes
+`el.style` directly, so React owning the same property means any unrelated
+re-render snaps the logo back to 64px.
 
-Plus a dark gradient overlay `rgba(0,0,0,0.55) → transparent`. Sits at `z-20`; BottomBar / Sidebar at `z-30`.
+## Data
 
-### `Compass.tsx`
+`data/projects.seeds.json` → `data/projects.ts` (`make()` builds a `Project`).
+`data/archives.json` → `data/archives.ts`.
 
-Ring of N dots, one per project. Rotates so the active dot is anchored at left (9 o'clock). Currently `SIZE=56, DOT=6, RADIUS=22`.
+- 22 seeds, 5 in `hidden`, **17 visible**, sorted by latest year descending.
+- Case studies: `zappedin`, `sellerapp`, `sellerapp-qc`, `reachinbox`,
+  `zapmail`, `threadjet`, `inboundiq`.
+- Still on a picsum placeholder image: `outbox-labs`, `salesmonk` (both have a
+  video, which is what actually renders).
+- A seed with no `src` falls back to `https://picsum.photos/seed/<slug>/1920/1080`
+  (allow-listed in `next.config.ts`).
 
-## Data — `data/projects.ts`
+### Media conventions
 
-```ts
-type ImageEntry = { id, src, client, role, category, year };
-type Project = {
-  id, title,
-  category?, liveLink?, impact?, video?,
-  image: ImageEntry,
-};
-```
+- Everything in `/public` is pre-compressed; nothing there should be a source
+  file. Videos are h264 mp4, long edge ≤ 1280, **no audio track**, `+faststart`.
+- Every video has a sibling poster still: `clip.mp4` → `clip-poster.webp`.
+  `lib/posterFor.ts` derives the path; `/api/studio/upload` generates it on
+  upload and `/api/studio/rename` carries it along on rename. The list view uses
+  the poster as a plain `<img>` for the two non-playing copies, so one clip is
+  never decoded three times.
+- **Every local media file has its intrinsic size baked into the seed**
+  (`width` / `height` = the size of whatever the list renders, i.e. the video
+  when there is one). `useImageAspects` returns those synchronously on the
+  first render, so the list and the intro lay out with correct per-tile heights
+  in the SSR markup — no measuring pass, no reflow, no waiting on the network.
+  `/api/studio/upload` reports the dimensions it measured and the studio stores
+  them; if a seed is ever missing them, the hook falls back to measuring that
+  one over the network. Every id is still guaranteed a value within 6s (falling
+  back to 1.6 on error/timeout), because consumers gate layout on "all ids
+  present" and a broken source must not stall that.
 
-`make(seed)` builds a `Project`. Seed accepts `src` (override for image path) and `video` (mp4 path). Without `src`, the image falls back to `https://picsum.photos/seed/<slug>/1920/1080`.
+## Studio (dev-only CMS)
 
-`HIDDEN` set filters projects from display: `zappedin`, `yaad-app`, `humoniq`.
-
-Sort is by `latestYear(image.year)` descending.
-
-### Projects currently with real images (`/public/projects/`)
-sellerapp, sellerapp-qc, google, reachinbox, zapmail, mailwarmup, visitoriq, coldstats, referralstack, threadjet, inboundiq
-
-### Projects still on picsum
-sellerapp-enterprise, socialgigs, inreach
-
-### Projects with video
-outbox-labs → `/projects/outbox.mp4` (19.9 MB)
-
-When the user drops new files in `~/Downloads/webp/<slug>.webp`:
-1. `cp ~/Downloads/webp/<slug>.webp public/projects/`
-2. Add `src: "/projects/<slug>.webp"` to that seed's `make({...})` call.
+`/studio` + `/api/studio/*`, all behind `isStudioAllowed()` (dev **and**
+localhost). Writes `data/*.json` and `public/projects`, compresses uploads
+(sharp for images → webp, ffmpeg-static for video → mp4 + poster), and has a
+publish flow that `git add`/`commit`/`push`es only the four studio-managed
+paths.
 
 ## Deployment
 
-- Initially set up for **GitHub Pages** with a workflow (`.github/workflows/nextjs.yml`) + `output: "export"` + `.nojekyll`.
-- That setup was **reverted** in commit `738a27d`. The repo now deploys via **Vercel** (zero-config, auto-detect Next.js).
-- The GitHub repo was **renamed** from `tirthjivani/tirthjivani.github.io` → `tirthjivani/Portfolio` (GitHub auto-redirects, but update the local remote: `git remote set-url origin https://github.com/tirthjivani/Portfolio.git`).
-- GitHub Pages branch (`gh-pages`) has been deleted.
-- 1 moderate Dependabot vulnerability is open: https://github.com/tirthjivani/Portfolio/security/dependabot/92
+Vercel (zero-config). `metadataBase` and the sitemap resolve through
+`lib/siteUrl.ts`, which reads `NEXT_PUBLIC_SITE_URL`, then Vercel's
+`VERCEL_PROJECT_PRODUCTION_URL`, then falls back to localhost. **Set
+`NEXT_PUBLIC_SITE_URL` once a custom domain is attached** — these are baked at
+build time, so a wrong value ships silently in every share card.
 
-## Git state
+## Quirks
 
-Branch: `master`. Recent commits (newest first):
-```
-fe1f87e new theme: fullscreen slideshow + bottom chrome + gallery morph
-738a27d revert GitHub Pages deploy in favor of Vercel
-6b54a7a deploy to GitHub Pages via Actions
-d7252c6 add List/Grid view toggle with shared-element morph
-cc7e177 rebuild portfolio in Next.js App Router
-```
+- **Scroll lock** is held by `Preloader` during the intro and by `SurfCanvas`
+  for the whole surf view. `Navbar` also takes it while the mobile menu is open.
+- **`history.scrollRestoration = "manual"`** is set in `app/layout.tsx` so a
+  refresh always starts at the top; `/about` and `/archives` additionally reset
+  lenis on mount, since lenis preserves scroll across SPA navs.
+- **`[data-rc] { opacity: 0 }`** in `globals.css` hides `CharReveal` characters
+  pre-hydration. With JS disabled, nav text stays invisible.
+- **Light mode** re-points `text-white/*` to `var(--fg)`. Anything that needs a
+  themed border or fill should use `border-current` / `bg-current` rather than a
+  `white` utility, which is what `CaseStudy` does.
+- **Tailwind v4** scans source for literal class strings — don't build class
+  names by concatenation.
 
-Pushes need a token with **`workflow` scope** if any change touches `.github/workflows/*` (the current `gh` token has `gist, read:org, repo` — not workflow). For routine pushes that don't modify workflow files, the current creds work fine.
+## Known gaps
 
-## Quirks / things to know
-
-- **Body scroll lock**: only active in list view (via useEffect on `view`). Restored on unmount of the effect, so toggling to grid releases the lock.
-- **`NAV_COOLDOWN`** can be lowered to ~500ms if the user wants faster nav (Motion's AnimatePresence interrupts in-flight transitions). It was tried and reverted; default stays at 1700ms.
-- **Grid view scroll** is native body scroll (not snap). Card click → `handleSelectFromGrid(i)` sets direction "next", current = i, view = list.
-- **Sidebar click** in list view → `navigateTo(i)` which picks a direction based on shortest cyclic distance (matches GSAP demo's wrap logic).
-- **Image sizing**: all real screenshots are 2880×1800 (16:10). Grid uses `<Image width={2880} height={1800} class="block h-auto w-full">` for natural-aspect display. If a future image differs, store its dims per project or convert to per-image `aspectRatio` style.
-- **Outbox video**: 19.9 MB is heavy for a portfolio first-load. Consider compressing or lazy-loading (`preload="metadata"` instead of full autoplay) if perf becomes a concern.
-- **Tailwind v4** discovers classes by scanning source. The dynamic `GRID_COL_START` array has literal strings (`"col-start-1"`, etc.) so they get picked up by JIT — don't break that pattern.
-- **Agentation devtool** triggers from `<DevTools/>` in `app/layout.tsx`. It only runs in dev (`NODE_ENV === "development"`). Page-feedback messages from the user originate here.
-- **Index** view in the BottomBar is a label only (no view implemented). User mentioned it but hasn't requested implementation.
-
-## What might be next
-
-- Implement the **Index** view (whatever shape the user wants — list of titles only? thumbnails?).
-- Real images for `sellerapp-enterprise`, `socialgigs`, `inreach`.
-- Compress `outbox.mp4` or replace with a poster + click-to-play.
-- Wire up the Navbar's "Work" anchor (currently `href="#outbox-labs"`, a no-op in list view because body scroll is locked).
-- Handle "Photos" / "Archive" / "Info" sections (faded labels currently).
+- `handoff.md` drifts fast. It was rewritten on 2026-09-06 after describing a
+  long-dead architecture (`Slideshow.tsx`, `ProjectsCanvas.tsx`, a grid view).
+- ESLint reports ~29 `react-hooks/refs` and `react-hooks/set-state-in-effect`
+  errors. They're the new React Compiler rules firing on deliberate
+  props-mirrored-into-refs patterns in the animation code — inert today, but
+  they'd have to be resolved before enabling the compiler.
+- `/about` socials: Dribbble / Figma / X are `"#"` placeholders and are filtered
+  out of the render. Add a real URL to bring one back.

@@ -9,8 +9,18 @@ export default function ArchivesPage() {
   // Match /about: lenis preserves scroll across SPA navs, so reset to top so
   // the page never opens mid-scroll.
   useLayoutEffect(() => {
-    window.scrollTo(0, 0);
-    getLenis()?.scrollTo(0, { immediate: true });
+    // Reset twice: once now, and once after the browser has settled the new
+    // (much shorter) document. Leaving `/` mid-scroll leaves a scroll offset
+    // that outlives the route change — the browser clamps it to this page's
+    // max and lenis re-syncs to that, which landed you at the BOTTOM of the
+    // page instead of the top.
+    const reset = () => {
+      window.scrollTo(0, 0);
+      getLenis()?.scrollTo(0, { immediate: true, force: true });
+    };
+    reset();
+    const raf = requestAnimationFrame(reset);
+    return () => cancelAnimationFrame(raf);
   }, []);
 
   return (
@@ -32,7 +42,11 @@ export default function ArchivesPage() {
             >
               <img
                 src={item.src}
-                alt={item.alt?.trim() || altFromPath(item.src)}
+                alt={
+                  item.alt?.trim() ||
+                  altFromPath(item.src) ||
+                  `Archive image ${i + 1}`
+                }
                 draggable={false}
                 loading="lazy"
                 decoding="async"

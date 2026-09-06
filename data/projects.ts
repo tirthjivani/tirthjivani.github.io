@@ -7,6 +7,12 @@ export type ImageEntry = {
   role: string;
   category: string;
   year: string;
+  // Intrinsic size of the media this project renders in the list (the video
+  // when there is one, otherwise the image). Baked into the seeds so the list
+  // and the intro can lay themselves out without first downloading anything —
+  // see lib/useImageAspects.ts.
+  width?: number;
+  height?: number;
 };
 
 export type CaseStudyImage = {
@@ -63,6 +69,9 @@ export type ProjectSeed = {
   timeline?: string;
   caseStudies?: CaseStudyLink[];
   sections?: CaseStudySection[];
+  /** Intrinsic size of the rendered media (video if present, else image). */
+  width?: number;
+  height?: number;
 };
 
 export type ProjectSeedsFile = {
@@ -92,6 +101,8 @@ export const make = (seed: ProjectSeed): Project => ({
     role: seed.role,
     category: seed.category ?? "-",
     year: seed.year,
+    width: seed.width,
+    height: seed.height,
   },
 });
 

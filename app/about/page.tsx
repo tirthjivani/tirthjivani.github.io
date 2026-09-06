@@ -9,18 +9,18 @@ import { getLenis } from "@/lib/lenis";
 
 // First / Last bookend the sequence; the middle frames flip in source order.
 const ME_FRAMES = [
-  "/me/01-first.jpg",
-  "/me/02.jpg",
-  "/me/03.jpg",
-  "/me/04.jpg",
-  "/me/05.jpg",
-  "/me/06.jpg",
-  "/me/07.jpg",
-  "/me/08.jpg",
-  "/me/09.jpg",
-  "/me/10.jpg",
-  "/me/11.jpg",
-  "/me/12-last.jpg",
+  "/me/01-first.webp",
+  "/me/02.webp",
+  "/me/03.webp",
+  "/me/04.webp",
+  "/me/05.webp",
+  "/me/06.webp",
+  "/me/07.webp",
+  "/me/08.webp",
+  "/me/09.webp",
+  "/me/10.webp",
+  "/me/11.webp",
+  "/me/12-last.webp",
 ];
 
 // Split around "Bangalore, India" so we can attach a ref to that marker and
@@ -47,15 +47,16 @@ const SERVICES = [
   "Motion Design",
 ];
 
-// TODO: replace the "#" placeholders once the real Dribbble / Figma / X URLs
-// are provided. LinkedIn + Instagram are the handles already used in the nav.
+// Entries with a "#" href are placeholders and are filtered out at render —
+// fill in a real URL to bring one back. (A live "#" link just opens a blank
+// tab onto the same page.)
 const SOCIALS = [
   { label: "LinkedIn", href: "https://linkedin.com/in/tirthjivani" },
   { label: "Instagram", href: "https://instagram.com/tirth.design" },
   { label: "Dribbble", href: "#" },
   { label: "Figma", href: "#" },
   { label: "X", href: "#" },
-];
+].filter((s) => s.href !== "#");
 
 const TYPOGRAPHY = ["Circular Std", "Geist Pixel"];
 
@@ -139,8 +140,18 @@ export default function AboutPage() {
   // /about to the top on mount, syncing both window and lenis state so the
   // smooth-scroll layer doesn't immediately animate back to its prior value.
   useLayoutEffect(() => {
-    window.scrollTo(0, 0);
-    getLenis()?.scrollTo(0, { immediate: true });
+    // Reset twice: once now, and once after the browser has settled the new
+    // (much shorter) document. Leaving `/` mid-scroll leaves a scroll offset
+    // that outlives the route change — the browser clamps it to this page's
+    // max and lenis re-syncs to that, which landed you at the BOTTOM of the
+    // page instead of the top.
+    const reset = () => {
+      window.scrollTo(0, 0);
+      getLenis()?.scrollTo(0, { immediate: true, force: true });
+    };
+    reset();
+    const raf = requestAnimationFrame(reset);
+    return () => cancelAnimationFrame(raf);
   }, []);
 
   // Reveal each pixel glyph by sliding it UP from below the text baseline —

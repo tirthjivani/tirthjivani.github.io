@@ -3,6 +3,7 @@
 import { motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { type SurfItem, useSurfWave } from "@/lib/useSurfWave";
+import { posterFor } from "@/lib/posterFor";
 import s from "./SurfWave.module.css";
 
 export type { SurfItem } from "@/lib/useSurfWave";
@@ -12,6 +13,8 @@ export interface SurfWaveProps {
   className?: string;
   onCardClick?: (index: number) => void;
   onHoverCard?: (index: number | null) => void;
+  /** Project to centre on mount, so switching views keeps the user in place. */
+  initialIndex?: number;
 }
 
 function usePrefersReducedMotion(): boolean {
@@ -31,12 +34,14 @@ export function SurfWave({
   className,
   onCardClick,
   onHoverCard,
+  initialIndex = 0,
 }: SurfWaveProps) {
   const reducedMotion = usePrefersReducedMotion();
   const { cards, layout, bindSurface, ready } = useSurfWave(
     items,
     reducedMotion,
-    onCardClick
+    onCardClick,
+    initialIndex
   );
 
   return (
@@ -49,10 +54,21 @@ export function SurfWave({
       <div className={s.stage} data-ready={ready}>
         {cards.map((card, i) => {
           const itemIdx = items.length > 0 ? i % items.length : 0;
+          // The motion-value pool is a fixed MAX_SLOTS entries, but a given
+          // viewport only ever positions `layout.slotCount` of them — the rest
+          // are parked at opacity 0. Mounting their media anyway meant dozens
+          // of off-stage <img>/<video> elements (and video decoders) for cards
+          // that are never drawn.
+          const inUse = layout.slotCount > 0 && i < layout.slotCount;
           // useSurfWave snapshots card.item once at pool init, so per-card
           // updates (aspect arriving after mount) never reach it. Re-resolve
           // from the live `items` prop each render instead.
           const item = items.length > 0 ? items[itemIdx] : card.item;
+          // An item can occupy more than one slot when the strip is longer
+          // than the item list. Only the first of those plays the video; the
+          // duplicates show the poster still, so one clip is never decoded
+          // several times over.
+          const isPrimarySlot = i === itemIdx;
           // Per-card sizing: keep the row height constant and derive width
           // from the item's natural aspect so the frame fits the media
           // exactly (no letterbox, no crop). Fallback to the uniform layout
@@ -73,20 +89,35 @@ export function SurfWave({
                 transform: card.transform,
                 opacity: card.opacity,
               }}
+              // Expose each project exactly once: parked slots and repeat
+              // occurrences of an item are decorative duplicates.
+              aria-hidden={!inUse || !isPrimarySlot ? true : undefined}
               onMouseEnter={() => onHoverCard?.(itemIdx)}
               onMouseLeave={() => onHoverCard?.(null)}
             >
               <div className={s.media}>
-                {item.video ? (
-                  <video
-                    className={s.vid}
-                    src={item.video}
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    preload="metadata"
-                  />
+                {!inUse ? null : item.video ? (
+                  isPrimarySlot ? (
+                    <video
+                      className={s.vid}
+                      src={item.video}
+                      poster={posterFor(item.video)}
+                      aria-label={item.alt}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      preload="metadata"
+                    />
+                  ) : (
+                    <img
+                      className={s.img}
+                      src={posterFor(item.video)}
+                      alt=""
+                      draggable={false}
+                      decoding="async"
+                    />
+                  )
                 ) : (
                   <img
                     className={s.img}

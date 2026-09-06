@@ -10,13 +10,13 @@ import { useImageAspects } from "@/lib/useImageAspects";
 
 type Props = {
   projects: Project[];
+  /** Project the user was last on in the list, centred on mount. */
   activeIndex?: number;
-  onHoverProject?: (index: number | null) => void;
 };
 
 type Cursor = { x: number; y: number; text: string } | null;
 
-export function SurfCanvas({ projects, onHoverProject }: Props) {
+export function SurfCanvas({ projects, activeIndex = 0 }: Props) {
   const router = useRouter();
   const [cursor, setCursor] = useState<Cursor>(null);
   const [hoverIdx, setHoverIdx] = useState<number | null>(null);
@@ -32,10 +32,6 @@ export function SurfCanvas({ projects, onHoverProject }: Props) {
       document.body.style.overflow = prev;
     };
   }, []);
-
-  useEffect(() => {
-    onHoverProject?.(hoverIdx);
-  }, [hoverIdx, onHoverProject]);
 
   const aspects = useImageAspects(projects);
   const items = useMemo<SurfItem[]>(
@@ -79,6 +75,7 @@ export function SurfCanvas({ projects, onHoverProject }: Props) {
     >
       <SurfWave
         items={items}
+        initialIndex={activeIndex}
         onCardClick={handleCardClick}
         onHoverCard={(idx) => {
           setHoverIdx(idx);
@@ -89,8 +86,14 @@ export function SurfCanvas({ projects, onHoverProject }: Props) {
         cursor &&
         createPortal(
           <div
-            className="pointer-events-none fixed z-[60] flex items-center justify-center rounded-full bg-white px-[10px] py-[5px] text-[12px] leading-none tracking-[-0.02em] text-black"
-            style={{ left: cursor.x + 18, top: cursor.y + 18 }}
+            className="pointer-events-none fixed z-[60] flex items-center justify-center rounded-full px-[10px] py-[5px] text-[12px] leading-none tracking-[-0.02em]"
+            style={{
+              left: cursor.x + 18,
+              top: cursor.y + 18,
+              // Inverted against the page so the pill reads in both themes.
+              backgroundColor: "var(--fg)",
+              color: "var(--bg)",
+            }}
           >
             {cursor.text}
           </div>,

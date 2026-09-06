@@ -85,6 +85,18 @@ export async function POST(req: Request) {
     // Good — target doesn't exist.
   }
   await fs.rename(oldAbs, newAbs);
+  // Videos carry a sibling poster still (`clip.mp4` → `clip-poster.webp`, see
+  // lib/posterFor.ts). Carry it along, or the renamed clip resolves to a
+  // poster that no longer exists.
+  if (/\.(mp4|mov|webm)$/i.test(oldExt)) {
+    const oldPoster = oldAbs.replace(/\.[a-z0-9]+$/i, "-poster.webp");
+    const newPoster = newAbs.replace(/\.[a-z0-9]+$/i, "-poster.webp");
+    try {
+      await fs.rename(oldPoster, newPoster);
+    } catch {
+      // No poster on disk (pre-convention upload) — nothing to move.
+    }
+  }
   const newRel = path.relative(PUBLIC_ROOT, newAbs).split(path.sep).join("/");
   return NextResponse.json({ path: `/${newRel}` });
 }
